@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://chrome-extension-batch.pages.dev/sitemap.xml

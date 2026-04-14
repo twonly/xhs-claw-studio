@@ -1,0 +1,162 @@
+/* 新用户引导 - 蒙版 + 聚光灯 + 气泡 */
+
+.onb-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 999998;
+  pointer-events: auto;
+  /* 通过 box-shadow 打出聚光灯洞 */
+  background: transparent;
+  transition: opacity 0.2s ease;
+}
+
+.onb-spotlight {
+  position: fixed;
+  z-index: 999998;
+  border-radius: 8px;
+  box-shadow: 0 0 0 99999px rgba(0, 0, 0, 0.55), 0 0 0 3px rgba(255, 36, 66, 0.75);
+  pointer-events: none;
+  transition: top 0.25s ease, left 0.25s ease, width 0.25s ease, height 0.25s ease;
+}
+
+/* 整页遮罩（首步/找不到目标时使用） */
+.onb-spotlight.onb-fullscreen {
+  box-shadow: 0 0 0 99999px rgba(0, 0, 0, 0.55);
+}
+
+.onb-tooltip {
+  position: fixed;
+  z-index: 999999;
+  width: 300px;
+  max-width: calc(100vw - 24px);
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.25);
+  padding: 16px 16px 12px;
+  font-size: 13px;
+  color: #222;
+  line-height: 1.55;
+  transition: top 0.25s ease, left 0.25s ease;
+}
+
+.onb-tooltip-arrow {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: #ffffff;
+  transform: rotate(45deg);
+  box-shadow: -2px -2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.onb-tooltip-arrow.top { top: -6px; left: 24px; }
+.onb-tooltip-arrow.bottom { bottom: -6px; left: 24px; box-shadow: 2px 2px 4px rgba(0,0,0,0.04); }
+.onb-tooltip-arrow.left { left: -6px; top: 20px; box-shadow: -2px 2px 4px rgba(0,0,0,0.04); }
+.onb-tooltip-arrow.right { right: -6px; top: 20px; box-shadow: 2px -2px 4px rgba(0,0,0,0.04); }
+
+.onb-tooltip-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.onb-tooltip-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111;
+  letter-spacing: 0.2px;
+}
+
+.onb-tooltip-step {
+  font-size: 11px;
+  color: #888;
+  white-space: nowrap;
+}
+
+.onb-tooltip-body {
+  color: #444;
+  margin-bottom: 12px;
+}
+
+.onb-tooltip-body strong { color: #ff2442; font-weight: 600; }
+.onb-tooltip-body code {
+  background: #f5f5f5;
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 12px;
+  color: #d14;
+}
+
+.onb-tooltip-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.onb-tooltip-skip {
+  background: transparent;
+  border: none;
+  color: #999;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 4px 6px;
+}
+.onb-tooltip-skip:hover { color: #555; }
+
+.onb-tooltip-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.onb-btn {
+  border: none;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: opacity 0.15s ease, background 0.15s ease;
+  font-family: inherit;
+}
+
+.onb-btn-ghost {
+  background: #f0f0f0;
+  color: #444;
+}
+.onb-btn-ghost:hover { background: #e4e4e4; }
+
+.onb-btn-primary {
+  background: #ff2442;
+  color: #fff;
+  font-weight: 500;
+}
+.onb-btn-primary:hover { background: #e51d3a; }
+
+/* 再次打开引导的入口按钮 */
+.onb-help-trigger {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid #e4e4e4;
+  color: #666;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  z-index: 998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.onb-help-trigger:hover {
+  background: #ff2442;
+  color: #fff;
+  border-color: #ff2442;
+}
+
+/* popup 容器较窄，tooltip 收窄 */
+body.onb-compact .onb-tooltip { width: 260px; }

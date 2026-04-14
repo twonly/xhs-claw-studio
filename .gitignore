@@ -1,0 +1,10 @@
+.DS_Store
+dist/package/
+node_modules/
+*.log
+.env
+.env.*
+landing-alt/
+landing-convert/
+landing-radar/
+MONETIZATION.md

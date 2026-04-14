@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- Sweet potato body -->
+  <ellipse cx="64" cy="78" rx="42" ry="28" fill="#D4763C" transform="rotate(-10 64 78)"/>
+  <ellipse cx="64" cy="78" rx="38" ry="24" fill="#E8934A" transform="rotate(-10 64 78)"/>
+  <!-- Sweet potato highlight -->
+  <ellipse cx="55" cy="72" rx="18" ry="8" fill="#F0A85E" transform="rotate(-15 55 72)" opacity="0.6"/>
+
+  <!-- Hedgehog body (sitting on sweet potato) -->
+  <circle cx="64" cy="48" r="28" fill="#FF2442"/>
+  <!-- Spines -->
+  <g fill="#CC1D35">
+    <ellipse cx="42" cy="30" rx="6" ry="12" transform="rotate(25 42 30)"/>
+    <ellipse cx="52" cy="22" rx="5" ry="13" transform="rotate(10 52 22)"/>
+    <ellipse cx="64" cy="20" rx="5" ry="13"/>
+    <ellipse cx="76" cy="22" rx="5" ry="13" transform="rotate(-10 76 22)"/>
+    <ellipse cx="86" cy="30" rx="6" ry="12" transform="rotate(-25 86 30)"/>
+  </g>
+  <!-- Face area -->
+  <ellipse cx="64" cy="52" rx="20" ry="18" fill="#FFF0E6"/>
+  <!-- Eyes -->
+  <circle cx="56" cy="48" r="3.5" fill="#333"/>
+  <circle cx="72" cy="48" r="3.5" fill="#333"/>
+  <!-- Eye shine -->
+  <circle cx="57.5" cy="46.5" r="1.2" fill="#FFF"/>
+  <circle cx="73.5" cy="46.5" r="1.2" fill="#FFF"/>
+  <!-- Nose -->
+  <ellipse cx="64" cy="54" rx="3" ry="2.5" fill="#CC1D35"/>
+  <!-- Mouth -->
+  <path d="M60 57 Q64 61 68 57" stroke="#CC1D35" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <!-- Blush -->
+  <ellipse cx="50" cy="55" rx="4" ry="2.5" fill="#FF8A9E" opacity="0.5"/>
+  <ellipse cx="78" cy="55" rx="4" ry="2.5" fill="#FF8A9E" opacity="0.5"/>
+
+  <!-- Arms hugging sweet potato -->
+  <path d="M44 62 Q38 72 42 80" stroke="#FF2442" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M84 62 Q90 72 86 80" stroke="#FF2442" stroke-width="5" fill="none" stroke-linecap="round"/>
+
+  <!-- Download arrow on sweet potato -->
+  <g transform="translate(75 82)" opacity="0.85">
+    <rect x="-4" y="-8" width="8" height="10" rx="1.5" fill="#FFF"/>
+    <polygon points="-7,3 0,10 7,3" fill="#FFF"/>
+  </g>
+</svg>

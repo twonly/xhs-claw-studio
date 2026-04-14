@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>红薯采集器 — 数据分析</title>
+  <link rel="stylesheet" href="analysis.css">
+  <link rel="stylesheet" href="../lib/onboarding.css">
+</head>
+<body>
+  <div class="container">
+    <main class="main-content">
+    <!-- 导航栏（详情页显示） -->
+    <nav id="nav-bar" class="nav-bar hidden">
+      <button id="btn-back" class="btn-back">&larr; 返回总览</button>
+      <span id="nav-blogger-name" class="nav-blogger-name"></span>
+    </nav>
+
+    <!-- ===== 总览视图 ===== -->
+    <div id="overview-view">
+      <header>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h1 id="overview-title" data-hidden-pref-trigger>数据分析看板</h1>
+          <div style="display:flex;gap:8px">
+            <button id="btn-library" class="btn-comparison-toggle" title="素材库">&#128218; 素材库</button>
+            <button id="btn-comparison-toggle" class="btn-comparison-toggle hidden" title="对比分析">⚖️ 对比分析</button>
+          </div>
+        </div>
+        <p class="subtitle" id="overview-subtitle">加载中...</p>
+      </header>
+
+      <!-- 云同步面板（v2.8.0）-->
+      <section id="cloud-sync-panel" class="cloud-sync-panel">
+        <div class="csp-header">
+          <div class="csp-title">
+            <span class="csp-icon">☁️</span>
+            <span>云同步</span>
+            <span class="panel-badge">BETA</span>
+          </div>
+          <div id="csp-status" class="csp-status">检测中...</div>
+        </div>
+
+        <!-- 未登录：登录/注册表单 -->
+        <div id="csp-auth" class="csp-auth hidden">
+          <div class="csp-auth-tabs">
+            <button class="csp-tab active" data-tab="signin">登录</button>
+            <button class="csp-tab" data-tab="signup">注册</button>
+          </div>
+          <div class="csp-auth-form">
+            <input type="email" id="csp-email" placeholder="邮箱" autocomplete="email">
+            <input type="password" id="csp-password" placeholder="密码（至少 8 位，含字母和数字）" autocomplete="current-password">
+            <button id="csp-submit" class="csp-btn-primary">登录</button>
+          </div>
+          <div id="csp-auth-msg" class="csp-msg"></div>
+          <div class="csp-auth-hint">
+            数据加密存储在 Supabase，仅你自己可见。<br>
+            注册后请查收验证邮件，点击链接完成验证后即可登录。密码至少 8 位，需包含字母和数字。
+          </div>
+        </div>
+
+        <!-- 已登录：同步面板 -->
+        <div id="csp-loggedin" class="csp-loggedin hidden">
+          <div class="csp-user-row">
+            <div class="csp-user-info">
+              <div class="csp-user-email" id="csp-user-email"></div>
+              <div class="csp-user-meta" id="csp-user-meta">本地 0 博主 / 0 笔记 · 云端 0 / 0</div>
+            </div>
+            <button id="csp-signout" class="csp-btn-link">退出</button>
+          </div>
+          <div class="csp-actions">
+            <button id="csp-sync-now" class="csp-btn-primary">立即同步全部</button>
+            <button id="csp-clear-cloud" class="csp-btn-link csp-btn-danger">清空云端</button>
+          </div>
+          <div id="csp-progress" class="csp-progress hidden">
+            <div class="csp-progress-bar"><div id="csp-progress-fill" class="csp-progress-fill"></div></div>
+            <div id="csp-progress-text" class="csp-progress-text"></div>
+          </div>
+          <div id="csp-result" class="csp-msg"></div>
+        </div>
+      </section>
+
+      <section id="blogger-grid" class="blogger-grid"></section>
+    </div>
+
+    <!-- ===== 对比视图 ===== -->
+    <div id="compare-view" class="hidden">
+      <nav id="compare-nav-bar" class="nav-bar">
+        <button id="btn-compare-back" class="btn-back">&larr; 返回总览</button>
+        <span id="compare-bloggers-info" class="nav-blogger-name"></span>
+      </nav>
+
+      <header style="margin-top:0">
+        <h1 data-hidden-pref-trigger>多博主对比分析</h1>
+        <p class="subtitle" id="compare-subtitle">加载中...</p>
+      </header>
+
+      <!-- 维度对比条形图 -->
+      <section class="panel">
+        <h2>7 维度对比评分</h2>
+        <div id="compare-dimension-bars" class="compare-dimension-bars"></div>
+      </section>
+
+      <!-- 博主评分卡 -->
+      <section class="panel">
+        <h2>博主评分概览</h2>
+        <div id="compare-summary-grid" class="compare-summary-grid"></div>
+      </section>
+
+      <!-- 详细对比表格 -->
+      <section class="panel">
+        <h2>详细指标对比</h2>
+        <div id="compare-table-container" style="overflow-x:auto"></div>
+      </section>
+
+      <!-- 标签交集分析 -->
+      <section class="panel">
+        <h2>标签与话题分析</h2>
+        <div id="compare-tags-section" class="compare-tags-section"></div>
+      </section>
+
+      <!-- 互动分布对比 -->
+      <section class="panel">
+        <h2>互动分布对比</h2>
+        <div id="compare-dist-grid" class="compare-dist-grid"></div>
+      </section>
+
+      <!-- AI 对比分析报告 -->
+      <section class="panel ai-section" id="compare-ai-section">
+        <div class="panel-header">
+          <h2>AI 对标分析</h2>
+          <div class="ai-actions">
+            <button id="btn-compare-ai-generate" class="btn-ai">生成报告</button>
+            <button id="btn-compare-ai-clear" class="btn-ai-secondary" style="display:none">清除缓存</button>
+          </div>
+        </div>
+        <div id="compare-ai-report" class="ai-report">
+          <p class="ai-placeholder">点击「生成报告」，AI 将为你分析对标机会、策略差异、实操建议</p>
+        </div>
+        <div id="compare-ai-nokey-overlay" class="lock-overlay" style="display:none">
+          <div class="lock-content">
+            <p class="lock-icon">&#128273;</p>
+            <p>请先在扩展弹窗的 AI 设置中配置 API Key</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ===== 详情视图 ===== -->
+    <div id="detail-view" class="hidden">
+      <header>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px">
+          <div style="min-width:0;flex:1">
+            <h1 id="detail-header" data-hidden-pref-trigger>数据分析看板</h1>
+            <p class="subtitle" id="subtitle">加载中...</p>
+          </div>
+          <div style="display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap">
+            <button id="btn-personal-view" class="btn-export-data btn-personal hidden" title="查看个人分析">&#128202; 个人分析</button>
+            <button id="btn-backend-import" class="btn-export-data btn-import" title="导入创作者后台数据">&#128228; 导入创作者数据</button>
+            <button id="btn-export-csv" class="btn-export-data" title="导出 CSV">&#128229; CSV</button>
+            <button id="btn-export-json" class="btn-export-data" title="导出 JSON">&#128229; JSON</button>
+            <button id="btn-export-pdf" class="btn-export-pdf" title="导出 PDF 报告">📄 导出 PDF</button>
+          </div>
+          <div id="backend-data-badge" class="backend-badge hidden"></div>
+        </div>
+      </header>
+
+      <div class="detail-mode-toggle">
+        <button id="btn-focus-core" class="detail-mode-btn active" type="button">核心分析</button>
+        <button id="btn-focus-deep" class="detail-mode-btn" type="button">深度洞察</button>
+      </div>
+
+      <!-- 博主 Profile 卡片（v2.7.1）-->
+      <section id="blogger-profile-card" class="blogger-profile-section hidden"></section>
+
+      <!-- 概览卡片 -->
+      <section class="cards" id="overview-cards"></section>
+
+      <!-- Top 笔记排行 -->
+      <section class="panel">
+        <h2>互动 Top 10</h2>
+        <div class="tab-bar" id="tab-bar">
+          <button class="tab active" data-sort="likes">按点赞</button>
+          <button class="tab" data-sort="collects">按收藏</button>
+          <button class="tab" data-sort="commentCount">按评论</button>
+        </div>
+        <div id="top-notes" class="bar-chart"></div>
+      </section>
+
+      <!-- 标签分析 -->
+      <section class="panel">
+        <h2>标签词频 Top 15</h2>
+        <div id="tag-chart" class="bar-chart"></div>
+      </section>
+
+      <!-- 互动分布 -->
+      <section class="panel">
+        <h2>互动数据分布</h2>
+        <div class="distribution-grid">
+          <div class="dist-wrapper">
+            <h3>点赞分布</h3>
+            <div id="likes-dist" class="dist-chart"></div>
+            <div id="likes-dist-labels" class="dist-labels"></div>
+          </div>
+          <div class="dist-wrapper">
+            <h3>收藏分布</h3>
+            <div id="collects-dist" class="dist-chart"></div>
+            <div id="collects-dist-labels" class="dist-labels"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 内容洞察 -->
+      <section class="panel">
+        <h2>内容洞察</h2>
+        <div id="content-insights" class="insights-grid"></div>
+      </section>
+
+      <!-- 深度洞察 -->
+      <section class="panel deep-dive-panel is-collapsed" id="deep-dive-panel">
+        <div class="panel-header deep-dive-header">
+          <h2>深度洞察</h2>
+          <div class="deep-dive-actions">
+            <button id="btn-deep-toggle" class="btn-deep-toggle" type="button">展开</button>
+            <button id="btn-deep-expand-all" class="btn-deep-secondary hidden" type="button">展开全部</button>
+          </div>
+        </div>
+
+        <div id="deep-dive-summary" class="deep-dive-summary"></div>
+
+        <div id="deep-dive-content" class="deep-dive-content hidden">
+          <div id="adv-kpi-grid" class="adv-kpi-grid"></div>
+
+          <div class="adv-section" data-adv-section="tag-roi">
+            <button class="adv-section-toggle" type="button">
+              <div class="adv-section-heading">
+                <span class="adv-section-title">标签 ROI 排行</span>
+                <span id="adv-summary-tag-roi" class="adv-section-summary"></span>
+              </div>
+              <span class="adv-section-state">展开</span>
+            </button>
+            <div class="adv-section-body">
+              <p class="adv-desc">每个标签的平均点赞 / 整体平均点赞，&gt;1× 拉高互动，&lt;1× 拉低</p>
+              <div id="adv-tag-roi-chart" class="adv-chart"></div>
+              <div class="adv-ai-toolbar">
+                <button class="btn-ai-inline" data-adv-ai="tag-roi">AI 分析</button>
+                <span id="adv-ai-meta-tag-roi" class="adv-ai-meta"></span>
+              </div>
+              <div id="adv-ai-tag-roi" class="adv-ai-report hidden"></div>
+            </div>
+          </div>
+
+          <div class="adv-section" data-adv-section="title-pattern">
+            <button class="adv-section-toggle" type="button">
+              <div class="adv-section-heading">
+                <span class="adv-section-title">标题模式效果</span>
+                <span id="adv-summary-title-pattern" class="adv-section-summary"></span>
+              </div>
+              <span class="adv-section-state">展开</span>
+            </button>
+            <div class="adv-section-body">
+              <p class="adv-desc">含特定模式的笔记 vs 全部笔记的平均点赞对比</p>
+              <div id="adv-title-pattern-chart" class="adv-chart adv-chart-sm"></div>
+              <div id="adv-title-pattern-cards" class="adv-pattern-cards"></div>
+              <div class="adv-ai-toolbar">
+                <button class="btn-ai-inline" data-adv-ai="title-pattern">AI 分析</button>
+                <span id="adv-ai-meta-title-pattern" class="adv-ai-meta"></span>
+              </div>
+              <div id="adv-ai-title-pattern" class="adv-ai-report hidden"></div>
+            </div>
+          </div>
+
+          <div class="adv-section" data-adv-section="heatmap">
+            <button class="adv-section-toggle" type="button">
+              <div class="adv-section-heading">
+                <span class="adv-section-title">发布时段热力图</span>
+                <span id="adv-summary-heatmap" class="adv-section-summary"></span>
+              </div>
+              <span class="adv-section-state">展开</span>
+            </button>
+            <div class="adv-section-body">
+              <p class="adv-desc">按星期×小时统计各时段平均互动，找到最佳发布窗口</p>
+              <div id="adv-heatmap-chart" class="adv-chart" style="height:280px"></div>
+              <div class="adv-ai-toolbar">
+                <button class="btn-ai-inline" data-adv-ai="heatmap">AI 分析</button>
+                <span id="adv-ai-meta-heatmap" class="adv-ai-meta"></span>
+              </div>
+              <div id="adv-ai-heatmap" class="adv-ai-report hidden"></div>
+            </div>
+          </div>
+
+          <div class="adv-section" data-adv-section="image-count">
+            <button class="adv-section-toggle" type="button">
+              <div class="adv-section-heading">
+                <span class="adv-section-title">图片数量 vs 互动</span>
+                <span id="adv-summary-image-count" class="adv-section-summary"></span>
+              </div>
+              <span class="adv-section-state">展开</span>
+            </button>
+            <div class="adv-section-body">
+              <p class="adv-desc">不同图片数量分组的平均点赞，找出最优图片数</p>
+              <div id="adv-image-count-chart" class="adv-chart adv-chart-sm"></div>
+              <div class="adv-ai-toolbar">
+                <button class="btn-ai-inline" data-adv-ai="image-count">AI 分析</button>
+                <span id="adv-ai-meta-image-count" class="adv-ai-meta"></span>
+              </div>
+              <div id="adv-ai-image-count" class="adv-ai-report hidden"></div>
+            </div>
+          </div>
+
+          <div class="adv-section" data-adv-section="format-roi">
+            <button class="adv-section-toggle" type="button">
+              <div class="adv-section-heading">
+                <span class="adv-section-title">视频 vs 图文 ROI</span>
+                <span id="adv-summary-format-roi" class="adv-section-summary"></span>
+              </div>
+              <span class="adv-section-state">展开</span>
+            </button>
+            <div class="adv-section-body">
+              <p class="adv-desc">两种内容形式的平均互动对比</p>
+              <div id="adv-format-roi-chart" class="adv-chart adv-chart-sm"></div>
+              <div class="adv-ai-toolbar">
+                <button class="btn-ai-inline" data-adv-ai="format-roi">AI 分析</button>
+                <span id="adv-ai-meta-format-roi" class="adv-ai-meta"></span>
+              </div>
+              <div id="adv-ai-format-roi" class="adv-ai-report hidden"></div>
+            </div>
+          </div>
+
+          <div class="adv-section" data-adv-section="content-len">
+            <button class="adv-section-toggle" type="button">
+              <div class="adv-section-heading">
+                <span class="adv-section-title">正文长度 vs 互动</span>
+                <span id="adv-summary-content-len" class="adv-section-summary"></span>
+              </div>
+              <span class="adv-section-state">展开</span>
+            </button>
+            <div class="adv-section-body">
+              <p class="adv-desc">短文 / 中篇 / 长文的平均点赞对比</p>
+              <div id="adv-content-len-chart" class="adv-chart adv-chart-sm"></div>
+              <div class="adv-ai-toolbar">
+                <button class="btn-ai-inline" data-adv-ai="content-len">AI 分析</button>
+                <span id="adv-ai-meta-content-len" class="adv-ai-meta"></span>
+              </div>
+              <div id="adv-ai-content-len" class="adv-ai-report hidden"></div>
+            </div>
+          </div>
+
+          <div class="adv-section" data-adv-section="growth" id="adv-growth-section">
+            <button class="adv-section-toggle" type="button">
+              <div class="adv-section-heading">
+                <span class="adv-section-title">📈 数据增长趋势</span>
+                <span id="adv-summary-growth" class="adv-section-summary"></span>
+              </div>
+              <span class="adv-section-state">展开</span>
+            </button>
+            <div class="adv-section-body">
+              <p class="adv-desc">历次抓取的汇总指标变化曲线，每次重新抓取会自动记录快照</p>
+              <div id="adv-growth-chart" class="adv-chart" style="height:320px"></div>
+              <div class="adv-ai-toolbar">
+                <button class="btn-ai-inline" data-adv-ai="growth">AI 分析</button>
+                <span id="adv-ai-meta-growth" class="adv-ai-meta"></span>
+              </div>
+              <div id="adv-ai-growth" class="adv-ai-report hidden"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 创作者后台数据分析（导入后显示） -->
+      <section id="backend-funnel-panel" class="panel hidden">
+        <h2>转化漏斗分析</h2>
+        <p class="panel-subtitle">数据来源：创作者后台导出</p>
+        <div id="backend-funnel-chart" style="height:300px"></div>
+      </section>
+
+      <section id="backend-ctr-panel" class="panel hidden">
+        <h2>封面点击率分布</h2>
+        <p class="panel-subtitle">数据来源：创作者后台导出</p>
+        <div id="backend-ctr-chart" style="height:300px"></div>
+      </section>
+
+      <section id="backend-attribution-panel" class="panel hidden">
+        <div class="panel-header">
+          <h2>涨粉归因 &amp; 分享传播</h2>
+        </div>
+        <p class="panel-subtitle">哪些笔记带来最多粉丝和分享</p>
+        <div class="backend-dual-chart">
+          <div id="backend-follower-chart" style="height:300px;flex:1"></div>
+          <div id="backend-share-chart" style="height:300px;flex:1"></div>
+        </div>
+      </section>
+
+      <!-- 运营建议 -->
+      <section class="panel">
+        <h2>运营建议</h2>
+        <div id="recommendations" class="recommendations"></div>
+      </section>
+
+      <!-- AI 深度分析 -->
+      <section class="panel ai-section" id="ai-section">
+        <div class="panel-header">
+          <h2>AI 深度分析</h2>
+          <div class="ai-actions">
+            <button id="btn-ai-generate" class="btn-ai">生成报告</button>
+            <button id="btn-ai-clear" class="btn-ai-secondary" style="display:none">清除缓存</button>
+          </div>
+        </div>
+        <div id="ai-report" class="ai-report">
+          <p class="ai-placeholder">点击「生成报告」，AI 将为你分析内容策略、爆款密码、对标建议</p>
+        </div>
+        <div id="ai-nokey-overlay" class="lock-overlay" style="display:none">
+          <div class="lock-content">
+            <p class="lock-icon">&#128273;</p>
+            <p>请先在扩展弹窗的 AI 设置中配置 API Key</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ===== 个人分析视图 ===== -->
+    <div id="personal-view" class="hidden">
+      <nav class="nav-bar">
+        <button id="btn-personal-back" class="btn-back">&larr; 返回详情</button>
+        <span id="personal-nav-name" class="nav-blogger-name"></span>
+      </nav>
+
+      <header style="margin-top:0">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px">
+          <div style="min-width:0;flex:1">
+            <h1 id="personal-header">个人数据分析</h1>
+            <p class="subtitle" id="personal-subtitle"></p>
+          </div>
+          <div style="display:flex;gap:6px;flex-shrink:0">
+            <button id="btn-personal-import" class="btn-export-data btn-import" title="导入/更新创作者数据">&#128228; 导入数据</button>
+          </div>
+        </div>
+      </header>
+
+      <!-- KPI 卡片 -->
+      <section class="cards" id="personal-kpi-cards"></section>
+
+      <!-- 转化漏斗 -->
+      <section class="panel" id="personal-funnel-panel">
+        <h2>转化漏斗</h2>
+        <div class="funnel-split">
+          <div id="personal-funnel-visual" style="height:360px"></div>
+          <div id="personal-funnel-chart"></div>
+        </div>
+      </section>
+
+      <!-- 封面点击率分析 -->
+      <section class="panel" id="personal-ctr-panel">
+        <div class="panel-header"><h2>封面点击率分析</h2></div>
+        <div id="personal-ctr-insight" class="ctr-insight"></div>
+        <div id="personal-ctr-chart" style="height:320px"></div>
+      </section>
+
+      <!-- 内容表现矩阵 -->
+      <section class="panel" id="personal-matrix-panel">
+        <h2>内容表现矩阵</h2>
+        <p class="panel-desc">横轴为曝光量，纵轴为互动率，气泡大小为涨粉数</p>
+        <div id="personal-matrix-chart" style="height:400px"></div>
+      </section>
+
+      <!-- 涨粉 & 分享归因 -->
+      <section class="panel" id="personal-attribution-panel">
+        <div class="panel-header"><h2>增长归因</h2></div>
+        <div class="personal-dual-chart">
+          <div>
+            <h3 class="personal-chart-title">涨粉 Top 10</h3>
+            <div id="personal-follower-chart" style="height:300px"></div>
+          </div>
+          <div>
+            <h3 class="personal-chart-title">分享 Top 10</h3>
+            <div id="personal-share-chart" style="height:300px"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 诊断清单：三象限笔记 -->
+      <section class="panel" id="personal-diagnosis-panel">
+        <div class="panel-header">
+          <h2>诊断清单</h2>
+          <span class="panel-desc">自动识别需要干预的笔记</span>
+        </div>
+        <div id="personal-diagnosis" class="personal-diagnosis-grid"></div>
+      </section>
+
+      <!-- 发布时段热力图 -->
+      <section class="panel" id="personal-heatmap-panel">
+        <div class="panel-header">
+          <h2>发布时段表现</h2>
+          <div class="heatmap-metric-switch">
+            <button class="heatmap-metric-btn active" data-metric="impressions">曝光</button>
+            <button class="heatmap-metric-btn" data-metric="views">观看</button>
+            <button class="heatmap-metric-btn" data-metric="interactions">互动</button>
+            <button class="heatmap-metric-btn" data-metric="followerGain">涨粉</button>
+          </div>
+        </div>
+        <div id="personal-heatmap-chart" style="height:280px"></div>
+        <div id="personal-heatmap-summary" class="heatmap-summary"></div>
+      </section>
+
+      <!-- 账号趋势（6 指标迷你图） -->
+      <section class="panel hidden" id="personal-trends-panel">
+        <h2 id="personal-trends-title">账号趋势</h2>
+        <div id="personal-trends-grid" class="personal-trends-grid"></div>
+      </section>
+
+      <!-- AI 改进建议 -->
+      <section class="panel ai-section" id="personal-ai-section">
+        <div class="panel-header">
+          <h2>AI 改进建议</h2>
+          <button id="btn-personal-ai" class="btn-ai">生成建议</button>
+        </div>
+        <div id="personal-ai-report" class="ai-report">
+          <p class="ai-placeholder">基于创作者后台数据，AI 将给出封面优化、内容策略、涨粉提效等具体建议</p>
+        </div>
+        <div id="personal-ai-nokey" class="lock-overlay" style="display:none">
+          <div class="lock-content">
+            <p class="lock-icon">&#128273;</p>
+            <p>请先在扩展弹窗的 AI 设置中配置 API Key</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- 悬浮聊天窗口 -->
+    <div id="chat-widget" class="chat-widget" style="display:none">
+      <div class="chat-header">
+        <span>AI 问答</span>
+        <div class="chat-header-actions">
+          <button id="btn-chat-clear" class="chat-btn" title="清除记录">&#128465;</button>
+          <button id="btn-chat-close" class="chat-btn">&#10005;</button>
+        </div>
+      </div>
+      <div id="chat-messages" class="chat-messages"></div>
+      <div class="chat-input-area">
+        <input id="chat-input" type="text" placeholder="问任何关于这些笔记的问题...">
+        <button id="btn-chat-send" class="btn-chat-send">发送</button>
+      </div>
+    </div>
+    <button id="btn-chat-toggle" class="chat-toggle-btn" style="display:none" title="AI 问答">&#128172;</button>
+
+    <!-- 选择模式浮动栏 -->
+    <div id="compare-selection-bar" class="compare-selection-bar hidden">
+      <span id="compare-selection-count">已选 0 位博主</span>
+      <button id="btn-compare-start" class="btn-compare-start" disabled>开始对比</button>
+      <button id="btn-compare-cancel" class="btn-compare-cancel">取消</button>
+    </div>
+
+    <!-- 底部推广位：作者 GitHub 卡片（全设备） -->
+    <div id="sponsor-bottom" class="sponsor-slot sponsor-slot-bottom" data-slot="bottom" hidden>
+      <div class="sponsor-slot-inner">
+        <span class="sponsor-label">来自作者</span>
+        <button class="sponsor-dismiss" aria-label="关闭" data-slot="bottom">&times;</button>
+        <div id="sponsor-bottom-content" class="sponsor-content"></div>
+      </div>
+    </div>
+
+    <footer>
+      <p>红薯采集器 — 数据分析看板</p>
+    </footer>
+    </main>
+
+    <aside id="workbench-rail" class="workbench-rail hidden">
+      <section id="workbench-overview" class="workbench-panel hidden"></section>
+      <section id="workbench-detail" class="workbench-panel hidden"></section>
+
+      <!-- 右侧推广位：作者小红书博主名片（桌面端 >=1280px 显示） -->
+      <section id="sponsor-sidebar" class="sponsor-slot sponsor-slot-sidebar" data-slot="sidebar" hidden>
+        <div class="sponsor-slot-inner">
+          <span class="sponsor-label">关于作者</span>
+          <button class="sponsor-dismiss" aria-label="关闭" data-slot="sidebar">&times;</button>
+          <div id="sponsor-sidebar-content" class="sponsor-content"></div>
+        </div>
+      </section>
+    </aside>
+  </div>
+
+  <!-- 导入创作者数据 Modal -->
+  <div id="import-modal" class="import-modal hidden">
+    <div class="import-modal-backdrop"></div>
+    <div class="import-modal-content">
+      <div class="import-modal-header">
+        <h3>导入创作者后台数据</h3>
+        <button id="import-modal-close" class="import-modal-close">&times;</button>
+      </div>
+      <div class="import-modal-body">
+        <p class="import-hint">从小红书创作者中心 → 数据分析 → 导出数据，将下载的 Excel 文件导入此处，解锁曝光、封面点击率、涨粉、分享等独占分析。</p>
+        <div class="import-upload-zones">
+          <div class="import-zone" id="import-zone-notes">
+            <input type="file" id="import-file-notes" accept=".xlsx,.xls" hidden>
+            <div class="import-zone-icon">&#128196;</div>
+            <div class="import-zone-label">笔记列表明细表.xlsx</div>
+            <div class="import-zone-hint">必选 · 包含每篇笔记的曝光/观看/涨粉等数据</div>
+            <div id="import-file-notes-name" class="import-zone-filename"></div>
+          </div>
+          <div class="import-zone" id="import-zone-account">
+            <input type="file" id="import-file-account" accept=".xlsx,.xls" hidden>
+            <div class="import-zone-icon">&#128200;</div>
+            <div class="import-zone-label">观看数据.xlsx</div>
+            <div class="import-zone-hint">可选 · 近 7 日或 30 日的账号级趋势数据</div>
+            <div id="import-file-account-name" class="import-zone-filename"></div>
+          </div>
+        </div>
+        <div id="import-preview" class="import-preview hidden"></div>
+        <div id="import-error" class="import-error hidden"></div>
+      </div>
+      <div class="import-modal-footer">
+        <button id="import-btn-merge" class="btn-ai" disabled>合并数据</button>
+        <button id="import-btn-cancel" class="btn-ai-secondary">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="vendor/echarts.min.js"></script>
+  <script src="vendor/html2pdf.bundle.min.js"></script>
+  <script src="vendor/xlsx.mini.min.js"></script>
+  <script src="../lib/data-store.js"></script>
+  <script src="../lib/backend-import.js"></script>
+  <script src="../lib/license.js"></script>
+  <script src="../lib/analytics.js"></script>
+  <script src="../lib/ai-catalog.js"></script>
+  <script src="../lib/ai-service.js"></script>
+  <script src="../lib/pdf-export.js"></script>
+  <script src="../lib/cloud-sync.js"></script>
+  <script src="../lib/onboarding.js"></script>
+  <script src="analysis.js"></script>
+  <script src="sponsor.js"></script>
+</body>
+</html>

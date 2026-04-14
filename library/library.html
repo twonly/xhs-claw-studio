@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>红薯采集器 — 素材库</title>
+  <link rel="stylesheet" href="../lib/onboarding.css">
+  <link rel="stylesheet" href="library.css">
+</head>
+<body>
+  <div class="layout">
+    <!-- 侧栏 -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1 class="logo">素材库</h1>
+        <span class="note-count" id="total-count">0 篇笔记</span>
+      </div>
+
+      <!-- 搜索 -->
+      <div class="search-box">
+        <input type="text" id="search-input" placeholder="搜索标题 / 正文 / 标签...">
+      </div>
+
+      <!-- 排序 -->
+      <div class="filter-group">
+        <label class="filter-label">排序</label>
+        <select id="sort-select">
+          <option value="likes-desc">点赞最多</option>
+          <option value="collects-desc">收藏最多</option>
+          <option value="comments-desc">评论最多</option>
+          <option value="time-desc">最新抓取</option>
+          <option value="time-asc">最早抓取</option>
+        </select>
+      </div>
+
+      <!-- 博主筛选 -->
+      <div class="filter-group">
+        <label class="filter-label">博主</label>
+        <div id="blogger-filter" class="checkbox-list"></div>
+      </div>
+
+      <!-- 内容类型 -->
+      <div class="filter-group">
+        <label class="filter-label">类型</label>
+        <div class="checkbox-list">
+          <label class="cb-label"><input type="checkbox" value="image" class="type-filter" checked> 图文</label>
+          <label class="cb-label"><input type="checkbox" value="video" class="type-filter" checked> 视频</label>
+        </div>
+      </div>
+
+      <!-- 互动区间筛选 -->
+      <div class="filter-group">
+        <label class="filter-label">互动区间</label>
+        <div class="range-row">
+          <span class="range-label">赞</span>
+          <input type="number" id="likes-min" class="range-input" placeholder="最少" min="0">
+          <span class="range-sep">-</span>
+          <input type="number" id="likes-max" class="range-input" placeholder="最多" min="0">
+        </div>
+        <div class="range-row">
+          <span class="range-label">藏</span>
+          <input type="number" id="collects-min" class="range-input" placeholder="最少" min="0">
+          <span class="range-sep">-</span>
+          <input type="number" id="collects-max" class="range-input" placeholder="最多" min="0">
+        </div>
+      </div>
+
+      <!-- 热门标签 -->
+      <div class="filter-group">
+        <label class="filter-label">热门标签</label>
+        <div id="tag-cloud" class="tag-cloud"></div>
+      </div>
+
+      <!-- 操作 -->
+      <div class="sidebar-footer">
+        <button id="btn-back-analysis" class="btn-link">返回分析看板</button>
+      </div>
+    </aside>
+
+    <!-- 主内容 -->
+    <main class="main">
+      <div class="toolbar">
+        <div id="filter-summary" class="filter-summary">全部笔记</div>
+        <div class="toolbar-actions">
+          <button id="btn-export-csv" class="btn-toolbar" title="导出筛选结果为 CSV">&#128229; 导出 CSV</button>
+          <button id="btn-clear-filters" class="btn-clear" style="display:none">清除筛选</button>
+        </div>
+      </div>
+
+      <!-- 统计面板 -->
+      <div id="stats-panel" class="stats-panel"></div>
+
+      <div id="note-grid" class="note-grid"></div>
+
+      <div id="empty-state" class="empty-state" style="display:none">
+        <p class="empty-icon">&#128269;</p>
+        <p>没有找到匹配的笔记</p>
+        <p class="empty-hint">尝试调整搜索词或筛选条件</p>
+      </div>
+
+      <div id="load-more" class="load-more" style="display:none">
+        <button id="btn-load-more" class="btn-load-more">加载更多</button>
+      </div>
+    </main>
+
+    <!-- 笔记详情侧边栏 -->
+    <div id="detail-overlay" class="detail-overlay" style="display:none"></div>
+    <aside id="detail-sidebar" class="detail-sidebar" style="display:none">
+      <div class="detail-header">
+        <button id="btn-detail-close" class="detail-close">&times;</button>
+      </div>
+      <div id="detail-content" class="detail-body"></div>
+    </aside>
+  </div>
+
+  <!-- Toast 提示 -->
+  <div id="toast" class="toast"></div>
+
+  <script src="../lib/data-store.js"></script>
+  <script src="../lib/onboarding.js"></script>
+  <script src="library.js"></script>
+</body>
+</html>
