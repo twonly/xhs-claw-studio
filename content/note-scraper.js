@@ -594,6 +594,13 @@
       ipLocation: null,
     };
 
+    const setIfPresent = (key, value) => {
+      if (value == null) return;
+      const text = String(value).trim();
+      if (!text) return;
+      stats[key] = text;
+    };
+
     // 策略 1: 从 __INITIAL_STATE__ 读取（最可靠）
     try {
       for (const script of document.querySelectorAll('script')) {
@@ -632,6 +639,50 @@
           || state?.user?.notes?.length;
         if (typeof noteCount === 'number') stats.totalNoteCount = noteCount;
         break;
+      }
+    } catch {}
+
+    // 策略 1.5: 从页面可见资料区兜底补齐简介 / 小红书号 / IP 属地
+    try {
+      const textNodes = Array.from(document.querySelectorAll('div, span, p'))
+        .map(el => (el.textContent || '').trim())
+        .filter(Boolean);
+
+      if (!stats.redId) {
+        const redIdText = textNodes.find(text => /小红书号[:：]/.test(text));
+        if (redIdText) {
+          const match = redIdText.match(/小红书号[:：]\s*([A-Za-z0-9_-]+)/);
+          if (match) stats.redId = match[1];
+        }
+      }
+
+      if (!stats.ipLocation) {
+        const ipText = textNodes.find(text => /IP属地[:：]/.test(text));
+        if (ipText) {
+          const match = ipText.match(/IP属地[:：]\s*([^\s]+)/);
+          if (match) stats.ipLocation = match[1];
+        }
+      }
+
+      if (!stats.desc) {
+        const descSelectors = [
+          '.user-desc',
+          '.user-bio',
+          '[class*="user-desc"]',
+          '[class*="userDesc"]',
+          '[class*="user-bio"]',
+          '[class*="desc"]',
+          '[class*="bio"]',
+        ];
+        for (const sel of descSelectors) {
+          const el = document.querySelector(sel);
+          const text = (el?.textContent || '').trim();
+          if (!text) continue;
+          if (text.length < 4 || text.length > 200) continue;
+          if (/关注|粉丝|获赞|收藏|笔记/.test(text)) continue;
+          setIfPresent('desc', text);
+          break;
+        }
       }
     } catch {}
 

@@ -146,20 +146,22 @@
 
     <!-- ===== 详情视图 ===== -->
     <div id="detail-view" class="hidden">
-      <header>
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px">
-          <div style="min-width:0;flex:1">
+      <header class="detail-page-header">
+        <div class="detail-page-head">
+          <div class="detail-page-title">
             <h1 id="detail-header" data-hidden-pref-trigger>数据分析看板</h1>
             <p class="subtitle" id="subtitle">加载中...</p>
           </div>
-          <div style="display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap">
+          <div class="detail-page-actions-wrap">
+            <div class="detail-page-actions">
             <button id="btn-personal-view" class="btn-export-data btn-personal hidden" title="查看个人分析">&#128202; 个人分析</button>
             <button id="btn-backend-import" class="btn-export-data btn-import" title="导入创作者后台数据">&#128228; 导入创作者数据</button>
             <button id="btn-export-csv" class="btn-export-data" title="导出 CSV">&#128229; CSV</button>
             <button id="btn-export-json" class="btn-export-data" title="导出 JSON">&#128229; JSON</button>
             <button id="btn-export-pdf" class="btn-export-pdf" title="导出 PDF 报告">📄 导出 PDF</button>
+            </div>
+            <div id="backend-data-badge" class="backend-badge hidden"></div>
           </div>
-          <div id="backend-data-badge" class="backend-badge hidden"></div>
         </div>
       </header>
 

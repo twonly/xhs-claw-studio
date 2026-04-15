@@ -43,6 +43,7 @@ const cloudPasswordInput = document.getElementById('cloud-password');
 let pendingCloudUpload = false;
 let cloudAuthTab = 'signin';
 const AUTHOR_PROFILE_URL = 'https://www.xiaohongshu.com/user/profile/6467b1210000000010027a51';
+let lastBloggerSavePromise = Promise.resolve();
 
 // ========== 初始化 ==========
 
@@ -320,11 +321,15 @@ chrome.runtime.onMessage.addListener((message) => {
       cachedNotes = message.results;
       // 按博主保存到 data-store
       if (message.blogger?.userId) {
-        DATA_STORE.saveBlogger(
+        lastBloggerSavePromise = DATA_STORE.saveBlogger(
           message.blogger.userId, message.blogger.nickname,
           message.blogger.avatar, message.blogger.profileUrl,
           message.results, message.blogger.stats || null
-        ).then(() => loadRecentScrapes());
+        )
+          .then(() => loadRecentScrapes())
+          .catch((err) => {
+            console.warn('[Popup] saveBlogger failed:', err);
+          });
         lastBloggerUserId = message.blogger.userId;
       }
       refreshCloudUploadPanel().catch(() => {});
@@ -1013,6 +1018,9 @@ btnDownloadSaved.addEventListener('click', () => {
 // ========== 数据分析 ==========
 
 btnAnalysis.addEventListener('click', async () => {
+  try {
+    await lastBloggerSavePromise;
+  } catch {}
   // 优先打开当前博主的详情页
   if (lastBloggerUserId) {
     chrome.tabs.create({ url: chrome.runtime.getURL(`analysis/analysis.html#detail=${lastBloggerUserId}`) });

@@ -376,6 +376,36 @@ header h1 { font-size: 28px; font-weight: 700; color: #ff2442; }
 header .subtitle { font-size: 14px; color: #999; margin-top: 6px; }
 [data-hidden-pref-trigger] { cursor: pointer; user-select: none; }
 
+.detail-page-header {
+  text-align: left;
+}
+.detail-page-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px 20px;
+  align-items: start;
+}
+.detail-page-title {
+  min-width: 0;
+}
+.detail-page-title h1 {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.detail-page-actions-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  min-width: min(100%, 540px);
+}
+.detail-page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
 /* 博主总览网格 */
 .blogger-grid {
   display: grid;
@@ -2108,8 +2138,14 @@ footer {
 
 /* 后台数据 badge */
 .backend-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-size: 12px; padding: 4px 10px; border-radius: 6px;
   margin-top: 4px;
+  max-width: 100%;
+  white-space: normal;
+  text-align: center;
 }
 .backend-badge.imported { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
 .backend-badge.not-imported { background: #f8fafc; color: #94a3b8; border: 1px solid #e2e8f0; }
@@ -2140,6 +2176,20 @@ footer {
   border-color: #93c5fd !important;
 }
 .btn-personal:hover { background: #dbeafe !important; }
+
+@media (max-width: 1180px) {
+  .detail-page-head {
+    grid-template-columns: 1fr;
+  }
+  .detail-page-actions-wrap {
+    min-width: 0;
+    align-items: flex-start;
+  }
+  .detail-page-actions {
+    justify-content: flex-start;
+  }
+}
+
 .panel-desc {
   font-size: 12px; color: #888; margin: -8px 0 12px;
 }

@@ -1511,6 +1511,23 @@
       return;
     }
 
+    const indexEntry = (await DATA_STORE.getBloggerIndex()).find(item => item.userId === userId) || null;
+    if (indexEntry) {
+      bloggerData.nickname = indexEntry.nickname || bloggerData.nickname;
+      bloggerData.avatar = indexEntry.avatar || bloggerData.avatar;
+      bloggerData.profileUrl = indexEntry.profileUrl || bloggerData.profileUrl;
+      bloggerData.stats = {
+        ...(bloggerData.stats || {}),
+        followerCount: indexEntry.followerCount ?? bloggerData.stats?.followerCount ?? null,
+        followingCount: indexEntry.followingCount ?? bloggerData.stats?.followingCount ?? null,
+        likedAndCollectedCount: indexEntry.likedAndCollectedCount ?? bloggerData.stats?.likedAndCollectedCount ?? null,
+        redId: indexEntry.redId ?? bloggerData.stats?.redId ?? null,
+        desc: indexEntry.desc ?? bloggerData.stats?.desc ?? null,
+        gender: indexEntry.gender ?? bloggerData.stats?.gender ?? null,
+        ipLocation: indexEntry.ipLocation ?? bloggerData.stats?.ipLocation ?? null,
+      };
+    }
+
     const notes = bloggerData.notes;
     const name = bloggerData.nickname || '博主';
     const time = new Date(bloggerData.scrapedAt).toLocaleString('zh-CN');
