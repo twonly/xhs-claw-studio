@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <strong>A real Chrome extension for XiaoHongShu batch capture, export, analysis, material library workflows, creator dashboard import, and AI recap.</strong>
+  <strong>Turn XiaoHongShu from manual scrolling, copying, and comparing into a structured content studio.</strong>
 </p>
 
 <p align="center">
@@ -18,11 +18,22 @@
   <img alt="Local First" src="https://img.shields.io/badge/Local-First-ff2442?style=for-the-badge">
 </p>
 
-## ✨ What This Is
+## ✨ Why This Exists
 
-`xhs-claw-studio` is not a concept project or a fake landing page.
+For bloggers, operators, and MCNs, the hard part is rarely just "reading content."
 
-It is a working Chrome extension, and it currently supports:
+The real friction usually looks like this:
+
+- breakout-post teardown still depends on screenshots and manual spreadsheets
+- competitor and matrix-account research lives across too many scattered pages
+- exported data stops at a sheet instead of turning into reusable review workflows
+- public-page data and creator-dashboard data stay disconnected, so analysis breaks halfway through
+
+`xhs-claw-studio` was built for exactly that workflow.
+
+It connects public-page capture, export, analysis, material-library workflows, and creator-dashboard import into one pipeline, so you do not have to bounce between screenshots, spreadsheets, tabs, and scattered notes.
+
+It currently supports:
 
 - batch capture from XiaoHongShu profile pages
 - single-note capture from note detail pages
@@ -43,7 +54,9 @@ After loading the extension into Chrome, open any XiaoHongShu profile page and u
 
 ## 🎯 What It Solves
 
-It turns public XiaoHongShu pages into structured data, then continues into analysis, recap, and reusable content research workflows instead of stopping at a one-time export.
+The point is not just to capture content. The point is to keep using it after capture.
+
+It turns public XiaoHongShu pages into structured data, then continues into analysis, recap, comparison, and reusable content research workflows instead of stopping at a one-time export.
 
 Typical use cases:
 
@@ -149,10 +162,3 @@ The current recommended install method is Chrome developer mode:
 5. Select this project directory
 
 If you download the packaged ZIP from `dist/`, unzip it first and then select the extracted folder. Chrome developer mode does not load a ZIP file directly through `Load unpacked`.
-
-## 🌐 Supported Pages
-
-- `https://www.xiaohongshu.com/user/profile/*`
-- `https://www.xiaohongshu.com/explore/*`
-- `https://www.xiaohongshu.com/discovery/item/*`
-- `https://creator.xiaohongshu.com/statistics/*`
