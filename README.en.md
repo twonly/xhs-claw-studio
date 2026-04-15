@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <strong>A real Chrome extension for XiaoHongShu capture, export, analysis, material library workflows, creator dashboard import, and AI recap.</strong>
+  <strong>A real Chrome extension for XiaoHongShu batch capture, export, analysis, material library workflows, creator dashboard import, and AI recap.</strong>
 </p>
 
 <p align="center">
@@ -18,11 +18,11 @@
   <img alt="Local First" src="https://img.shields.io/badge/Local-First-ff2442?style=for-the-badge">
 </p>
 
-## What This Is
+## ✨ What This Is
 
-`xhs-claw-studio` is a working Chrome extension, not a concept mockup.
+`xhs-claw-studio` is not a concept project or a fake landing page.
 
-It currently supports:
+It is a working Chrome extension, and it currently supports:
 
 - batch capture from XiaoHongShu profile pages
 - single-note capture from note detail pages
@@ -31,72 +31,116 @@ It currently supports:
 - multi-blogger comparison
 - searchable material library
 - creator dashboard Excel import
-- AI recap and follow-up chat
+- AI reports and follow-up chat
 - optional cloud sync
 
-## What It Solves
+### 🖼️ Screenshot 1: Popup / Batch Capture Entry
 
-It turns XiaoHongShu public-page content into structured data, then keeps going into analysis, comparison, recap, and reusable research workflows.
+![Popup / Batch Capture Entry](docs/screenshots/01-popup-batch-capture.png)
+
+Description:
+After loading the extension into Chrome, open any XiaoHongShu profile page and use the popup to batch-capture notes. It is recommended to control delay settings and batch size to reduce anti-bot risk. If capture fails, open `F12`, inspect `Network`, and submit an issue with the relevant request details.
+
+## 🎯 What It Solves
+
+It turns public XiaoHongShu pages into structured data, then continues into analysis, recap, and reusable content research workflows instead of stopping at a one-time export.
 
 Typical use cases:
 
-- creator ops review
+- content ops review
 - competitor research
-- idea mining
+- topic and idea mining
 - content archiving
-- account analysis
+- creator account analysis
 
-## Current Real Workflow
+## 🧭 Current Real Workflow
 
 1. Open a XiaoHongShu profile page or note detail page
 2. Capture a single note or batch-crawl a profile
-3. Export CSV / JSON or jump into the dashboard
-4. Inspect top notes, engagement distribution, tag patterns, and blogger comparison
-5. Use the material library to search and filter all captured content
-6. Import creator dashboard Excel data for deeper account analysis
-7. Connect your own compatible API key if you want AI reports
+3. Export CSV / JSON or jump directly into the analysis dashboard
+4. Review top content, engagement distribution, tag strategy, and multi-blogger comparison
+5. Search, filter, and export captured content from the material library
+6. Import creator dashboard Excel files for deeper personal analysis
+7. If you configure your own compatible API key, continue with AI reports and AI chat
 
-## Core Features
+## 🧩 Core Features
 
-### 1. Capture
+### 1. Data Capture 📥
 
-- batch crawl XiaoHongShu profile pages
-- single-note capture for note detail pages
-- extract title, body, tags, images, comments, engagement, publish time, and source URL
-- task resume support
-- cooldown-based crawling for longer runs
+- batch capture from XiaoHongShu profile pages
+- single-note capture from note detail pages
+- extract title, body, tags, images, comments, engagement metrics, publish time, and source URL
+- resume support for interrupted runs
+- cooldown-based pacing to reduce failures during longer crawls
 
-### 2. Export
+### 🖼️ Screenshot 2: Capture Results and Next Actions
+
+![Capture Results and Next Actions](docs/screenshots/02-capture-result-actions.png)
+
+Description:
+After a batch capture finishes, you can directly download `CSV` or `JSON`, jump into the `Data Analysis` dashboard, or upload the current blogger dataset to the cloud to form a continuous workflow from capture to analysis.
+
+### 2. Data Export 📦
 
 - CSV export
 - JSON export
 - standard analysis export
-- full raw export
+- full raw-data export
 
-### 3. Dashboard
+### 3. Analysis Dashboard 📊
 
 - single-blogger analysis
-- top-note ranking
+- top-content ranking
 - engagement distribution
 - tag and title pattern analysis
 - multi-blogger comparison
-- creator-dashboard-based personal analysis
+- personal analysis after creator dashboard import
 
-### 4. Material Library
+### 🖼️ Screenshot 3: Single Blogger Dashboard
 
-- cross-blogger search
-- search by title, content, tags, and blogger
+![Single Blogger Dashboard](docs/screenshots/03-single-blogger-dashboard.png)
+
+Description:
+Inside the analysis page, you can review a blogger's core metrics, top-performing content, profile details, and export actions. This view works well for account review, content breakdown, and periodic performance checks.
+
+### 🖼️ Screenshot 4: Multi-Blogger Comparison
+
+![Multi-Blogger Comparison](docs/screenshots/04-multi-blogger-comparison.png)
+
+Description:
+Compare multiple bloggers side by side across note count, total likes, average likes per post, collect-to-like ratio, breakout rate, title length, body length, and more. This is useful for competitor research and same-track benchmarking.
+
+### 4. Material Library 🗂️
+
+- unified cross-blogger search
+- search by title, body, tag, or blogger
 - filter by content type, engagement range, and tags
-- note detail side panel
-- filtered result export
+- expand note details
+- export filtered results
 
-### 5. AI
+### 🖼️ Screenshot 5: Material Library
 
-- BYOK by default
-- supports DeepSeek, OpenAI, Moonshot, GLM, Qwen, SiliconFlow
-- custom model name supported
+![Material Library](docs/screenshots/05-material-library.png)
 
-## Install
+Description:
+Captured data is accumulated into a reusable material library with search, filtering, sorting, and export. It is useful for building long-term topic banks, breakout-post libraries, and competitor inspiration databases.
+
+### 5. AI 🤖
+
+- BYOK by default, no model usage subsidy included
+- supports DeepSeek, OpenAI, Moonshot, GLM, Qwen, and SiliconFlow
+- custom model names supported
+
+### 🖼️ Screenshot 6: AI Deep Analysis and Chat
+
+![AI Deep Analysis and Chat](docs/screenshots/06-ai-analysis-and-chat.png)
+
+Description:
+Supports broad analysis, chat-style exploration, and focused analysis around specific topics. LLM capability is already integrated, but you need to configure your own compatible API key to use it.
+
+## 🚀 Installation
+
+The current recommended install method is Chrome developer mode:
 
 1. Clone or download this repository
 2. Open `chrome://extensions/`
@@ -104,9 +148,9 @@ Typical use cases:
 4. Click `Load unpacked`
 5. Select this project directory
 
-If you download the packaged ZIP from `dist/`, unzip it first, then select the extracted folder. Chrome developer-mode installation does not load a ZIP file directly through `Load unpacked`.
+If you download the packaged ZIP from `dist/`, unzip it first and then select the extracted folder. Chrome developer mode does not load a ZIP file directly through `Load unpacked`.
 
-## Supported Pages
+## 🌐 Supported Pages
 
 - `https://www.xiaohongshu.com/user/profile/*`
 - `https://www.xiaohongshu.com/explore/*`
