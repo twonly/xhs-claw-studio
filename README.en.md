@@ -5,7 +5,11 @@
 </p>
 
 <p align="center">
-  <strong>Turn XiaoHongShu from manual scrolling, copying, and comparing into a structured content studio.</strong>
+  <strong>Too expensive? Only need export, not a full platform?</strong>
+</p>
+
+<p align="center">
+  <strong>HongShu Claw: focused XiaoHongShu export and lightweight analysis.</strong>
 </p>
 
 <p align="center">
@@ -18,36 +22,31 @@
   <img alt="Local First" src="https://img.shields.io/badge/Local-First-ff2442?style=for-the-badge">
 </p>
 
-## ✨ Why This Exists
+## ✨ If These Questions Sound Familiar
 
-For bloggers, operators, and MCNs, the hard part is rarely just "reading content."
+- Too expensive?
+- Do you only want export, without buying a full platform?
+- Do you just want to capture the data first, then run lightweight analysis and recap?
+- Do you want a tool you can start using immediately, instead of another heavy SaaS workspace?
 
-The real friction usually looks like this:
+`HongShu Claw` is built for exactly that use case.
 
-- breakout-post teardown still depends on screenshots and manual spreadsheets
-- competitor and matrix-account research lives across too many scattered pages
-- exported data stops at a sheet instead of turning into reusable review workflows
-- public-page data and creator-dashboard data stay disconnected, so analysis breaks halfway through
+It does not try to be an all-in-one content platform. It focuses on turning XiaoHongShu public-page capture, export, analysis, material-library workflows, and creator-dashboard import into one lightweight pipeline.
 
-`xhs-claw-studio` was built for exactly that workflow.
-
-It connects public-page capture, export, analysis, material-library workflows, and creator-dashboard import into one pipeline, so you do not have to bounce between screenshots, spreadsheets, tabs, and scattered notes.
+For solo creators, small teams, and MCNs, that usually means you do not need to pay for a heavy platform. The product positioning is simple: focused export and lightweight analysis, priced at a small fraction of traditional platforms.
 
 ### 🧭 Diagram: Pain to Value
 
 ![Pain to Value](docs/diagrams/03-pain-to-value.svg)
 
-It currently supports:
+What you really get is a full workflow without platform bloat:
 
-- batch capture from XiaoHongShu profile pages
-- single-note capture from note detail pages
-- CSV / JSON export
-- blogger analysis dashboard
-- multi-blogger comparison
-- searchable material library
-- creator dashboard Excel import
-- AI reports and follow-up chat
-- optional cloud sync
+- capture XiaoHongShu profile pages and note detail pages
+- export CSV / JSON
+- run single-blogger analysis and multi-blogger comparison
+- build a searchable material library for recap and reuse
+- import creator dashboard Excel files only when you need deeper metrics
+- connect your own compatible API key only when you want AI
 
 ### 🖼️ Screenshot 1: Popup / Batch Capture Entry
 
@@ -58,9 +57,9 @@ After loading the extension into Chrome, open any XiaoHongShu profile page and u
 
 ## 🎯 What It Solves
 
-The point is not just to capture content. The point is to keep using it after capture.
+The point is not "more features." The point is not paying for the features you do not need.
 
-It turns public XiaoHongShu pages into structured data, then continues into analysis, recap, comparison, and reusable content research workflows instead of stopping at a one-time export.
+If what you need is XiaoHongShu export, lightweight analysis, competitor comparison, and material-library workflows, `HongShu Claw` is the more direct and lightweight option.
 
 Typical use cases:
 
