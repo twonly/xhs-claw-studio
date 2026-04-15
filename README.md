@@ -36,7 +36,7 @@
 
 ### 🖼️ 截图 1：插件 Popup / 批量抓取入口
 
-预留图片路径：`docs/screenshots/01-popup-batch-capture.png`
+![插件 Popup / 批量抓取入口](docs/screenshots/01-popup-batch-capture.png)
 
 说明：
 导入 Chrome 插件后，在小红书博主页面打开，即可批量抓取笔记数据。建议控制延时范围和每批抓取数量，避免触发反爬机制。如果抓取失败，可打开 `F12` 查看 `Network` 信息并提交 issue。
@@ -75,7 +75,7 @@
 
 ### 🖼️ 截图 2：抓取结果与后续操作
 
-预留图片路径：`docs/screenshots/02-capture-result-actions.png`
+![抓取结果与后续操作](docs/screenshots/02-capture-result-actions.png)
 
 说明：
 批量抓取完成后，可以直接下载 `CSV`、`JSON`，进入 `数据分析` 看板，或者把当前博主数据上传到云端，形成从抓取到分析的连续工作流。
@@ -98,14 +98,14 @@
 
 ### 🖼️ 截图 3：单博主分析看板
 
-预留图片路径：`docs/screenshots/03-single-blogger-dashboard.png`
+![单博主分析看板](docs/screenshots/03-single-blogger-dashboard.png)
 
 说明：
 进入分析页后，可以查看单个博主的核心指标、Top 内容、画像信息和导出入口。这个页面适合做账号复盘、内容拆解和阶段性数据回看。
 
 ### 🖼️ 截图 4：多博主对比
 
-预留图片路径：`docs/screenshots/04-multi-blogger-comparison.png`
+![多博主对比](docs/screenshots/04-multi-blogger-comparison.png)
 
 说明：
 支持多位博主横向对比，查看笔记数、总点赞、平均赞/篇、收藏/赞比、爆款率、标题长度、正文长度等指标，适合做竞品研究和同赛道对标。
@@ -120,7 +120,7 @@
 
 ### 🖼️ 截图 5：素材库
 
-预留图片路径：`docs/screenshots/05-material-library.png`
+![素材库](docs/screenshots/05-material-library.png)
 
 说明：
 抓取过的数据会沉淀成统一素材库，支持搜索、筛选、排序和导出。适合长期做选题库、爆款库和竞品素材沉淀。
@@ -133,7 +133,7 @@
 
 ### 🖼️ 截图 6：AI 深度分析与问答
 
-预留图片路径：`docs/screenshots/06-ai-analysis-and-chat.png`
+![AI 深度分析与问答](docs/screenshots/06-ai-analysis-and-chat.png)
 
 说明：
 支持综合分析、问答式分析，以及围绕特定专题做针对性分析。当前已经集成 LLM 能力，但需要用户自行配置兼容 API Key 才能使用。
