@@ -33,6 +33,10 @@ The real friction usually looks like this:
 
 It connects public-page capture, export, analysis, material-library workflows, and creator-dashboard import into one pipeline, so you do not have to bounce between screenshots, spreadsheets, tabs, and scattered notes.
 
+### 🧭 Diagram: Pain to Value
+
+![Pain to Value](docs/diagrams/03-pain-to-value.svg)
+
 It currently supports:
 
 - batch capture from XiaoHongShu profile pages
@@ -75,6 +79,10 @@ Typical use cases:
 5. Search, filter, and export captured content from the material library
 6. Import creator dashboard Excel files for deeper personal analysis
 7. If you configure your own compatible API key, continue with AI reports and AI chat
+
+### 🗺️ Diagram: Product Workflow
+
+![Product Workflow](docs/diagrams/01-product-workflow.svg)
 
 ## 🧩 Core Features
 
@@ -162,3 +170,7 @@ The current recommended install method is Chrome developer mode:
 5. Select this project directory
 
 If you download the packaged ZIP from `dist/`, unzip it first and then select the extracted folder. Chrome developer mode does not load a ZIP file directly through `Load unpacked`.
+
+## 🧱 Product Module Map
+
+![Product Module Map](docs/diagrams/02-product-module-map.svg)

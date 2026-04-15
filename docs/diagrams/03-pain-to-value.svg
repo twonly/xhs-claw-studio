@@ -1,0 +1,86 @@
+<svg width="1600" height="940" viewBox="0 0 1600 940" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0 0L12 6L0 12V0Z" fill="#ff2442"/>
+    </marker>
+    <style>
+      .title { font: 700 36px Inter, Helvetica, Arial, sans-serif; fill: #0f172a; }
+      .subtitle { font: 600 14px "JetBrains Mono", Consolas, monospace; fill: #64748b; letter-spacing: 1.4px; }
+      .h { font: 700 22px Inter, Helvetica, Arial, sans-serif; fill: #0f172a; }
+      .label { font: 600 15px Inter, Helvetica, Arial, sans-serif; fill: #0f172a; }
+      .body { font: 500 13px Inter, Helvetica, Arial, sans-serif; fill: #475569; }
+      .mono { font: 600 12px "JetBrains Mono", Consolas, monospace; fill: #64748b; letter-spacing: 0.6px; }
+      .stat { font: 700 16px Inter, Helvetica, Arial, sans-serif; fill: #ff2442; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="940" fill="#f8fafc"/>
+  <rect x="54" y="48" width="1492" height="844" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  <line x1="54" y1="142" x2="1546" y2="142" stroke="#cbd5e1" stroke-width="2"/>
+
+  <text x="92" y="102" class="title">XHS Claw Studio</text>
+  <text x="92" y="126" class="subtitle">VERSION C / PAIN TO VALUE / FROM FRAGMENTED RESEARCH TO OPERATIONAL CLARITY</text>
+
+  <text x="92" y="196" class="mono">01 / WHY PEOPLE STRUGGLE</text>
+  <rect x="92" y="222" width="360" height="150" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="120" y="256" class="h">Pain 1</text>
+  <text x="120" y="286" class="label">Manual teardown is slow</text>
+  <text x="120" y="314" class="body">Screenshots, notes, spreadsheets, and tabs are split apart.</text>
+  <text x="120" y="338" class="body">What should be a review workflow becomes copy-paste labor.</text>
+
+  <rect x="92" y="396" width="360" height="150" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="120" y="430" class="h">Pain 2</text>
+  <text x="120" y="460" class="label">Competitor research is fragmented</text>
+  <text x="120" y="488" class="body">Different bloggers, notes, and metrics live on separate pages.</text>
+  <text x="120" y="512" class="body">Cross-account comparison is hard to maintain.</text>
+
+  <rect x="92" y="570" width="360" height="150" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="120" y="604" class="h">Pain 3</text>
+  <text x="120" y="634" class="label">Exports do not become assets</text>
+  <text x="120" y="662" class="body">A file gets downloaded, then the workflow stops.</text>
+  <text x="120" y="686" class="body">There is no reusable topic bank or long-term content system.</text>
+
+  <text x="542" y="196" class="mono">02 / WHAT THE PRODUCT DOES</text>
+  <rect x="542" y="222" width="516" height="498" fill="#fff1f2" stroke="#ff2442" stroke-width="2"/>
+  <text x="574" y="268" class="h">One Product, One Workflow</text>
+  <text x="574" y="304" class="label">Capture</text>
+  <text x="574" y="330" class="body">Batch crawl profiles and capture single notes</text>
+  <text x="574" y="374" class="label">Structure</text>
+  <text x="574" y="400" class="body">Save note records, blogger snapshots, exports, and backend imports in one system</text>
+  <text x="574" y="444" class="label">Analyze</text>
+  <text x="574" y="470" class="body">Review dashboards, top content, engagement distribution, and multi-blogger comparison</text>
+  <text x="574" y="514" class="label">Reuse</text>
+  <text x="574" y="540" class="body">Search and filter everything in a material library instead of re-collecting from scratch</text>
+  <text x="574" y="584" class="label">Go Deeper</text>
+  <text x="574" y="610" class="body">Bring in creator backend metrics and AI analysis only when you need them</text>
+  <text x="574" y="664" class="mono">public pages + backend data + analysis + material assets + AI recap</text>
+
+  <text x="1148" y="196" class="mono">03 / WHAT YOU GET</text>
+  <rect x="1148" y="222" width="316" height="118" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="1176" y="258" class="stat">FASTER</text>
+  <text x="1176" y="286" class="label">Account recap and content review</text>
+  <text x="1176" y="312" class="body">Less manual collection, more direct insight</text>
+
+  <rect x="1148" y="370" width="316" height="118" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="1176" y="406" class="stat">CLEARER</text>
+  <text x="1176" y="434" class="label">Competitor and matrix benchmarking</text>
+  <text x="1176" y="460" class="body">See patterns across accounts, not one page at a time</text>
+
+  <rect x="1148" y="518" width="316" height="118" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="1176" y="554" class="stat">REUSABLE</text>
+  <text x="1176" y="582" class="label">Topic bank and material library</text>
+  <text x="1176" y="608" class="body">Turn captured notes into a long-term content asset</text>
+
+  <rect x="1148" y="666" width="316" height="118" fill="#fff1f2" stroke="#ff2442" stroke-width="2"/>
+  <text x="1176" y="702" class="stat">STUDIO</text>
+  <text x="1176" y="730" class="label">A workflow, not a one-time crawler</text>
+  <text x="1176" y="756" class="body">Built for bloggers, operators, and MCNs who need repeatable review</text>
+
+  <line x1="452" y1="298" x2="542" y2="298" stroke="#ff2442" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="452" y1="472" x2="542" y2="472" stroke="#ff2442" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="452" y1="646" x2="542" y2="646" stroke="#ff2442" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="1058" y1="282" x2="1148" y2="282" stroke="#ff2442" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="1058" y1="430" x2="1148" y2="430" stroke="#ff2442" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="1058" y1="578" x2="1148" y2="578" stroke="#ff2442" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="1058" y1="726" x2="1148" y2="726" stroke="#ff2442" stroke-width="3" marker-end="url(#arrow)"/>
+</svg>

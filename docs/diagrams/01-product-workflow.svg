@@ -1,0 +1,119 @@
+<svg width="1600" height="940" viewBox="0 0 1600 940" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow-red" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0 0L12 6L0 12V0Z" fill="#ff2442"/>
+    </marker>
+    <marker id="arrow-slate" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0 0L12 6L0 12V0Z" fill="#94a3b8"/>
+    </marker>
+    <style>
+      .title { font: 700 36px Inter, Helvetica, Arial, sans-serif; fill: #0f172a; }
+      .subtitle { font: 600 14px "JetBrains Mono", Consolas, monospace; fill: #64748b; letter-spacing: 1.4px; }
+      .h { font: 700 22px Inter, Helvetica, Arial, sans-serif; fill: #0f172a; }
+      .label { font: 600 15px Inter, Helvetica, Arial, sans-serif; fill: #0f172a; }
+      .body { font: 500 13px Inter, Helvetica, Arial, sans-serif; fill: #475569; }
+      .mono { font: 600 12px "JetBrains Mono", Consolas, monospace; fill: #64748b; letter-spacing: 0.6px; }
+      .pill { font: 700 13px Inter, Helvetica, Arial, sans-serif; fill: #0f172a; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="940" fill="#f8fafc"/>
+  <rect x="54" y="48" width="1492" height="844" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+
+  <line x1="54" y1="142" x2="1546" y2="142" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="92" y="102" class="title">XHS Claw Studio</text>
+  <text x="92" y="126" class="subtitle">VERSION A / PRODUCT WORKFLOW / PUBLIC DATA TO REUSABLE CONTENT SYSTEM</text>
+
+  <rect x="1184" y="82" width="92" height="30" rx="15" fill="#fff1f2" stroke="#fecdd3"/>
+  <text x="1215" y="102" class="pill">Blogger</text>
+  <rect x="1288" y="82" width="104" height="30" rx="15" fill="#fff1f2" stroke="#fecdd3"/>
+  <text x="1321" y="102" class="pill">Operator</text>
+  <rect x="1404" y="82" width="86" height="30" rx="15" fill="#fff1f2" stroke="#fecdd3"/>
+  <text x="1434" y="102" class="pill">MCN</text>
+
+  <text x="92" y="194" class="mono">01 / SOURCE INPUT</text>
+  <rect x="92" y="214" width="266" height="160" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="118" y="248" class="h">Public Pages</text>
+  <text x="118" y="276" class="body">XiaoHongShu profile pages</text>
+  <text x="118" y="300" class="body">Note detail pages</text>
+  <text x="118" y="324" class="body">Tags, comments, titles, images</text>
+  <text x="118" y="348" class="body">Engagement metrics and publish time</text>
+
+  <rect x="92" y="408" width="266" height="142" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="118" y="442" class="h">Creator Backend</text>
+  <text x="118" y="470" class="body">Excel export from creator dashboard</text>
+  <text x="118" y="494" class="body">Impressions, CTR, shares, fan gain</text>
+  <text x="118" y="518" class="body">A second data layer for personal review</text>
+
+  <text x="456" y="194" class="mono">02 / CAPTURE AND STORAGE</text>
+  <rect x="456" y="214" width="300" height="126" fill="#fff1f2" stroke="#ff2442" stroke-width="2"/>
+  <text x="482" y="248" class="h">Popup Capture Layer</text>
+  <text x="482" y="276" class="body">Batch crawl profile notes</text>
+  <text x="482" y="300" class="body">Single-note capture</text>
+  <text x="482" y="324" class="body">Delay control and resume support</text>
+
+  <rect x="456" y="366" width="300" height="184" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="482" y="400" class="h">Local First Data Core</text>
+  <text x="482" y="428" class="body">Structured note records</text>
+  <text x="482" y="452" class="body">Blogger-level history snapshots</text>
+  <text x="482" y="476" class="body">Export-ready CSV / JSON datasets</text>
+  <text x="482" y="500" class="body">Optional cloud sync for portability</text>
+  <text x="482" y="530" class="mono">Chrome Extension / Local Storage / Data Store</text>
+
+  <text x="856" y="194" class="mono">03 / ANALYSIS SURFACES</text>
+  <rect x="856" y="214" width="286" height="108" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="882" y="248" class="h">Single Blogger Dashboard</text>
+  <text x="882" y="276" class="body">Top content, metrics, tag patterns</text>
+  <text x="882" y="300" class="body">Export actions and profile overview</text>
+
+  <rect x="856" y="338" width="286" height="108" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="882" y="372" class="h">Multi-Blogger Comparison</text>
+  <text x="882" y="400" class="body">Benchmark accounts side by side</text>
+  <text x="882" y="424" class="body">Compare volume, likes, collect ratio, hit rate</text>
+
+  <rect x="856" y="462" width="286" height="108" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="882" y="496" class="h">Material Library</text>
+  <text x="882" y="524" class="body">Search, filter, sort, and export captured ideas</text>
+  <text x="882" y="548" class="body">Build reusable topic and competitor libraries</text>
+
+  <text x="1228" y="194" class="mono">04 / DEEPER REVIEW</text>
+  <rect x="1228" y="214" width="236" height="164" fill="#fff1f2" stroke="#ff2442" stroke-width="2"/>
+  <text x="1254" y="248" class="h">AI Layer</text>
+  <text x="1254" y="276" class="body">AI reports</text>
+  <text x="1254" y="300" class="body">Topic-specific breakdowns</text>
+  <text x="1254" y="324" class="body">Chat-style follow-up analysis</text>
+  <text x="1254" y="348" class="body">Bring your own compatible API key</text>
+
+  <rect x="1228" y="406" width="236" height="164" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="1254" y="440" class="h">Personal Analysis</text>
+  <text x="1254" y="468" class="body">Merge creator dashboard data</text>
+  <text x="1254" y="492" class="body">Review personal performance with backend metrics</text>
+  <text x="1254" y="516" class="body">Separate from public-page detail analysis</text>
+
+  <text x="92" y="652" class="mono">05 / OUTPUTS</text>
+  <rect x="92" y="678" width="1372" height="150" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  <rect x="124" y="714" width="238" height="78" fill="#ffffff" stroke="#cbd5e1"/>
+  <text x="152" y="746" class="label">Creator Review</text>
+  <text x="152" y="770" class="body">Know what worked and why</text>
+  <rect x="390" y="714" width="238" height="78" fill="#ffffff" stroke="#cbd5e1"/>
+  <text x="418" y="746" class="label">Competitor Research</text>
+  <text x="418" y="770" class="body">Benchmark tracks and matrix accounts</text>
+  <rect x="656" y="714" width="238" height="78" fill="#ffffff" stroke="#cbd5e1"/>
+  <text x="684" y="746" class="label">Topic Mining</text>
+  <text x="684" y="770" class="body">Turn captured notes into reusable ideas</text>
+  <rect x="922" y="714" width="238" height="78" fill="#ffffff" stroke="#cbd5e1"/>
+  <text x="950" y="746" class="label">Team Workflow</text>
+  <text x="950" y="770" class="body">Sync exports and reports across projects</text>
+  <rect x="1188" y="714" width="238" height="78" fill="#fff1f2" stroke="#ff2442"/>
+  <text x="1216" y="746" class="label">Reusable Studio</text>
+  <text x="1216" y="770" class="body">Not one export, but a lasting content system</text>
+
+  <line x1="358" y1="294" x2="456" y2="277" stroke="#94a3b8" stroke-width="3" marker-end="url(#arrow-slate)"/>
+  <line x1="358" y1="476" x2="456" y2="458" stroke="#94a3b8" stroke-width="3" marker-end="url(#arrow-slate)"/>
+  <line x1="606" y1="340" x2="606" y2="366" stroke="#ff2442" stroke-width="3" marker-end="url(#arrow-red)"/>
+  <line x1="756" y1="430" x2="856" y2="430" stroke="#94a3b8" stroke-width="3" marker-end="url(#arrow-slate)"/>
+  <line x1="1142" y1="430" x2="1228" y2="294" stroke="#94a3b8" stroke-width="3" marker-end="url(#arrow-slate)"/>
+  <line x1="1142" y1="430" x2="1228" y2="488" stroke="#94a3b8" stroke-width="3" marker-end="url(#arrow-slate)"/>
+  <line x1="999" y1="570" x2="999" y2="678" stroke="#ff2442" stroke-width="3" marker-end="url(#arrow-red)"/>
+  <line x1="1346" y1="570" x2="1346" y2="678" stroke="#ff2442" stroke-width="3" marker-end="url(#arrow-red)"/>
+</svg>
