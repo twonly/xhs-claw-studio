@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>红薯采集器｜小红书批量抓取、数据分析与 AI 复盘 Chrome 扩展</title>
-  <meta name="description" content="红薯采集器用于小红书批量抓取、数据分析、创作者后台数据导入、AI 复盘与可选云同步。支持 BYOK 多厂商 AI 和自定义模型名。">
-  <meta name="keywords" content="小红书导出,小红书批量抓取,XHS导出,小红书运营分析,Chrome扩展,红薯采集器,小红书素材库,竞品分析,AI复盘,创作者数据导入">
+  <title>红薯采集器｜更轻、更便宜的小红书笔记导出平替</title>
+  <meta name="description" content="红薯采集器是一款更轻、更便宜的小红书笔记导出平替。支持批量导出正文、图片、标签、评论与互动数据，适合竞品研究、运营复盘和内容备份。">
+  <meta name="keywords" content="小红书导出,小红书笔记导出,小红书平替,XHS导出,竞品研究,运营复盘,Chrome扩展,红薯采集器">
   <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
   <meta name="author" content="红薯采集器">
   <meta name="theme-color" content="#533afd">
@@ -13,15 +13,15 @@
   <meta property="og:type" content="website">
   <meta property="og:locale" content="zh_CN">
   <meta property="og:site_name" content="红薯采集器">
-  <meta property="og:title" content="红薯采集器｜小红书批量抓取、数据分析与 AI 复盘 Chrome 扩展">
-  <meta property="og:description" content="批量抓取小红书账号内容，进入分析看板、多博主对比、创作者后台数据导入、AI 复盘与可选云同步流程。">
+  <meta property="og:title" content="红薯采集器｜更轻、更便宜的小红书笔记导出平替">
+  <meta property="og:description" content="如果你只想批量导出小红书正文、图片、标签和互动数据，而不想买一整套又贵又复杂的平台，红薯采集器就是更轻的平替选择。">
   <meta property="og:url" content="https://chrome-extension-batch.pages.dev/">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="红薯采集器｜小红书批量抓取、数据分析与 AI 复盘 Chrome 扩展">
-  <meta name="twitter:description" content="适合运营复盘、竞品研究、创作者数据整理与内容沉淀的小红书分析工具。">
+  <meta name="twitter:title" content="红薯采集器｜更轻、更便宜的小红书笔记导出平替">
+  <meta name="twitter:description" content="专注小红书导出、竞品研究和运营复盘，不卖复杂平台，只解决导出这件事。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500;600;700&amp;family=Source+Code+Pro:wght@400;500;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <script type="application/ld+json">
   {
@@ -31,13 +31,27 @@
     "applicationCategory": "BusinessApplication",
     "operatingSystem": "Chrome",
     "url": "https://chrome-extension-batch.pages.dev/",
-    "description": "用于小红书批量抓取、数据分析、AI 复盘与可选云同步的 Chrome 扩展，支持 BYOK 多厂商 AI 与自定义模型名。",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "CNY",
-      "name": "公开版"
-    }
+    "description": "更轻、更便宜的小红书笔记导出平替，支持批量导出正文、图片、标签、评论与互动数据。",
+    "offers": [
+      {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "CNY",
+        "name": "Free"
+      },
+      {
+        "@type": "Offer",
+        "price": "29",
+        "priceCurrency": "CNY",
+        "name": "Pro"
+      },
+      {
+        "@type": "Offer",
+        "price": "59",
+        "priceCurrency": "CNY",
+        "name": "Pro Max"
+      }
+    ]
   }
   </script>
 </head>
@@ -51,21 +65,21 @@
         <span class="brand-mark">红</span>
         <span class="brand-copy">
           <strong>红薯采集器</strong>
-          <em>XHS Export &amp; Analysis</em>
+          <em>XHS Export Replacement</em>
         </span>
       </a>
 
       <nav class="site-nav" aria-label="主导航">
-        <a href="#value">价值</a>
+        <a href="#value">为什么买</a>
         <a href="#features">功能</a>
         <a href="#install-guide">安装</a>
-        <a href="#access">使用方式</a>
+        <a href="#pricing">价格</a>
         <a href="#faq">FAQ</a>
       </nav>
 
       <div class="header-actions">
-        <a class="btn btn-secondary" href="#preview">查看样例</a>
-        <a class="btn btn-primary" href="#install-guide">安装说明</a>
+        <a class="btn btn-secondary" href="#preview">查看导出样例</a>
+        <a class="btn btn-primary" href="#install-guide">开始使用</a>
       </div>
     </div>
   </header>
@@ -76,44 +90,44 @@
         <div class="hero-copy reveal-up">
           <div class="eyebrow-row">
             <span class="eyebrow">CHROME EXTENSION</span>
-            <span class="eyebrow">LOCAL-FIRST</span>
-            <span class="eyebrow">BYOK AI</span>
+            <span class="eyebrow">LIGHTWEIGHT</span>
+            <span class="eyebrow">LOWER COST</span>
           </div>
 
-          <h1>从批量抓取，到 AI 复盘，<br>把小红书内容变成可复用资产。</h1>
+          <h1>如果你只想导出小红书内容，<br>别买一整套贵平台。</h1>
           <p class="hero-lead">
-            红薯采集器不只做“导出文件”。
-            你可以批量抓取账号内容，提取标题、正文、标签、图片、评论和互动数据，
-            然后继续进入分析看板、多博主对比、创作者后台数据导入、AI 报告与素材库流程。
+            红薯采集器就是为这件事做的：
+            批量导出任意账号的标题、正文、标签、图片、评论和互动数据。
+            不讲复杂故事，不做一堆你用不到的大平台功能，只把导出、复盘和竞品研究做好。
           </p>
 
           <div class="hero-actions">
             <a class="btn btn-primary btn-large" href="#install-guide">查看安装方式</a>
-            <a class="btn btn-secondary btn-large" href="#preview">先看导出样例</a>
+            <a class="btn btn-secondary btn-large" href="#pricing">看价格</a>
           </div>
 
           <div class="hero-points">
-            <span>主页批量抓取全部笔记</span>
-            <span>断点续传 + 随机冷却</span>
-            <span>CSV / JSON / PDF / AI 报告</span>
-            <span>多厂商 AI + 自定义模型名</span>
+            <span>比大平台更轻</span>
+            <span>比整套数据产品更便宜</span>
+            <span>打开网页就能导出</span>
+            <span>够用就行，不卖复杂</span>
           </div>
 
           <div class="hero-metrics">
             <article>
-              <span>适用场景</span>
-              <strong data-counter="5">0</strong>
-              <em>运营复盘 / 竞品研究 / 创作者分析 / 素材库 / 数据归档</em>
+              <span>主打结果</span>
+              <strong data-counter="1">0</strong>
+              <em>把账号内容批量导出来</em>
             </article>
             <article>
               <span>核心字段</span>
-              <strong data-counter="12">0</strong>
-              <em>标题 正文 标签 图片 评论 互动 发布时间 原链等</em>
+              <strong data-counter="9">0</strong>
+              <em>标题 正文 标签 图片 评论 互动等</em>
             </article>
             <article>
-              <span>分析链路</span>
-              <strong>看板 + 对比 + AI</strong>
-              <em>从抓取继续走到洞察和复盘</em>
+              <span>典型用户</span>
+              <strong data-counter="3">0</strong>
+              <em>运营 竞品研究 内容备份</em>
             </article>
           </div>
         </div>
@@ -121,8 +135,8 @@
         <div class="hero-visual reveal-up">
           <article class="dashboard-card main-dashboard">
             <div class="card-head">
-              <span>分析看板预览</span>
-              <span>LIVE DATA</span>
+              <span>你真正拿到的结果</span>
+              <span>EXPORT READY</span>
             </div>
 
             <div class="dashboard-top">
@@ -131,12 +145,12 @@
                 <strong data-counter="128">0</strong>
               </div>
               <div>
-                <span class="metric-label">平均互动率</span>
-                <strong>6.4%</strong>
+                <span class="metric-label">导出格式</span>
+                <strong>CSV / JSON</strong>
               </div>
               <div>
-                <span class="metric-label">高频标签</span>
-                <strong>12</strong>
+                <span class="metric-label">继续复盘</span>
+                <strong>看板</strong>
               </div>
             </div>
 
@@ -154,10 +168,10 @@
             </div>
 
             <div class="chip-grid">
+              <span>#正文导出</span>
+              <span>#竞品研究</span>
               <span>#运营复盘</span>
-              <span>#内容策略</span>
-              <span>#选题灵感</span>
-              <span>#数据分析</span>
+              <span>#内容备份</span>
             </div>
           </article>
 
@@ -177,36 +191,32 @@
 
     <section class="trust-strip">
       <div class="container trust-grid reveal-up">
-        <div><strong>默认本地优先</strong><span>抓取、导出、分析默认都在浏览器本地完成</span></div>
-        <div><strong>云同步按需开启</strong><span>只有你主动登录并触发时才写入 Supabase</span></div>
-        <div><strong>AI 走你的 Key</strong><span>支持多厂商 BYOK，并可手动填最新模型名</span></div>
+        <div><strong>不是大而全平台</strong><span>我们主打小红书内容导出，不把页面讲成复杂 SaaS</span></div>
+        <div><strong>先解决最值钱的痛点</strong><span>先把正文、图片、标签和互动数据拿下来，再谈后续分析</span></div>
+        <div><strong>更适合价格敏感用户</strong><span>适合只想导出和研究，不想为一整套平台埋单的人</span></div>
       </div>
     </section>
 
     <section class="section" id="value">
       <div class="container">
         <div class="section-heading reveal-up">
-          <span class="eyebrow">WHY IT MATTERS</span>
-          <h2>它解决的不是“导出文件”问题，而是“内容资产化”问题。</h2>
-          <p>把零散网页信息变成你自己的结构化数据库，后续复盘、研究、筛选、汇报和素材沉淀都会更快。</p>
+          <span class="eyebrow">WHY PEOPLE BUY</span>
+          <h2>因为很多人真正想要的，只是一个更轻、更便宜的导出工具。</h2>
+          <p>他们不想买复杂平台，不想部署脚本，也不想手动复制几十上百篇笔记。红薯采集器就卡在这个中间地带：简单、够用、价格低得多。</p>
         </div>
 
         <div class="value-grid">
           <article class="info-card reveal-up">
-            <h3>运营复盘</h3>
-            <p>直接查看高互动内容、标签策略、发布时间规律和标题模式，减少人工整理成本。</p>
+            <h3>比手动复制快很多</h3>
+            <p>不用再一篇篇打开复制正文、标签和互动数据，直接批量导出结构化结果。</p>
           </article>
           <article class="info-card reveal-up">
-            <h3>竞品研究</h3>
-            <p>批量导出同赛道账号样本，统一分析正文、标签、互动和爆款特征。</p>
+            <h3>比脚本更简单</h3>
+            <p>不需要 Python、部署和环境配置，安装扩展后打开网页就能开始抓取。</p>
           </article>
           <article class="info-card reveal-up">
-            <h3>素材沉淀</h3>
-            <p>把正文、图片、评论与链接沉淀成可检索素材库，方便长期选题和内容参考。</p>
-          </article>
-          <article class="info-card reveal-up">
-            <h3>创作者后台复盘</h3>
-            <p>可导入创作者后台导出的 Excel，把曝光、观看、涨粉、分享等指标并到同一份分析里。</p>
+            <h3>比大平台便宜很多</h3>
+            <p>如果你只想做导出和轻量复盘，没必要为一整套复杂的数据产品买单。</p>
           </article>
         </div>
       </div>
@@ -216,60 +226,40 @@
       <div class="container">
         <div class="section-heading reveal-up">
           <span class="eyebrow">FEATURES</span>
-          <h2>从抓取到洞察，整条链路都围绕“导出后还能继续分析”来设计。</h2>
-          <p>所有信息只服务于一个目标：把小红书公开内容提取成结构化、可分析、可复用的数据资产。</p>
+          <h2>只保留真正影响购买决策的功能。</h2>
+          <p>不是为了堆功能，而是为了让用户最快完成“导出一个账号内容”这件事。</p>
         </div>
 
         <div class="feature-grid">
           <article class="feature-card reveal-up">
             <span class="feature-id">01</span>
-            <h3>主页批量抓取</h3>
-            <p>打开任意用户主页，自动收集卡片并逐篇提取详情，而不是只能手动抓单篇。</p>
+            <h3>主页批量导出</h3>
+            <p>打开任意用户主页，自动收集卡片并逐篇提取详情，而不是只能抓单篇。</p>
           </article>
           <article class="feature-card reveal-up">
             <span class="feature-id">02</span>
-            <h3>断点续传</h3>
-            <p>长任务中断后可以继续，已抓到的数据不会丢，适合几十篇到上百篇任务。</p>
+            <h3>正文 / 图片 / 标签一起拿走</h3>
+            <p>不是只拿摘要，直接导出标题、正文、标签、图片链接、评论和互动数据。</p>
           </article>
           <article class="feature-card reveal-up">
             <span class="feature-id">03</span>
-            <h3>智能防封节奏</h3>
-            <p>支持随机延时和分段冷却，更贴近真实浏览节奏，降低人工盯任务的压力。</p>
+            <h3>断点续传</h3>
+            <p>长任务中断后可以继续，几十篇到上百篇账号也能更稳地跑完。</p>
           </article>
           <article class="feature-card reveal-up">
             <span class="feature-id">04</span>
-            <h3>分析看板</h3>
-            <p>导出后继续进入概览指标、Top Notes、标签词频、内容洞察和深度分析视图。</p>
+            <h3>随机延时与冷却</h3>
+            <p>支持更贴近真实浏览节奏的抓取方式，减少人工盯任务的压力。</p>
           </article>
           <article class="feature-card reveal-up">
             <span class="feature-id">05</span>
-            <h3>多博主对比</h3>
-            <p>把多个账号拉到同一个对比页，统一看评分、标签差异、互动分布和 AI 对标建议。</p>
+            <h3>基础分析看板</h3>
+            <p>导出后可以继续看 Top Notes、标签分布和基础复盘结果，不止停在下载文件。</p>
           </article>
           <article class="feature-card reveal-up">
             <span class="feature-id">06</span>
-            <h3>AI 深度报告</h3>
-            <p>基于聚合后的结构化数据生成账号定位、爆款公式、选题建议与对标结论。</p>
-          </article>
-          <article class="feature-card reveal-up">
-            <span class="feature-id">07</span>
-            <h3>创作者数据导入</h3>
-            <p>导入创作者后台 Excel 后，可以补充曝光、观看、封面点击率、涨粉、分享等后台指标。</p>
-          </article>
-          <article class="feature-card reveal-up">
-            <span class="feature-id">08</span>
-            <h3>云同步</h3>
-            <p>本地数据可按需同步到 Supabase，适合换电脑、换浏览器或跨设备延续研究流程。</p>
-          </article>
-          <article class="feature-card reveal-up">
-            <span class="feature-id">09</span>
-            <h3>素材库与导出</h3>
-            <p>支持全文搜索、多维筛选、复制，以及 CSV / JSON / PDF 等输出方式。</p>
-          </article>
-          <article class="feature-card reveal-up">
-            <span class="feature-id">10</span>
-            <h3>BYOK 多厂商 AI</h3>
-            <p>支持 DeepSeek、OpenAI、Moonshot、智谱、通义千问、SiliconFlow 等厂商，并允许手填自定义模型名。</p>
+            <h3>素材库与检索</h3>
+            <p>把导出的内容沉淀下来，方便后续搜索、筛选、复制和复用。</p>
           </article>
         </div>
       </div>
@@ -279,16 +269,16 @@
       <div class="container install-layout">
         <div class="section-heading reveal-up section-heading-left">
           <span class="eyebrow">INSTALL GUIDE</span>
-          <h2>作为商店配套官网，这里直接告诉用户怎么安装、怎么开始。</h2>
-          <p>当前页面可作为 Chrome Web Store 的官网链接、产品说明页和隐私政策入口，也适合直接发给朋友做功能体验说明。</p>
+          <h2>安装后，不用学一堆东西，直接开始导出。</h2>
+          <p>这就是一个实用工具，不是重产品培训。流程越短越好，越快得到结果越好。</p>
         </div>
 
         <div class="install-card reveal-up">
           <ol class="install-steps">
             <li>安装扩展后，打开小红书网页，进入目标主页或笔记详情页。</li>
-            <li>点击扩展图标，选择单篇或批量模式，并设置抓取数量、延时和冷却策略。</li>
-            <li>抓取完成后，直接进入分析页查看看板、对比和 AI 报告。</li>
-            <li>如需更深复盘，可继续导入创作者后台 Excel，或按需开启云同步。</li>
+            <li>点击扩展图标，选择单篇或批量模式，并设置抓取数量和延时。</li>
+            <li>开始导出，得到标题、正文、标签、图片、评论和互动数据。</li>
+            <li>需要时再继续查看看板、导出 CSV / JSON，或进入素材库检索。</li>
           </ol>
           <div class="install-actions">
             <a class="btn btn-primary" href="#final-actions">查看安装入口</a>
@@ -303,8 +293,8 @@
       <div class="container workflow-layout">
         <div class="section-heading reveal-up section-heading-left">
           <span class="eyebrow">WORKFLOW</span>
-          <h2>3 步完成一次完整的小红书内容研究流程。</h2>
-          <p>不需要脚本部署，不需要额外环境，只需要 Chrome 扩展、目标页面，以及你自己的 AI Key（如果要用 AI）。</p>
+          <h2>3 步完成一次典型的竞品研究或内容备份。</h2>
+          <p>不需要脚本，不需要部署，不需要先学平台，只要打开页面、导出结果、继续复盘。</p>
         </div>
 
         <div class="workflow-steps">
@@ -316,12 +306,12 @@
           <article class="step-card reveal-up">
             <span class="step-no">2</span>
             <h3>运行导出任务</h3>
-            <p>设置抓取数量、延时和冷却策略，扩展自动提取标题、正文、标签、图片与互动数据。</p>
+            <p>设置抓取数量、延时和冷却策略，扩展自动提取正文、标签、图片与互动数据。</p>
           </article>
           <article class="step-card reveal-up">
             <span class="step-no">3</span>
-            <h3>进入分析与复用</h3>
-            <p>查看看板、做多博主对比、生成 AI 报告，或者沉淀到素材库里做长期检索和复盘。</p>
+            <h3>拿结果去研究</h3>
+            <p>查看看板、导出文件、筛选素材库，或者把结果直接拿去做竞品研究和运营复盘。</p>
           </article>
         </div>
       </div>
@@ -332,22 +322,17 @@
         <article class="compliance-card">
           <span class="eyebrow">DATA SAFETY</span>
           <h3>只处理公开可见内容</h3>
-          <p>页面内容与隐私说明保持一致：产品主要处理小红书页面上公开可见的内容，不收集登录凭证或敏感账号密码。</p>
+          <p>产品主要处理小红书页面上公开可见的内容，不收集登录凭证或账号密码。</p>
         </article>
         <article class="compliance-card">
           <span class="eyebrow">LOCAL FIRST</span>
           <h3>默认以本地处理为主</h3>
-          <p>数据默认存储在浏览器本地；云同步是可选能力，需要用户主动注册或开启相关功能。</p>
+          <p>数据默认存储在浏览器本地；云同步是可选能力，需要用户主动注册或开启。</p>
         </article>
         <article class="compliance-card">
-          <span class="eyebrow">BYOK AI</span>
-          <h3>AI 仅发送最小必要摘要</h3>
-          <p>AI 功能默认不代付模型费用，走用户自己的 API Key；只发送分析所需的数据摘要，不走整站代理。</p>
-        </article>
-        <article class="compliance-card">
-          <span class="eyebrow">STORE READY</span>
-          <h3>配套隐私政策与说明页</h3>
-          <p>页面已提供隐私政策、安装说明与产品用途说明，适合挂在商店后台作为官网与合规页面。</p>
+          <span class="eyebrow">ENOUGH, NOT MORE</span>
+          <h3>只保留够用的核心能力</h3>
+          <p>这页和这个产品都在强调一个原则：先把导出做好，而不是先把产品讲复杂。</p>
         </article>
       </div>
     </section>
@@ -356,8 +341,8 @@
       <div class="container calculator-wrap reveal-up">
         <div class="calculator-copy">
           <span class="eyebrow">ROI CALCULATOR</span>
-          <h2>你每周能省多少时间？</h2>
-          <p>按“需要处理的笔记量”粗略估算，从手动复制切到扩展流程，时间差会很直观。</p>
+          <h2>如果你每周都在手动复制，会浪费多少时间？</h2>
+          <p>按处理笔记量粗略估算，从手动复制切到扩展导出，时间差会很直观。</p>
         </div>
 
         <div class="calculator-card">
@@ -387,50 +372,51 @@
       </div>
     </section>
 
-    <section class="section" id="access">
+    <section class="section" id="pricing">
       <div class="container">
         <div class="section-heading reveal-up">
-          <span class="eyebrow">ACCESS</span>
-          <h2>当前阶段先把产品体验跑顺，让用户第一次用就能得到结果。</h2>
-          <p>本地抓取、导出、分析和对比都可以直接使用；云同步是可选能力，AI 走你自己的兼容 API Key。</p>
+          <span class="eyebrow">PRICING</span>
+          <h2>定价逻辑很简单：先试，再为高频使用买单。</h2>
+          <p>这不是一整套贵平台，而是一个更轻、更便宜的小红书导出平替。</p>
         </div>
 
         <div class="pricing-grid">
           <article class="price-card reveal-up">
-            <span class="plan-tag">LOCAL FIRST</span>
-            <h3>核心功能直接开放</h3>
-            <p class="price">本地可用</p>
+            <span class="plan-tag">FREE</span>
+            <h3>验证价值</h3>
+            <p class="price">¥0</p>
             <ul>
-              <li>单篇抓取、主页批量、断点续传</li>
-              <li>CSV / JSON / PDF 导出</li>
-              <li>分析看板、多博主对比、素材库</li>
-              <li>不登录也能完整使用本地能力</li>
+              <li>单篇抓取完整开放</li>
+              <li>批量最多 5 篇</li>
+              <li>CSV 导出</li>
+              <li>适合确认它是不是你要的工具</li>
             </ul>
-            <a class="btn btn-secondary" href="#install-guide">查看安装方式</a>
+            <a class="btn btn-secondary" href="#install-guide">开始试用</a>
           </article>
 
           <article class="price-card featured reveal-up">
-            <span class="plan-tag">OPTIONAL CLOUD</span>
-            <h3>需要多端同步时再登录</h3>
-            <p class="price">按需开启</p>
+            <span class="plan-tag">PRO</span>
+            <h3>主力版本</h3>
+            <p class="price">¥29<span>/月</span></p>
             <ul>
-              <li>邮箱注册后可把数据同步到 Supabase</li>
-              <li>换电脑或换浏览器时继续使用</li>
-              <li>默认不自动上传，所有云写入都需主动触发</li>
-              <li>适合长期做研究库、复盘库和账号跟踪</li>
+              <li>无限批量抓取</li>
+              <li>JSON + CSV 导出</li>
+              <li>断点续传与冷却配置</li>
+              <li>基础分析看板</li>
+              <li>适合高频做竞品研究和复盘的人</li>
             </ul>
             <a class="btn btn-primary" href="#install-guide">查看安装方式</a>
           </article>
 
           <article class="price-card reveal-up">
-            <span class="plan-tag">BRING YOUR OWN AI</span>
-            <h3>AI 不代付模型费用</h3>
-            <p class="price">自配 Key</p>
+            <span class="plan-tag">PRO MAX</span>
+            <h3>附加洞察版</h3>
+            <p class="price">¥59<span>/月</span></p>
             <ul>
-              <li>兼容 DeepSeek、OpenAI、Moonshot、智谱、通义千问、SiliconFlow</li>
-              <li>推荐模型列表会持续更新，也支持直接填写自定义模型名</li>
-              <li>支持 AI 报告、对比分析和局部总结</li>
-              <li>适合把 AI 成本和模型选择权都握在自己手里</li>
+              <li>AI 运营分析报告</li>
+              <li>多账号对比</li>
+              <li>PDF 报告导出</li>
+              <li>适合要更深洞察的人</li>
             </ul>
             <a class="btn btn-secondary" href="#install-guide">查看安装方式</a>
           </article>
@@ -442,17 +428,17 @@
       <div class="container faq-layout">
         <div class="section-heading reveal-up section-heading-left">
           <span class="eyebrow">FAQ</span>
-          <h2>围绕产品本身，把用户最关心的问题先回答清楚。</h2>
+          <h2>把价格敏感用户最关心的问题先回答清楚。</h2>
         </div>
 
         <div class="faq-list">
           <details class="faq-item reveal-up" open>
-            <summary>这个扩展适合谁？</summary>
-            <p>适合小红书运营、品牌投放、竞品研究、内容团队，以及需要做内容沉淀与素材检索的人。</p>
+            <summary>红薯采集器适合谁？</summary>
+            <p>适合小红书运营、竞品研究者、内容团队，以及只想把账号内容导出来做备份和复盘的人。</p>
           </details>
           <details class="faq-item reveal-up">
-            <summary>现在收费吗？</summary>
-            <p>当前阶段以开放使用和收集反馈为主。核心抓取、导出、分析和对比功能都可以直接使用；AI 需要你自己配置兼容 API Key。</p>
+            <summary>为什么说它是平替？</summary>
+            <p>因为很多人真正想要的只是导出和轻量复盘，不需要一整套又贵又复杂的平台。红薯采集器就是把这件事做得更轻、更直接。</p>
           </details>
           <details class="faq-item reveal-up">
             <summary>导出的数据包含哪些字段？</summary>
@@ -460,19 +446,11 @@
           </details>
           <details class="faq-item reveal-up">
             <summary>是不是只有导出，没有分析？</summary>
-            <p>不是。红薯采集器的重点之一，就是导出后还能继续进入分析看板、多博主对比、素材库和可选的 AI 流程。</p>
+            <p>不是。它会保留基础分析看板和素材库能力，但不会把首页讲成一个复杂的大平台。</p>
           </details>
           <details class="faq-item reveal-up">
             <summary>数据会不会默认上传到云端？</summary>
             <p>默认以本地处理为主。云同步属于可选能力，需要用户主动登录或启用，详见隐私政策。</p>
-          </details>
-          <details class="faq-item reveal-up">
-            <summary>AI 支持哪些厂商和模型？</summary>
-            <p>当前支持 DeepSeek、OpenAI、Moonshot、智谱、通义千问、SiliconFlow 等兼容接口；提供推荐模型列表，也支持直接手填自定义模型名。</p>
-          </details>
-          <details class="faq-item reveal-up">
-            <summary>能不能导入创作者后台数据一起分析？</summary>
-            <p>可以。分析页支持导入小红书创作者后台导出的 Excel，把曝光、观看、涨粉、分享等后台指标并进同一个复盘视图。</p>
           </details>
           <details class="faq-item reveal-up">
             <summary>这个官网可以作为商店官网链接吗？</summary>
@@ -487,8 +465,8 @@
         <div class="final-card">
           <div>
             <span class="eyebrow">GET STARTED</span>
-            <h2>先让用户顺畅抓取、分析、复盘，再决定下一步商业化节奏。</h2>
-            <p>当前版本更适合作为公开官网、商店说明页和体验入口，先把真实使用反馈收回来。</p>
+            <h2>别再为“只想导出内容”去买一整套重平台。</h2>
+            <p>如果你要的是一个更轻、更便宜、打开网页就能开始的小红书导出工具，红薯采集器就是更适合的选择。</p>
           </div>
           <div class="final-actions">
             <a class="btn btn-primary btn-large" href="#install-guide">查看安装方式</a>
@@ -503,7 +481,7 @@
     <div class="container footer-inner">
       <div>
         <strong>红薯采集器</strong>
-        <p>小红书批量抓取、数据分析与 AI 复盘 Chrome 扩展。</p>
+        <p>更轻、更便宜的小红书笔记导出平替。</p>
       </div>
       <div class="footer-links">
         <a href="/">首页</a>

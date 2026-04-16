@@ -40,10 +40,42 @@ const cloudSubmitBtn = document.getElementById('cloud-submit');
 const cloudEmailInput = document.getElementById('cloud-email');
 const cloudPasswordInput = document.getElementById('cloud-password');
 
-let pendingCloudUpload = false;
 let cloudAuthTab = 'signin';
+
+// 取当前生效的导出格式：根据模式挑对应 radio 组
+// creator 模式用 #settings → name="format-creator"
+// profile 批量模式用 #batch-settings → name="format-batch"
+// note 模式无格式切换，走 compatible 即可
+function getExportFormat() {
+  const group = currentMode === 'profile' ? 'format-batch' : 'format-creator';
+  return document.querySelector(`input[name="${group}"]:checked`)?.value || 'compatible';
+}
 const AUTHOR_PROFILE_URL = 'https://www.xiaohongshu.com/user/profile/6467b1210000000010027a51';
 let lastBloggerSavePromise = Promise.resolve();
+
+// 是否运行在侧边栏
+const IS_SIDEPANEL = document.body.dataset.mode === 'sidepanel';
+
+// popup 模式下的"在侧边栏打开"按钮
+if (!IS_SIDEPANEL) {
+  document.getElementById('btn-open-sidepanel')?.addEventListener('click', async () => {
+    if (!chrome.sidePanel?.open) {
+      // 浏览器不支持 sidePanel API
+      alert('当前浏览器不支持侧边栏功能，请升级到 Chrome 114+');
+      return;
+    }
+    try {
+      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+      await chrome.sidePanel.open({ tabId: tab?.id });
+      window.close(); // 关闭 popup
+    } catch (e) {
+      console.warn('[SidePanel] open failed:', e);
+    }
+  });
+} else {
+  // 侧边栏模式下隐藏入口按钮
+  document.getElementById('btn-open-sidepanel')?.remove();
+}
 
 // ========== 初始化 ==========
 
@@ -71,9 +103,13 @@ async function init() {
     currentMode = 'note';
     initNoteMode();
   } else {
-    setStatus('error', '请打开小红书笔记详情页或个人主页，或点击下方示例主页');
+    statusBar.className = 'status-bar status-error';
+    statusText.innerHTML = '请打开<a href="#" id="status-link-demo" style="color:#ff2442;text-decoration:underline">小红书笔记详情页或个人主页</a>';
+    document.getElementById('status-link-demo')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      chrome.tabs.create({ url: AUTHOR_PROFILE_URL });
+    });
     btnStart.textContent = '不支持当前页面';
-    footerText.textContent = '也可以直接点示例主页，跳转到作者主页开始体验';
   }
 
   // 埋点：每次打开 popup
@@ -110,7 +146,9 @@ function buildPopupOnboardSteps() {
     {
       selector: '#btn-start',
       title: '③  开始抓取',
-      content: '确认无误后点击 <strong>开始导出</strong>。抓取过程中请保持此窗口打开，支持断点续传。',
+      content: IS_SIDEPANEL
+        ? '确认无误后点击 <strong>开始导出</strong>。侧边栏会始终保持打开，切换标签页也不影响进度。'
+        : '确认无误后点击 <strong>开始导出</strong>。抓取过程中请保持此窗口打开，支持断点续传。',
       position: 'top',
     },
     {
@@ -125,11 +163,12 @@ function buildPopupOnboardSteps() {
 
 async function startPopupOnboarding() {
   if (typeof ONBOARDING === 'undefined') return;
-  const done = await ONBOARDING.isDone('popup');
+  const key = IS_SIDEPANEL ? 'sidepanel' : 'popup';
+  const done = await ONBOARDING.isDone(key);
   if (done) return;
   ONBOARDING.start({
-    key: 'popup',
-    compact: true,
+    key,
+    compact: !IS_SIDEPANEL,
     steps: buildPopupOnboardSteps(),
   });
 }
@@ -190,7 +229,9 @@ async function initNoteMode() {
 async function initProfileMode() {
   batchSettingsDiv.classList.remove('hidden');
   btnStart.textContent = '批量抓取笔记内容';
-  footerText.textContent = '批量抓取在当前页面进行，请勿关闭页面';
+  footerText.textContent = IS_SIDEPANEL
+    ? '侧边栏模式：切换标签页不会中断抓取'
+    : '批量抓取在当前页面进行，请勿关闭页面';
 
   try {
     const status = await sendToContentWithRetry({ action: 'getStatus' }, 'content/note-scraper.js');
@@ -327,6 +368,7 @@ chrome.runtime.onMessage.addListener((message) => {
           message.results, message.blogger.stats || null
         )
           .then(() => loadRecentScrapes())
+          .then(() => autoCloudSync(message.blogger.userId))
           .catch((err) => {
             console.warn('[Popup] saveBlogger failed:', err);
           });
@@ -682,6 +724,19 @@ async function persistMergedProfileData(preferredInfo = null) {
   return bloggerData;
 }
 
+// 抓取完成后静默上传到云端（无 UI 反馈，类似埋点）
+async function autoCloudSync(userId) {
+  if (typeof CLOUD_SYNC === 'undefined') return;
+  try {
+    const bloggerData = await DATA_STORE.getBloggerData(userId);
+    if (!bloggerData?.notes?.length) return;
+    await CLOUD_SYNC.syncBlogger(bloggerData);
+    await chrome.storage.local.set({ cloudSyncLastAt: Date.now() });
+  } catch (e) {
+    console.warn('[AutoSync]', e.message || e);
+  }
+}
+
 function setCloudMessage(text = '', type = '') {
   if (!cloudMsg) return;
   cloudMsg.textContent = text;
@@ -693,8 +748,21 @@ function setCloudTab(tab) {
   cloudUploadPanel?.querySelectorAll('.cloud-tab').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.tab === cloudAuthTab);
   });
+}
+
+function updateCloudAuthCopy(session) {
+  const isAnonymous = !!(session && CLOUD_SYNC?.isAnonymousSession?.(session));
+  const signinTab = cloudUploadPanel?.querySelector('.cloud-tab[data-tab="signin"]');
+  const signupTab = cloudUploadPanel?.querySelector('.cloud-tab[data-tab="signup"]');
+
+  if (signinTab) signinTab.textContent = isAnonymous ? '绑定已有账号' : '登录';
+  if (signupTab) signupTab.textContent = isAnonymous ? '注册并绑定邮箱' : '注册';
   if (cloudSubmitBtn) {
-    cloudSubmitBtn.textContent = cloudAuthTab === 'signin' ? '登录' : '注册';
+    if (cloudAuthTab === 'signin') {
+      cloudSubmitBtn.textContent = isAnonymous ? '绑定已有账号' : '登录';
+    } else {
+      cloudSubmitBtn.textContent = isAnonymous ? '注册并绑定邮箱' : '注册';
+    }
   }
 }
 
@@ -707,7 +775,9 @@ async function refreshCloudUploadPanel(options = {}) {
   const existing = info?.userId ? await DATA_STORE.getBloggerData(info.userId) : null;
   const hasData = supported && (((existing?.notes?.length) || 0) > 0 || cachedNotes.length > 0);
   const session = await CLOUD_SYNC.getSession();
-  const isLoggedIn = !!session?.access_token;
+  const hasIdentity = !!session?.access_token;
+  const isAnonymous = hasIdentity && CLOUD_SYNC.isAnonymousSession(session);
+  const hasBoundEmail = hasIdentity && CLOUD_SYNC.hasBoundEmail(session);
 
   btnUpload?.classList.toggle('hidden', !supported || !hasData);
   btnUpload.disabled = !supported || !hasData || typeof CLOUD_SYNC === 'undefined';
@@ -715,14 +785,20 @@ async function refreshCloudUploadPanel(options = {}) {
   cloudUploadPanel.classList.toggle('hidden', (!supported || !hasData) && !forceOpen);
   if (!supported || !hasData) return;
 
-  cloudAuthBox.classList.toggle('hidden', isLoggedIn);
-  cloudSignoutBtn.classList.toggle('hidden', !isLoggedIn);
+  cloudAuthBox.classList.toggle('hidden', hasBoundEmail);
+  cloudSignoutBtn.classList.toggle('hidden', !hasIdentity);
+  if (cloudSignoutBtn) {
+    cloudSignoutBtn.textContent = isAnonymous ? '重置匿名身份' : '退出';
+  }
+  updateCloudAuthCopy(session);
 
   if (cloudUploadSubtitle) {
-    if (isLoggedIn) {
-      cloudUploadSubtitle.textContent = `已登录 ${session.user?.email || ''}，上传当前博主在本地的完整去重数据`;
+    if (hasBoundEmail) {
+      cloudUploadSubtitle.textContent = `已绑定 ${session.user?.email || ''}，上传当前博主在本地的完整去重数据`;
+    } else if (isAnonymous) {
+      cloudUploadSubtitle.textContent = '当前为匿名云身份，可直接继续上传；后续绑定邮箱后会自动关联这份云端数据';
     } else {
-      cloudUploadSubtitle.textContent = '上传当前博主在本地的完整去重数据，未登录时会先完成认证';
+      cloudUploadSubtitle.textContent = '首次上传时会自动创建匿名云身份；后续如需跨设备找回数据，再绑定邮箱即可';
     }
   }
 }
@@ -742,7 +818,8 @@ async function uploadCurrentProfile() {
   try {
     const result = await CLOUD_SYNC.syncBlogger(bloggerData);
     await chrome.storage.local.set({ cloudSyncLastAt: Date.now() });
-    setCloudMessage(`上传成功：${result.noteCount} 篇笔记已同步到云端`, 'ok');
+    const suffix = result.sessionKind === 'anonymous' ? '（当前使用匿名云身份）' : '';
+    setCloudMessage(`上传成功：${result.noteCount} 篇笔记已同步到云端${suffix}`, 'ok');
     ANALYTICS.track('cloud_sync_single_upload', {
       mode: 'popup',
       note_count: result.noteCount,
@@ -753,7 +830,6 @@ async function uploadCurrentProfile() {
   } finally {
     btnUpload.disabled = false;
     btnUpload.textContent = originalText;
-    pendingCloudUpload = false;
     await refreshCloudUploadPanel({ forceOpen: true });
   }
 }
@@ -765,8 +841,9 @@ function initCloudUploadPanel() {
   setCloudMessage('');
 
   cloudUploadPanel.querySelectorAll('.cloud-tab').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', async () => {
       setCloudTab(btn.dataset.tab);
+      updateCloudAuthCopy(await CLOUD_SYNC.getSession());
       setCloudMessage('');
     });
   });
@@ -785,22 +862,27 @@ function initCloudUploadPanel() {
     setCloudMessage('');
 
     try {
+      let result;
       if (cloudAuthTab === 'signin') {
-        await CLOUD_SYNC.signIn(email, password);
-        setCloudMessage('登录成功', 'ok');
+        result = await CLOUD_SYNC.signIn(email, password);
+        const migrated = (result?.migration?.bloggers || 0) + (result?.migration?.notes || 0) + (result?.migration?.aiReports || 0);
+        setCloudMessage(migrated > 0 ? `绑定成功，已迁移 ${result.migration.bloggers} 位博主 / ${result.migration.notes} 篇笔记` : '登录成功', 'ok');
       } else {
-        const result = await CLOUD_SYNC.signUp(email, password);
+        result = await CLOUD_SYNC.signUp(email, password);
         if (result.requiresConfirm) {
-          setCloudMessage('注册成功，请先完成邮箱验证后再登录', 'warn');
+          setCloudMessage(
+            result.keptAnonymousIdentity
+              ? '注册成功，请先完成邮箱验证；当前匿名云身份和已上传数据会保留，验证后再回来绑定'
+              : '注册成功，请先完成邮箱验证后再登录',
+            'warn'
+          );
           return;
         }
-        setCloudMessage('注册成功并已登录', 'ok');
+        const migrated = (result?.migration?.bloggers || 0) + (result?.migration?.notes || 0) + (result?.migration?.aiReports || 0);
+        setCloudMessage(migrated > 0 ? `注册并绑定成功，已迁移 ${result.migration.bloggers} 位博主 / ${result.migration.notes} 篇笔记` : '注册成功并已登录', 'ok');
       }
       ANALYTICS.track('cloud_sync_auth', { action: cloudAuthTab, entry: 'popup' });
       await refreshCloudUploadPanel({ forceOpen: true });
-      if (pendingCloudUpload) {
-        await uploadCurrentProfile();
-      }
     } catch (e) {
       setCloudMessage(e.message || '认证失败', 'err');
     } finally {
@@ -810,9 +892,9 @@ function initCloudUploadPanel() {
   });
 
   cloudSignoutBtn?.addEventListener('click', async () => {
+    const currentSession = await CLOUD_SYNC.getSession();
     await CLOUD_SYNC.signOut();
-    pendingCloudUpload = false;
-    setCloudMessage('已退出云端登录', '');
+    setCloudMessage(CLOUD_SYNC?.isAnonymousSession?.(currentSession) ? '已清除当前匿名云身份' : '已退出云端登录', '');
     await refreshCloudUploadPanel({ forceOpen: true });
   });
 }
@@ -937,7 +1019,7 @@ btnStop.addEventListener('click', async () => {
 
 btnCsv.addEventListener('click', async () => {
   if (cachedNotes.length === 0) return;
-  const format = document.querySelector('input[name="format"]:checked')?.value || 'compatible';
+  const format = getExportFormat();
   const csv = format === 'compatible' ? generateCompatibleCSV(cachedNotes) : generateFullCSV(cachedNotes);
   const ts = getTimestamp();
   const prefix = currentMode === 'profile' ? 'xhs_batch' : currentMode === 'note' ? 'xhs_note' : 'xhs_data';
@@ -1009,7 +1091,7 @@ btnClearSaved.addEventListener('click', async () => {
 
 btnDownloadSaved.addEventListener('click', () => {
   if (cachedNotes.length === 0) return;
-  const format = document.querySelector('input[name="format"]:checked')?.value || 'compatible';
+  const format = getExportFormat();
   const csv = format === 'compatible' ? generateCompatibleCSV(cachedNotes) : generateFullCSV(cachedNotes);
   const ts = getTimestamp();
   downloadViaBackground(csv, `xhs_batch_resume_${ts}.csv`, 'text/csv;charset=utf-8');
@@ -1053,14 +1135,6 @@ btnUpload?.addEventListener('click', async () => {
   }
 
   await refreshCloudUploadPanel({ forceOpen: true });
-  const session = await CLOUD_SYNC.getSession();
-  if (!session?.access_token) {
-    pendingCloudUpload = true;
-    setCloudMessage('请先登录云端账号，登录成功后会自动继续上传', 'warn');
-    cloudUploadPanel?.classList.remove('hidden');
-    return;
-  }
-
   try {
     await uploadCurrentProfile();
   } catch (e) {
@@ -1151,7 +1225,6 @@ function toggleHiddenPrefs(visible) {
   document.querySelectorAll('.hidden-pref').forEach((el) => {
     el.classList.toggle('hidden', !visible);
   });
-  document.getElementById('hidden-pref-tip')?.classList.toggle('hidden', !visible);
 }
 
 async function initHiddenPrefsUnlock() {
@@ -1200,6 +1273,8 @@ initHiddenPrefsUnlock().catch(() => {});
       document.getElementById('ai-custom-model').value = '';
       populateModelSelect(p, defaultModel);
       await saveAiConfig();
+      await refreshAiKeyInput();
+      setAiTestResult('');
     });
 
     document.getElementById('ai-model')?.addEventListener('change', saveAiConfig);
@@ -1215,13 +1290,7 @@ initHiddenPrefsUnlock().catch(() => {});
     updateModelOverrideState();
   }
 
-  // 显示已有 Key
-  const keyData = await chrome.storage.local.get(['aiApiKey', 'deepseekApiKey']);
-  const hasKey = keyData.aiApiKey || keyData.deepseekApiKey;
-  if (hasKey) {
-    const el = document.getElementById('ai-api-key');
-    if (el) el.value = '••••••••';
-  }
+  await refreshAiKeyInput();
 })();
 
 async function saveAiConfig() {
@@ -1234,13 +1303,81 @@ async function saveAiConfig() {
   });
 }
 
+function setAiTestResult(text = '', type = '') {
+  const el = document.getElementById('ai-test-result');
+  if (!el) return;
+  el.textContent = text;
+  el.style.whiteSpace = 'pre-line';
+  if (type === 'ok') {
+    el.style.color = '#16a34a';
+  } else if (type === 'err') {
+    el.style.color = '#ff2442';
+  } else if (type === 'warn') {
+    el.style.color = '#d97706';
+  } else {
+    el.style.color = '#999';
+  }
+}
+
+function getDraftAiConfig() {
+  const provider = document.getElementById('ai-provider')?.value || 'deepseek';
+  const model = document.getElementById('ai-model')?.value || '';
+  const customBaseUrl = document.getElementById('ai-custom-url')?.value?.trim() || '';
+  const customModel = document.getElementById('ai-custom-model')?.value?.trim() || '';
+  return AI_CATALOG.normalizeConfig({ provider, model, customBaseUrl, customModel });
+}
+
+async function refreshAiKeyInput() {
+  const input = document.getElementById('ai-api-key');
+  if (!input) return;
+  const provider = document.getElementById('ai-provider')?.value || 'deepseek';
+  const key = await AI_SERVICE.getApiKey(provider);
+  input.value = key ? '••••••••' : '';
+}
+
+async function getDraftAiApiKey() {
+  const inputValue = document.getElementById('ai-api-key')?.value?.trim() || '';
+  if (inputValue && inputValue !== '••••••••') return AI_SERVICE.normalizeApiKey(inputValue);
+  const provider = document.getElementById('ai-provider')?.value || 'deepseek';
+  return AI_SERVICE.getApiKey(provider);
+}
+
 document.getElementById('btn-save-apikey')?.addEventListener('click', async () => {
-  const key = document.getElementById('ai-api-key').value.trim();
+  const key = AI_SERVICE.normalizeApiKey(document.getElementById('ai-api-key').value.trim());
   if (!key || key === '••••••••') return;
-  await chrome.storage.local.set({ aiApiKey: key, deepseekApiKey: key });
+  const provider = document.getElementById('ai-provider')?.value || 'deepseek';
+  await AI_SERVICE.setApiKey(key, provider);
   await saveAiConfig();
   document.getElementById('ai-api-key').value = '••••••••';
-  setStatus('done', 'AI 设置已保存');
+  setAiTestResult('');
+  setStatus('done', `${AI_CATALOG.getProvider(provider).name} API Key 已保存`);
+});
+
+document.getElementById('btn-test-ai')?.addEventListener('click', async () => {
+  const btn = document.getElementById('btn-test-ai');
+  if (!btn) return;
+
+  const originalText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = '测试中...';
+  const config = getDraftAiConfig();
+  const url = AI_CATALOG.getChatCompletionsUrl(config);
+  const model = AI_CATALOG.getEffectiveModel(config);
+  setAiTestResult(`正在测试...\nBase URL：${url}\n模型：${model}`, '');
+
+  try {
+    const apiKey = await getDraftAiApiKey();
+    const result = await AI_SERVICE.testConnection(config, apiKey);
+    const providerName = AI_CATALOG.getProvider(config.provider).name;
+    setAiTestResult(`连通成功：${providerName} / ${result.model}\nBase URL：${result.url}`, 'ok');
+    setStatus('done', `AI 连通成功：${providerName}`);
+  } catch (e) {
+    setAiTestResult(`连通失败：${e.message || '未知错误'}\nBase URL：${url}`, 'err');
+    setStatus('error', e.message || '连通测试失败');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = originalText;
+  }
 });
 
 btnExampleProfile?.addEventListener('click', async () => {

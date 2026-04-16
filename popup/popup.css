@@ -22,6 +22,26 @@ body {
   color: #fff;
   padding: 16px 20px;
   text-align: center;
+  position: relative;
+}
+
+/* 侧边栏入口按钮（header 右上角） */
+.btn-sidepanel-entry {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 3px 10px;
+  font-size: 11px;
+  border: 1px solid rgba(255,255,255,0.55);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.15s;
+  letter-spacing: 0.5px;
+}
+.btn-sidepanel-entry:hover {
+  background: rgba(255,255,255,0.3);
 }
 
 .header h1 {

@@ -6,6 +6,18 @@ try {
   // importScripts 失败不影响主业务
 }
 
+// 侧边栏偏好恢复 — service worker 重启时同步 openPanelOnActionClick
+async function restoreSidePanelPref() {
+  try {
+    if (!chrome.sidePanel?.setPanelBehavior) return;
+    const data = await chrome.storage.local.get('sidepanel_default');
+    await chrome.sidePanel.setPanelBehavior({
+      openPanelOnActionClick: data.sidepanel_default === true,
+    });
+  } catch {}
+}
+restoreSidePanelPref();
+
 // 首次安装埋点
 chrome.runtime.onInstalled.addListener(async (details) => {
   try {

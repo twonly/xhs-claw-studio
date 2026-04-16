@@ -1,0 +1,145 @@
+/* 侧边栏模式的样式覆盖 —— 只写与 popup.css 不同的地方 */
+
+/* 1. 撑满整个侧边栏视口（popup.css 里 body 是 400px 固定宽度） */
+body[data-mode="sidepanel"] {
+  width: 100%;
+  min-width: 300px;
+  height: 100vh;
+  margin: 0;
+  overflow: hidden; /* 外层不滚，内容区自己滚 */
+}
+
+body[data-mode="sidepanel"] .container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 2. 顶栏 sticky，滚动时仍可见 */
+body[data-mode="sidepanel"] .header {
+  position: relative;
+  flex-shrink: 0;
+  padding: 14px 20px 12px;
+}
+
+body[data-mode="sidepanel"] .header h1 {
+  font-size: 17px;
+}
+
+/* 3. 顶栏右上角：关闭侧边栏按钮 */
+body[data-mode="sidepanel"] .sp-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+body[data-mode="sidepanel"] .sp-close:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* popup 模式下不显示关闭按钮和"默认入口"设置项 */
+body:not([data-mode="sidepanel"]) .sp-close,
+body:not([data-mode="sidepanel"]) .sp-default-pref {
+  display: none !important;
+}
+
+/* 4. 中间内容区滚动；除了 header/footer/actions 之外都在滚动区 */
+body[data-mode="sidepanel"] .url-input-section,
+body[data-mode="sidepanel"] #recent-section,
+body[data-mode="sidepanel"] #status-bar,
+body[data-mode="sidepanel"] #settings,
+body[data-mode="sidepanel"] #batch-settings,
+body[data-mode="sidepanel"] #resume-section,
+body[data-mode="sidepanel"] #progress-section,
+body[data-mode="sidepanel"] #download-section,
+body[data-mode="sidepanel"] #cloud-upload-panel,
+body[data-mode="sidepanel"] #results-section,
+body[data-mode="sidepanel"] #license-section {
+  flex-shrink: 0;
+}
+
+/* 把 header、action（操作按钮区）、footer 之外的部分用一个伪容器包起来是最干净的方案，
+   但这里不改 HTML，用 scroll-marker 技巧：让整个 container 可以滚动，header 仍 sticky */
+body[data-mode="sidepanel"] .container {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+body[data-mode="sidepanel"] .header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* 5. 抓取时操作按钮区 sticky 在底部，始终可见 */
+body[data-mode="sidepanel"] .actions {
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  padding: 10px 20px;
+  margin: 0 -20px;
+  border-top: 1px solid #f0f0f0;
+  z-index: 9;
+  box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.04);
+}
+
+/* 6. 进度条在底部操作区上方保持可见（抓取长时间运行时要盯进度） */
+body[data-mode="sidepanel"] #progress-section:not(.hidden) {
+  position: sticky;
+  bottom: 56px;
+  background: #fff;
+  padding: 10px 20px;
+  margin: 0 -20px;
+  border-top: 1px solid #f5f5f5;
+  z-index: 8;
+}
+
+/* 7. 下载按钮横向 grid，利用更多宽度 */
+body[data-mode="sidepanel"] .download-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+}
+
+/* 8. URL 输入栏 + 最近采集更紧凑 */
+body[data-mode="sidepanel"] .url-input-section {
+  padding: 12px 20px;
+}
+
+body[data-mode="sidepanel"] .recent-section {
+  padding: 8px 20px 10px;
+}
+
+/* 9. 横向较宽时（用户拉宽了面板）表单 label 横排 */
+@media (min-width: 420px) {
+  body[data-mode="sidepanel"] .setting-row {
+    display: grid;
+    grid-template-columns: 88px 1fr;
+    gap: 12px;
+    align-items: start;
+  }
+}
+
+/* 10. AI 配置区在 sidepanel 下默认展开 */
+body[data-mode="sidepanel"] #license-section h3 {
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+/* 11. footer 稍微轻量 */
+body[data-mode="sidepanel"] .footer {
+  text-align: center;
+  padding: 8px 20px 14px;
+  font-size: 11px;
+  color: #999;
+  flex-shrink: 0;
+}

@@ -1107,14 +1107,16 @@
         scrapedInChunk = 0;
         if (batchState.stopRequested) break;
       } else {
-        // 普通随机延时
+        // 普通随机延时（在用户设定的 min~max 区间内）
+        // 10% 概率插入一次稍长的暂停（maxDelay 的 2~3 倍），模拟真人不规则操作
         const isLongPause = Math.random() < 0.1;
         const delayMs = isLongPause
-          ? 15000 + Math.random() * 15000
+          ? maxDelay * 2 + Math.random() * maxDelay
           : minDelay + Math.random() * (maxDelay - minDelay);
 
+        const label = isLongPause ? '防检测暂停' : '等待';
         broadcastProgress(batchState.results.length, targetCards.length,
-          `等待 ${(delayMs / 1000).toFixed(0)}s...`);
+          `${label} ${(delayMs / 1000).toFixed(0)}s...`);
         await new Promise(r => setTimeout(r, delayMs));
       }
     }

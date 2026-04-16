@@ -4325,8 +4325,28 @@ ${digest}`,
     const statusEl = document.getElementById('csp-status');
     const authBox = document.getElementById('csp-auth');
     const loggedInBox = document.getElementById('csp-loggedin');
+    const submitBtn = document.getElementById('csp-submit');
+    const emailEl = document.getElementById('csp-user-email');
+    const metaEl = document.getElementById('csp-user-meta');
+    const signoutBtn = document.getElementById('csp-signout');
+    const clearCloudBtn = document.getElementById('csp-clear-cloud');
 
     let currentTab = 'signin';
+
+    function updateAuthCopy(session) {
+      const isAnonymous = !!(session && CLOUD_SYNC.isAnonymousSession(session));
+      panel.querySelectorAll('.csp-tab').forEach((tab) => {
+        if (tab.dataset.tab === 'signin') {
+          tab.textContent = isAnonymous ? '绑定已有账号' : '登录';
+        } else {
+          tab.textContent = isAnonymous ? '注册并绑定邮箱' : '注册';
+        }
+      });
+      submitBtn.textContent =
+        currentTab === 'signin'
+          ? (isAnonymous ? '绑定已有账号' : '登录')
+          : (isAnonymous ? '注册并绑定邮箱' : '注册');
+    }
 
     async function refreshWorkbenchForCurrentRoute() {
       const route = getRoute();
@@ -4342,24 +4362,46 @@ ${digest}`,
 
     async function refresh() {
       const session = await CLOUD_SYNC.getSession();
-      if (session?.access_token) {
-        statusEl.textContent = '已连接';
+      const hasIdentity = !!session?.access_token;
+      const isAnonymous = hasIdentity && CLOUD_SYNC.isAnonymousSession(session);
+      const hasBoundEmail = hasIdentity && CLOUD_SYNC.hasBoundEmail(session);
+      updateAuthCopy(session);
+
+      if (hasBoundEmail) {
+        statusEl.textContent = '已绑定邮箱';
         statusEl.className = 'csp-status ok';
         authBox.classList.add('hidden');
         loggedInBox.classList.remove('hidden');
-        document.getElementById('csp-user-email').textContent = session.user?.email || '已登录';
+        emailEl.textContent = session.user?.email || '已登录';
+        signoutBtn.classList.remove('hidden');
+        clearCloudBtn.disabled = false;
+        await refreshStats();
+      } else if (isAnonymous) {
+        statusEl.textContent = '匿名已连接';
+        statusEl.className = 'csp-status ok';
+        authBox.classList.remove('hidden');
+        loggedInBox.classList.remove('hidden');
+        emailEl.textContent = '匿名云身份（可继续绑定邮箱）';
+        signoutBtn.classList.remove('hidden');
+        clearCloudBtn.disabled = false;
         await refreshStats();
       } else {
-        statusEl.textContent = '未登录';
+        const localIndex = await DATA_STORE.getBloggerIndex();
+        const localBloggers = localIndex.length;
+        const localNotes = localIndex.reduce((sum, blogger) => sum + (blogger.noteCount || 0), 0);
+        statusEl.textContent = '待创建匿名身份';
         statusEl.className = 'csp-status warn';
         authBox.classList.remove('hidden');
-        loggedInBox.classList.add('hidden');
+        loggedInBox.classList.remove('hidden');
+        emailEl.textContent = '首次同步时自动创建匿名云身份';
+        metaEl.textContent = `本地 ${localBloggers} 博主 / ${localNotes} 笔记 · 首次同步时自动创建云端身份`;
+        signoutBtn.classList.add('hidden');
+        clearCloudBtn.disabled = true;
       }
       await refreshWorkbenchForCurrentRoute();
     }
 
     async function refreshStats() {
-      const metaEl = document.getElementById('csp-user-meta');
       try {
         const localIndex = await DATA_STORE.getBloggerIndex();
         const localBloggers = localIndex.length;
@@ -4378,10 +4420,10 @@ ${digest}`,
 
     // Tab 切换
     panel.querySelectorAll('.csp-tab').forEach(tab => {
-      tab.addEventListener('click', () => {
+      tab.addEventListener('click', async () => {
         currentTab = tab.dataset.tab;
         panel.querySelectorAll('.csp-tab').forEach(t => t.classList.toggle('active', t === tab));
-        document.getElementById('csp-submit').textContent = currentTab === 'signin' ? '登录' : '注册';
+        updateAuthCopy(await CLOUD_SYNC.getSession());
         document.getElementById('csp-auth-msg').textContent = '';
         document.getElementById('csp-auth-msg').className = 'csp-msg';
       });
@@ -4400,24 +4442,32 @@ ${digest}`,
         return;
       }
 
-      const submitBtn = document.getElementById('csp-submit');
       submitBtn.disabled = true;
       const originalText = submitBtn.textContent;
       submitBtn.textContent = '处理中...';
 
       try {
+        let result;
         if (currentTab === 'signin') {
-          await CLOUD_SYNC.signIn(email, password);
-          msgEl.textContent = '登录成功';
+          result = await CLOUD_SYNC.signIn(email, password);
+          const migrated = (result?.migration?.bloggers || 0) + (result?.migration?.notes || 0) + (result?.migration?.aiReports || 0);
+          msgEl.textContent = migrated > 0
+            ? `绑定成功，已迁移 ${result.migration.bloggers} 位博主 / ${result.migration.notes} 篇笔记`
+            : '登录成功';
           msgEl.className = 'csp-msg ok';
         } else {
-          const result = await CLOUD_SYNC.signUp(email, password);
+          result = await CLOUD_SYNC.signUp(email, password);
           if (result.requiresConfirm) {
-            msgEl.textContent = '注册成功，请查收验证邮件后再登录（或在 Supabase Dashboard 关闭 Confirm email）';
+            msgEl.textContent = result.keptAnonymousIdentity
+              ? '注册成功，请先验证邮箱；当前匿名云身份和已同步数据会保留，验证后再回来绑定'
+              : '注册成功，请查收验证邮件后再登录';
             msgEl.className = 'csp-msg warn';
             return;
           }
-          msgEl.textContent = '注册成功并已登录';
+          const migrated = (result?.migration?.bloggers || 0) + (result?.migration?.notes || 0) + (result?.migration?.aiReports || 0);
+          msgEl.textContent = migrated > 0
+            ? `注册并绑定成功，已迁移 ${result.migration.bloggers} 位博主 / ${result.migration.notes} 篇笔记`
+            : '注册成功并已登录';
           msgEl.className = 'csp-msg ok';
         }
         await refresh();
@@ -4433,7 +4483,8 @@ ${digest}`,
 
     // 退出
     document.getElementById('csp-signout').addEventListener('click', async () => {
-      if (!confirm('确定退出云同步？本地数据不会被删除。')) return;
+      const currentSession = await CLOUD_SYNC.getSession();
+      if (!confirm(CLOUD_SYNC.isAnonymousSession(currentSession) ? '确定清除当前匿名云身份？本地数据不会被删除。' : '确定退出云同步？本地数据不会被删除。')) return;
       await CLOUD_SYNC.signOut();
       await refresh();
     });
