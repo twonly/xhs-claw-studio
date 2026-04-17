@@ -1,122 +1,167 @@
 # Chrome Web Store 发布文案
 
 ## 扩展名称
-红薯采集器 — 小红书笔记导出 & 运营分析
+Claw Studio — Creator Content Exporter
 
-## 简短描述（132 字符内，显示在搜索结果中）
-一键导出小红书笔记正文、图片、标签、互动数据。批量抓取、分析看板、素材库免费可用；云同步可选，AI 支持自配 Key。
+## 简短描述（132 字符内）
+面向内容创作者的数据导出助手。将你访问到的笔记正文、图片、标签和公开互动数据一键导出为 CSV / JSON，辅助创作复盘和行业研究。
 
 ## 详细描述
 
-小红书后台只能导出自己的数据摘要，无法获取笔记正文、图片原图和评论内容。更别提分析竞品账号了——你只能一篇篇手动复制粘贴。
+**Claw Studio 是一款面向内容创作者的数据导出与分析工具。**
 
-**红薯采集器**帮你一键解决。
+创作者日常需要复盘自己的历史笔记表现、研究行业优秀内容的创作规律。平台内只提供有限的数据摘要，无法导出笔记正文、图片和标签等结构化字段。一遍遍复制粘贴既低效又容易出错。
+
+Claw Studio 在你主动触发下完成这件事——只读取你当前访问的公开页面内容，默认本地保存。
 
 ### 核心功能
 
-**数据采集**
-- 单篇抓取：打开任意笔记详情页，一键提取标题、正文、标签、高清图片、互动数据和评论
-- 批量导出：打开任意用户主页，自动收集全部笔记并逐篇提取完整内容
-- 断点续传：大量笔记不必一次抓完，关闭后可继续，已抓数据不丢失
-- 智能防封：随机延时 + 分段冷却机制，模拟真实浏览节奏
+**笔记导出**
+- 单篇导出：打开任意笔记详情页，提取标题、正文、标签、高清图、公开互动数据
+- 批量导出：你访问的创作者主页中，逐篇自动收集笔记详情
+- 断点续传：大批量任务关闭后可继续，已抓数据不丢
+- 节流控制：用户可配置延时区间 + 分段冷却，尊重平台节奏
 
-**数据分析**
-- 博主 Profile 卡片：展示头像、昵称、小红书号、IP属地、个人简介、关注/粉丝/获赞与收藏
-- 概览看板：总点赞/收藏/评论、粉丝数、互动率等核心指标一览
-- 互动 Top 10：按点赞/收藏/评论排序的爆款笔记排行
-- 点赞 & 收藏分布：直观展示互动数据集中度
-- 标签词频分析：发现高频标签和话题趋势
+**数据分析看板**
+- 概览指标：点赞 / 收藏 / 评论 / 互动率
+- Top 10：按点赞 / 收藏 / 评论排序的高互动笔记
+- 分布图：点赞与收藏分布
+- 标签词频：高频话题统计
 
-**深度洞察**
-- 标签 ROI 图：每个标签的平均互动效果对比
-- 标题模式分析：问句/数字/热词等标题公式对互动的影响
-- 发布时间热力图：7×24 小时发布时段 vs 平均互动量
-- 图片数量 vs 互动：最佳配图数量区间
-- 视频 vs 图文 ROI：两种内容形式的互动对比
-- 正文长度 vs 互动：短文/中篇/长文的效果差异
-- 数据增长趋势：历次抓取的汇总指标变化曲线
+**深度洞察**（基于历史数据计算）
+- 标签 ROI：各标签平均互动效果对比
+- 标题模式分析：问句 / 数字 / 关键词标题公式的互动差异
+- 发布时间热力图：7×24 时段互动分布
+- 配图数量 vs 互动、视频 vs 图文、正文长度 vs 互动
+- 数据增长趋势：历次采集的聚合指标变化曲线
 
 **素材库**
-- 全量笔记库：跨博主汇总所有采集的笔记，统一检索
-- 全文搜索：按标题/正文/标签/博主名搜索，多关键词 AND 匹配
-- 多维筛选：按博主、内容类型（图文/视频）、标签、互动区间过滤
-- 筛选统计面板：实时显示平均赞/藏/评、爆款率、藏赞比
-- 一键复制：快速复制标题/正文/标签/链接，选题参考效率翻倍
-- 笔记详情面板：不跳转 XHS，在扩展内查看完整内容、图片、评论、历史变化
-- 批量导出 CSV：导出当前筛选结果
+- 全文搜索：标题 / 正文 / 标签 / 作者多关键词 AND 匹配
+- 多维筛选：作者、内容类型、标签、互动区间
+- 筛选统计面板：均值、爆款率、藏赞比
+- 一键复制：标题 / 正文 / 标签 / 链接
+- 批量导出 CSV / JSON
 
-**AI 深度分析**
-- AI 分析报告：基于数据摘要生成专业运营分析报告（内容策略/爆款密码/对标建议/数据洞察）
-- AI 对话问答：基于你的数据与 AI 自由对话，获取个性化运营建议
-- 多博主对比：选择多位博主生成对比分析报告
-- 多厂商支持：兼容 DeepSeek、OpenAI、Moonshot、智谱、通义千问、SiliconFlow 等 OpenAI 兼容接口
-- AI 采用自配 API Key 模式，默认不代付模型费用
+**AI 分析（自配 API Key）**
+- AI 分析报告、AI 对话问答、多账号对比
+- 兼容 DeepSeek、OpenAI、Moonshot、智谱、通义千问、SiliconFlow 等 OpenAI 兼容接口
+- 发送给 AI 的是聚合后的数据摘要，而非原始笔记集
+- 不代付 API 费用，模型费用由用户自行承担
 
-**云同步**
-- 邮箱注册一键登录，按需把数据同步到云端
-- 多设备共享：换电脑不丢数据
-- 同步内容：博主信息、笔记数据（含正文和标签）、AI 报告
+**云同步（可选）**
+- 邮箱注册后按需开启；也支持匿名上传
+- 同步内容：账号元信息、笔记数据、AI 报告
+- 本地数据始终是 source of truth，云端仅作备份和跨设备访问
 
-**导出能力**
-- CSV / JSON 全格式导出（分析页 & 素材库均可）
-- PDF 报告导出：完整分析页面渲染为 A4 PDF
-
-### 导出数据字段
-
-| 字段 | 说明 |
-|------|------|
-| 笔记ID | 笔记唯一标识 |
-| 标题 | 笔记完整标题 |
-| 正文 | 笔记完整正文内容 |
-| 标签/话题 | 所有标签和话题 |
-| 图片链接 | 高清原图 CDN 链接 |
-| 点赞/收藏/评论数 | 互动数据 |
-| 评论内容 | 热门评论（含作者标记） |
-| 发布时间 | 笔记发布时间 |
-| 笔记链接 | 原文 URL |
+**导出格式**
+- CSV / JSON 全格式（分析页 & 素材库均可）
+- PDF：完整分析页面导出为 A4 报告
 
 ### 适用场景
 
-- **运营复盘**：导出全部笔记数据，分析哪些选题、标签、发布时间效果最好
-- **竞品研究**：批量导出同赛道优质账号的内容，学习爆款文案和选题方向
-- **内容备份**：一键备份全部笔记正文和图片链接，防止内容丢失
-- **数据分析**：导出结构化数据，用 Excel / Python / BI 工具深度分析
-- **选题参考**：素材库全文搜索 + 一键复制标题/标签，快速找到灵感
+- **个人内容复盘**：导出自己发布过的所有笔记做历史数据分析
+- **内容备份**：一键保存笔记正文和图片链接，防止误删或平台变化
+- **行业研究**：在你访问的公开内容基础上整理结构化数据做趋势分析
+- **选题参考**：素材库全文搜索快速找到灵感
+- **BI 分析**：导出 CSV 送入 Excel / Python / Tableau
 
-### 安全说明
+### 数据与隐私
 
-- 本扩展仅读取小红书页面的**公开可见内容**，不涉及任何登录凭证或隐私数据
-- 数据默认存储在本地浏览器；云同步为可选功能，需注册登录后主动开启
-- 内置智能限速机制，尊重平台规则
-- AI 分析仅发送聚合数据摘要，不发送原文；需用户自行配置兼容 API Key
-- 开源透明，代码可审查
+- 只读取你**当前主动访问的公开页面**内容，不涉及登录凭证、私信或他人非公开数据
+- 默认**本地存储**，无自动上传
+- 云同步为**可选**功能，完全由用户主动触发
+- AI 分析由用户**自行配置** API Key，Claw Studio 不代理任何模型调用
+- 开源透明，代码审查可见 GitHub
+- 详细隐私政策：https://xhs-claw-studio.pages.dev/privacy
 
 ### 使用方法
 
-1. 安装扩展后，打开小红书网页版 (www.xiaohongshu.com)
-2. **单篇模式**：打开任意笔记详情页 → 点击扩展图标 → 点击「开始导出」
-3. **批量模式**：打开任意用户的个人主页 → 点击扩展图标 → 设置数量和延时 → 点击「开始导出」
-4. 抓取完成后，点击「数据分析」查看看板，或下载 CSV / JSON
-5. 在分析页面点击「素材库」浏览和搜索所有已采集笔记
+1. 安装后打开目标笔记详情页或创作者主页
+2. 点击扩展图标或打开侧边栏
+3. 选择单篇或批量模式 → 点击「开始导出」
+4. 抓取完成后，点击「数据分析」查看看板或下载 CSV / JSON / PDF
+5. 在分析页面打开「素材库」跨博主检索
 
 ---
 
 ## 分类
 Productivity（效率工具）
 
-## 标签/关键词
-小红书, xiaohongshu, XHS, 数据导出, 笔记导出, 运营分析, 内容采集, 红薯, RedNote, 素材库, AI分析
+## 单一用途声明（Single Purpose）
 
-## 隐私权政策要点（发布时需提供 URL）
+**English**:
+Claw Studio is a data export and analysis tool for content creators. Its single purpose is to help users export, organize, and analyze publicly visible notes and engagement metrics from pages they actively visit.
 
-见 landing/privacy.html
+**中文**:
+Claw Studio 是面向内容创作者的数据导出和分析工具，单一用途是帮助用户从其主动访问的页面导出、整理并分析公开笔记及互动数据。
 
 ---
 
-## 截图建议（需要 1280x800 或 640x400）
+## 权限说明（用于 Chrome Web Store Permissions tab 逐条填写）
 
-1. **主界面**：博主主页模式，显示 popup 设置项和「开始导出」按钮
-2. **数据分析**：博主 Profile 卡片 + 概览卡片 + Top 10 排行
-3. **深度洞察**：发布时间热力图 + 图片数量 vs 互动 + 标签 ROI
-4. **素材库**：搜索/筛选界面 + 统计面板 + 笔记卡片 + 详情侧边栏
-5. **AI 分析**：AI 生成的运营分析报告（流式输出中）
+### API Permissions
+
+| 权限 | Justification (EN) | 中文参考 |
+|------|---|---|
+| `activeTab` | Read the DOM of a note or profile page the user explicitly opens, so the user can extract visible content. | 用户主动打开页面后读取 DOM 提取公开内容 |
+| `scripting` | Inject the capture script into target pages when the user triggers a capture from the popup/side panel. | 触发抓取时向目标页面注入内容脚本 |
+| `tabs` | Detect the active tab and route capture messages to the correct tab; no browsing history is collected. | 判断活跃标签并路由抓取消息 |
+| `storage` | Store user preferences (AI key, export format) and captured data locally in the browser. | 本地保存用户偏好和已抓数据 |
+| `unlimitedStorage` | Batch captures can accumulate significant data volume; the default 10 MB storage quota is insufficient for power users. | 批量抓取数据量较大，10 MB 默认配额不够 |
+| `downloads` | Save generated CSV / JSON / PDF files to the user's local Downloads folder. | 下载导出的 CSV/JSON/PDF |
+| `sidePanel` | Provide a persistent side panel UI alternative to the popup so the panel stays open when the user switches tabs. | 提供常驻侧边栏 UI |
+
+### Host Permissions
+
+| Host | Justification |
+|------|------|
+| `https://www.xiaohongshu.com/*` | Inject the content script into public note and profile pages the user actively visits to extract the content the user is viewing. |
+| `https://creator.xiaohongshu.com/statistics/*` | Read the user's own creator dashboard (user must be logged into their own account) to export historical statistics. |
+| `https://api.deepseek.com/*` | Forward user-configured AI API key to DeepSeek for report generation. Activated only after the user configures their own API key and triggers an AI feature. |
+| `https://api.openai.com/*` | Same as above, for OpenAI. |
+| `https://api.moonshot.cn/*` | Same as above, for Moonshot (Kimi). |
+| `https://open.bigmodel.cn/*` | Same as above, for ZhiPu GLM. |
+| `https://dashscope.aliyuncs.com/*` | Same as above, for Alibaba QianWen. |
+| `https://api.siliconflow.cn/*` | Same as above, for SiliconFlow. |
+| `https://*.supabase.co/*` | Backend endpoint for optional cloud sync (Supabase). Activated only when the user explicitly enables backup. |
+| `https://api.mixpanel.com/*` | Anonymous usage analytics with no user-identifying data. User can disable in settings. |
+
+### Remote Code
+
+**No remote code execution.** All executable JavaScript is bundled within the extension package. Remote endpoints serve only data payloads (JSON); there is no `eval` of remote responses and no dynamic script loading.
+
+### Data Usage Disclosure
+
+**What we collect (only when user triggers capture):**
+- Publicly visible note content (title, body, tags, images, public engagement counts) from pages the user actively visits
+- The user's own creator-dashboard statistics when the user visits their own dashboard
+
+**What we do NOT collect:**
+- Passwords, authentication tokens, private messages
+- Browsing history or pages the user did not explicitly visit
+- Any content from third-party users the extension does not have on-screen access to
+
+**Where the data goes:**
+- **Default**: stored locally in Chrome's `storage.local`
+- **Optional cloud sync**: uploaded to Supabase only when the user enables backup
+- **Optional AI analysis**: an aggregated summary (not raw notes) is sent to a user-configured AI provider only when the user triggers an AI feature
+
+---
+
+## 关键词 / 标签
+
+content creator, creator tools, note export, content export, content research, data export, productivity, analytics, content library, AI analysis, CSV export, cross-device sync
+
+## 隐私政策 URL
+https://xhs-claw-studio.pages.dev/privacy
+
+---
+
+## 截图清单（1280×800 PNG）
+
+位于 `docs/screenshots/store/`：
+1. `store-01-capture.png` — 扩展弹窗 + 设置项 + 开始导出
+2. `store-02-dashboard.png` — 单博主分析看板
+3. `store-03-insights.png` — 深度洞察（热力图 + ROI）
+4. `store-04-library.png` — 素材库全文搜索
+5. `store-05-ai.png` — AI 分析报告
