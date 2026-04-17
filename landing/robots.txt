@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://chrome-extension-batch.pages.dev/sitemap.xml
+Sitemap: https://xhs-claw-studio.pages.dev/sitemap.xml
