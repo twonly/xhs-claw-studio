@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Claw Studio — Creator Content Exporter",
   "version": "3.1.0",
-  "description": "Export publicly visible notes, images, tags, and engagement data for content research and operational analysis. Bring your own AI key.",
+  "description": "Export publicly visible notes, images, tags, and engagement data for content research and analysis. Bring your own AI API key.",
   "minimum_chrome_version": "114",
   "permissions": [
     "activeTab",
