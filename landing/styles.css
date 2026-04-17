@@ -280,6 +280,15 @@ input {
   text-wrap: balance;
 }
 
+html[lang="zh-CN"] .hero-copy h1 {
+  max-width: 10.8ch;
+  font-size: clamp(2.15rem, 4.05vw, 3.35rem);
+  line-height: 1.14;
+  letter-spacing: -0.055em;
+  word-break: keep-all;
+  line-break: strict;
+}
+
 .hero-lead,
 .section-heading p,
 .info-card p,
@@ -888,6 +897,11 @@ input {
   .hero-copy h1,
   .policy-heading h1 {
     font-size: clamp(2.1rem, 10vw, 3rem);
+  }
+
+  html[lang="zh-CN"] .hero-copy h1 {
+    max-width: 11.2ch;
+    font-size: clamp(2rem, 9.2vw, 2.9rem);
   }
 
   .value-grid,
