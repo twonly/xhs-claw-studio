@@ -252,8 +252,9 @@ input {
 }
 
 .hero-grid {
-  grid-template-columns: minmax(0, 1.04fr) minmax(0, 0.96fr);
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
   align-items: start;
+  gap: 36px;
 }
 
 .hero-copy h1,
@@ -270,12 +271,13 @@ input {
 
 .hero-copy h1,
 .policy-heading h1 {
-  font-size: clamp(2.65rem, 5.4vw, 4.35rem);
+  font-size: clamp(2.35rem, 4.5vw, 3.75rem);
 }
 
 .hero-copy h1 {
-  max-width: 10.5ch;
-  line-height: 1.08;
+  max-width: 8.6ch;
+  line-height: 1.12;
+  text-wrap: balance;
 }
 
 .hero-lead,
@@ -404,6 +406,9 @@ input {
 .hero-visual {
   display: grid;
   gap: 18px;
+  width: 100%;
+  max-width: 720px;
+  justify-self: end;
 }
 
 .dashboard-card {
@@ -411,6 +416,8 @@ input {
   padding: 24px;
   background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(246,250,255,0.88));
   box-shadow: var(--shadow-lg);
+  width: 100%;
+  overflow: hidden;
 }
 
 .card-head,
@@ -427,6 +434,14 @@ input {
 .dashboard-top {
   margin-top: 20px;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.dashboard-top > div {
+  min-width: 0;
+}
+
+.dashboard-top strong {
+  overflow-wrap: anywhere;
 }
 
 .chart-card {
@@ -837,6 +852,11 @@ input {
     display: none;
   }
 
+  .hero-visual {
+    max-width: none;
+    justify-self: stretch;
+  }
+
   .value-grid,
   .feature-grid,
   .pricing-grid,
@@ -867,7 +887,7 @@ input {
 
   .hero-copy h1,
   .policy-heading h1 {
-    font-size: clamp(2.2rem, 11vw, 3.2rem);
+    font-size: clamp(2.1rem, 10vw, 3rem);
   }
 
   .value-grid,
