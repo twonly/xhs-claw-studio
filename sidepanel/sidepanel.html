@@ -2,16 +2,19 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="popup.css">
+  <title>红薯采集器 — 侧边栏</title>
+  <!-- 先加载 popup.css 保证基础样式 + sidepanel.css 做布局覆盖 -->
+  <link rel="stylesheet" href="../popup/popup.css">
+  <link rel="stylesheet" href="sidepanel.css">
   <link rel="stylesheet" href="../lib/onboarding.css">
 </head>
-<body>
+<body data-mode="sidepanel">
   <div class="container">
     <!-- 标题栏 -->
     <div class="header">
       <h1 id="popup-title">红薯采集器</h1>
       <p class="subtitle">小红书笔记一键导出 / 批量抓取</p>
-      <button id="btn-open-sidepanel" class="btn-sidepanel-entry" title="在侧边栏打开（常驻，不会因失焦关闭）">侧边栏</button>
+      <button id="btn-close-sidepanel" class="sp-close" title="切回弹窗模式">×</button>
     </div>
 
     <!-- URL 快捷输入 -->
@@ -139,7 +142,7 @@
       </div>
     </div>
 
-    <!-- 进度区域 -->
+    <!-- 进度区域（sidepanel 下会被固定在底部操作区上方） -->
     <div id="progress-section" class="progress-section hidden">
       <div class="progress-bar-container">
         <div id="progress-bar" class="progress-bar" style="width: 0%"></div>
@@ -238,11 +241,23 @@
         </div>
       </div>
       <div class="setting-note">AI 功能默认不代付模型费用；配置你自己的兼容 API Key 后即可使用。</div>
+
+      <!-- sidepanel 独有：默认入口偏好切换 -->
+      <div class="setting-row sp-default-pref">
+        <label>默认入口</label>
+        <div class="setting-input">
+          <label class="radio-label">
+            <input type="checkbox" id="sp-default-toggle">
+            <span>点击图标时默认打开侧边栏</span>
+          </label>
+        </div>
+      </div>
+
     </div>
 
     <!-- 提示 -->
     <div class="footer">
-      <p id="footer-text">请在抓取过程中保持此弹窗打开</p>
+      <p id="footer-text">侧边栏模式：切换标签页不会关闭面板</p>
     </div>
   </div>
 
@@ -253,6 +268,9 @@
   <script src="../lib/ai-service.js"></script>
   <script src="../lib/cloud-sync.js"></script>
   <script src="../lib/onboarding.js"></script>
-  <script src="popup.js"></script>
+  <!-- 核心业务逻辑 100% 复用 popup.js -->
+  <script src="../popup/popup.js"></script>
+  <!-- 薄壳：只处理 sidepanel 特有交互（关闭、默认入口切换） -->
+  <script src="sidepanel.js"></script>
 </body>
 </html>
