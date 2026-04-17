@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "红薯采集器 — 小红书笔记导出",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "一键导出小红书任意用户全部笔记正文、图片、标签、互动数据。支持批量抓取、深度洞察分析、AI 报告、PDF 导出、素材库。运营分析必备。",
   "minimum_chrome_version": "114",
   "permissions": [
