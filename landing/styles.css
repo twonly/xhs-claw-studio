@@ -155,10 +155,36 @@ input {
 .chip-grid,
 .install-actions,
 .footer-links,
-.policy-actions {
+.policy-actions,
+.lang-switch {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
+}
+
+.lang-switch {
+  gap: 6px;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid var(--line);
+}
+
+.lang-btn {
+  min-width: 46px;
+  min-height: 34px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.lang-btn.is-active {
+  background: var(--brand);
+  color: #fff;
+  box-shadow: var(--shadow-md);
 }
 
 .site-nav {
@@ -244,11 +270,12 @@ input {
 
 .hero-copy h1,
 .policy-heading h1 {
-  font-size: clamp(3rem, 7vw, 5.2rem);
+  font-size: clamp(2.65rem, 5.4vw, 4.35rem);
 }
 
 .hero-copy h1 {
-  max-width: 9ch;
+  max-width: 10.5ch;
+  line-height: 1.08;
 }
 
 .hero-lead,
@@ -269,7 +296,7 @@ input {
 }
 
 .hero-lead {
-  max-width: 60ch;
+  max-width: 54ch;
   margin-top: 18px;
 }
 
@@ -444,6 +471,38 @@ input {
   background: #101b34;
   color: #dce7ff;
   font: 0.88rem/1.8 'Source Code Pro', ui-monospace, monospace;
+}
+
+.screenshot-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.screenshot-card {
+  display: grid;
+  gap: 14px;
+}
+
+.screenshot-card img {
+  width: 100%;
+  display: block;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+}
+
+.screenshot-card h3 {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+.screenshot-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.65;
 }
 
 .trust-strip {
@@ -785,7 +844,8 @@ input {
   .hero-metrics,
   .dashboard-top,
   .calc-grid,
-  .compliance-grid {
+  .compliance-grid,
+  .screenshot-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -807,7 +867,7 @@ input {
 
   .hero-copy h1,
   .policy-heading h1 {
-    font-size: clamp(2.5rem, 12vw, 3.6rem);
+    font-size: clamp(2.2rem, 11vw, 3.2rem);
   }
 
   .value-grid,
@@ -817,7 +877,8 @@ input {
   .hero-metrics,
   .dashboard-top,
   .calc-grid,
-  .compliance-grid {
+  .compliance-grid,
+  .screenshot-grid {
     grid-template-columns: 1fr;
   }
 

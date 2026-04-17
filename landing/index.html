@@ -1,73 +1,58 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>红薯采集器｜开源的小红书笔记导出与轻量分析工具</title>
-  <meta name="description" content="红薯采集器是一款开源、轻量的小红书笔记导出工具。支持批量导出正文、图片、标签、评论与互动数据，适合竞品研究、运营复盘和内容备份。">
-  <meta name="keywords" content="小红书导出,小红书笔记导出,小红书平替,XHS导出,竞品研究,运营复盘,Chrome扩展,红薯采集器">
+  <title>HongShu Claw | Open-source XiaoHongShu export and lightweight analysis</title>
+  <meta name="description" content="HongShu Claw is an open-source Chrome extension for exporting public XiaoHongShu notes and running lightweight analysis.">
+  <meta name="keywords" content="XiaoHongShu export,XHS export,RedNote export,competitor research,content analysis,Chrome extension,HongShu Claw">
   <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
-  <meta name="author" content="红薯采集器">
+  <meta name="author" content="HongShu Claw">
   <meta name="theme-color" content="#533afd">
   <link rel="canonical" href="https://xhs-claw-studio.pages.dev/">
   <meta property="og:type" content="website">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:site_name" content="红薯采集器">
-  <meta property="og:title" content="红薯采集器｜开源的小红书笔记导出与轻量分析工具">
-  <meta property="og:description" content="如果你只想批量导出小红书正文、图片、标签和互动数据，并做轻量复盘，红薯采集器是一个更轻、更直接的开源选择。">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:site_name" content="HongShu Claw">
+  <meta property="og:title" content="HongShu Claw | Open-source XiaoHongShu export and lightweight analysis">
+  <meta property="og:description" content="Export public XiaoHongShu notes, keep structured fields, and review them in a lightweight dashboard.">
   <meta property="og:url" content="https://xhs-claw-studio.pages.dev/">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="红薯采集器｜开源的小红书笔记导出与轻量分析工具">
-  <meta name="twitter:description" content="专注小红书导出、竞品研究和运营复盘，开源、轻量、直接可用。">
+  <meta name="twitter:title" content="HongShu Claw | Open-source XiaoHongShu export and lightweight analysis">
+  <meta name="twitter:description" content="A lightweight Chrome extension for XiaoHongShu export, competitor research, and content review.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500;600;700&amp;family=Source+Code+Pro:wght@400;500;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "红薯采集器",
-    "applicationCategory": "BusinessApplication",
-    "operatingSystem": "Chrome",
-    "url": "https://xhs-claw-studio.pages.dev/",
-    "description": "开源的小红书笔记导出与轻量分析工具，支持批量导出正文、图片、标签、评论与互动数据。",
-    "offers": [
-      {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "CNY",
-        "name": "Open Source Public Release"
-      }
-    ]
-  }
-  </script>
 </head>
-<body>
+<body data-page="landing">
   <div class="page-glow page-glow-a"></div>
   <div class="page-glow page-glow-b"></div>
 
   <header class="site-header">
     <div class="container header-inner">
-      <a class="brand" href="#top" aria-label="红薯采集器首页">
+      <a class="brand" href="#top" aria-label="HongShu Claw home">
         <span class="brand-mark">红</span>
         <span class="brand-copy">
-          <strong>红薯采集器</strong>
-          <em>XHS Export Replacement</em>
+          <strong>HongShu Claw</strong>
+          <em>XHS Export Studio</em>
         </span>
       </a>
 
-      <nav class="site-nav" aria-label="主导航">
-        <a href="#value">为什么买</a>
-        <a href="#features">功能</a>
-        <a href="#install-guide">安装</a>
-        <a href="#pricing">版本</a>
-        <a href="#faq">FAQ</a>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="#value" data-i18n="nav.why">Why it matters</a>
+        <a href="#features" data-i18n="nav.features">Features</a>
+        <a href="#install-guide" data-i18n="nav.install">Install</a>
+        <a href="#release" data-i18n="nav.release">Release</a>
+        <a href="#faq" data-i18n="nav.faq">FAQ</a>
       </nav>
 
       <div class="header-actions">
+        <div class="lang-switch" role="group" aria-label="Language switcher">
+          <button type="button" class="lang-btn is-active" data-lang="en">EN</button>
+          <button type="button" class="lang-btn" data-lang="zh">中文</button>
+        </div>
         <a class="btn btn-secondary" href="https://github.com/twonly/xhs-claw-studio" target="_blank" rel="noreferrer">GitHub</a>
-        <a class="btn btn-primary" href="#install-guide">安装使用</a>
+        <a class="btn btn-primary" href="#install-guide" data-i18n="cta.install">Install</a>
       </div>
     </div>
   </header>
@@ -78,45 +63,42 @@
         <div class="hero-copy reveal-up">
           <div class="eyebrow-row">
             <span class="eyebrow">CHROME EXTENSION</span>
-            <span class="eyebrow">LIGHTWEIGHT</span>
-            <span class="eyebrow">LOWER COST</span>
+            <span class="eyebrow">OPEN SOURCE</span>
+            <span class="eyebrow">LOCAL FIRST</span>
           </div>
 
-          <h1>如果你只想导出小红书内容，<br>别买一整套贵平台。</h1>
-          <p class="hero-lead">
-            红薯采集器就是为这件事做的：
-            批量导出任意账号的标题、正文、标签、图片、评论和互动数据。
-            不讲复杂故事，不做一堆你用不到的大平台功能，只把导出、复盘和竞品研究做好。
-            当前公开版先把安装、导出、分析和素材沉淀这条主链路做扎实。
+          <h1 data-i18n-html="hero.title">Export public XiaoHongShu notes without buying a heavy platform.</h1>
+          <p class="hero-lead" data-i18n="hero.lead">
+            HongShu Claw is built for one practical job: export public posts faster, keep structured fields, and continue with lightweight analysis.
           </p>
 
           <div class="hero-actions">
-            <a class="btn btn-primary btn-large" href="#install-guide">查看安装方式</a>
-            <a class="btn btn-secondary btn-large" href="https://github.com/twonly/xhs-claw-studio" target="_blank" rel="noreferrer">查看 GitHub</a>
+            <a class="btn btn-primary btn-large" href="#install-guide" data-i18n="hero.primary">See install steps</a>
+            <a class="btn btn-secondary btn-large" href="https://github.com/twonly/xhs-claw-studio" target="_blank" rel="noreferrer" data-i18n="hero.secondary">Open GitHub</a>
           </div>
 
           <div class="hero-points">
-            <span>任意账号批量导出</span>
-            <span>正文 图片 标签 互动一起拿走</span>
-            <span>断点续传 + 冷却设置</span>
-            <span>开源可见，先用再说</span>
+            <span data-i18n="hero.point1">Batch export any public profile</span>
+            <span data-i18n="hero.point2">Keep title, body, tags, images, and engagement</span>
+            <span data-i18n="hero.point3">Resume, cooldown, and export-ready workflow</span>
+            <span data-i18n="hero.point4">Open source and reviewable</span>
           </div>
 
           <div class="hero-metrics">
             <article>
-              <span>主打结果</span>
+              <span data-i18n="hero.metric1.label">Main outcome</span>
               <strong data-counter="1">0</strong>
-              <em>把账号内容批量导出来</em>
+              <em data-i18n="hero.metric1.value">Export one account into structured data</em>
             </article>
             <article>
-              <span>核心字段</span>
+              <span data-i18n="hero.metric2.label">Core field groups</span>
               <strong data-counter="9">0</strong>
-              <em>标题 正文 标签 图片 评论 互动等</em>
+              <em data-i18n="hero.metric2.value">Title, body, tags, images, comments, engagement, and more</em>
             </article>
             <article>
-              <span>典型用户</span>
+              <span data-i18n="hero.metric3.label">Best-fit users</span>
               <strong data-counter="3">0</strong>
-              <em>运营 竞品研究 内容备份</em>
+              <em data-i18n="hero.metric3.value">Ops, competitor research, and content backup</em>
             </article>
           </div>
         </div>
@@ -124,55 +106,55 @@
         <div class="hero-visual reveal-up">
           <article class="dashboard-card main-dashboard">
             <div class="card-head">
-              <span>你真正拿到的结果</span>
+              <span data-i18n="dashboard.headline">What you actually get</span>
               <span>EXPORT READY</span>
             </div>
 
             <div class="dashboard-top">
               <div>
-                <span class="metric-label">已抓取笔记</span>
+                <span class="metric-label" data-i18n="dashboard.metric1.label">Captured notes</span>
                 <strong data-counter="128">0</strong>
               </div>
               <div>
-                <span class="metric-label">导出格式</span>
+                <span class="metric-label" data-i18n="dashboard.metric2.label">Export format</span>
                 <strong>CSV / JSON</strong>
               </div>
               <div>
-                <span class="metric-label">继续复盘</span>
-                <strong>看板</strong>
+                <span class="metric-label" data-i18n="dashboard.metric3.label">Next step</span>
+                <strong data-i18n="dashboard.metric3.value">Dashboard</strong>
               </div>
             </div>
 
             <div class="chart-card">
               <div class="chart-head">
-                <span>爆款内容分布</span>
+                <span data-i18n="dashboard.chart">Top-content distribution</span>
                 <span>TOP NOTES</span>
               </div>
               <div class="bars">
-                <div class="bar-row"><label>运营复盘模板</label><span style="width: 92%"></span><em>1,260</em></div>
-                <div class="bar-row"><label>预算工位改造</label><span style="width: 78%"></span><em>982</em></div>
-                <div class="bar-row"><label>竞品拆解方法</label><span style="width: 66%"></span><em>855</em></div>
-                <div class="bar-row"><label>选题清单</label><span style="width: 58%"></span><em>742</em></div>
+                <div class="bar-row"><label data-i18n="dashboard.bar1">Review template</label><span style="width: 92%"></span><em>1,260</em></div>
+                <div class="bar-row"><label data-i18n="dashboard.bar2">Workspace upgrade</label><span style="width: 78%"></span><em>982</em></div>
+                <div class="bar-row"><label data-i18n="dashboard.bar3">Competitor teardown</label><span style="width: 66%"></span><em>855</em></div>
+                <div class="bar-row"><label data-i18n="dashboard.bar4">Topic list</label><span style="width: 58%"></span><em>742</em></div>
               </div>
             </div>
 
             <div class="chip-grid">
-              <span>#正文导出</span>
-              <span>#竞品研究</span>
-              <span>#运营复盘</span>
-              <span>#内容备份</span>
+              <span data-i18n="dashboard.tag1">#ExportBody</span>
+              <span data-i18n="dashboard.tag2">#CompetitorResearch</span>
+              <span data-i18n="dashboard.tag3">#OpsReview</span>
+              <span data-i18n="dashboard.tag4">#ContentBackup</span>
             </div>
           </article>
 
           <article class="dashboard-card code-card" id="preview">
             <div class="card-head">
-              <span>导出样例</span>
+              <span data-i18n="sample.title">Export sample</span>
               <span>CSV / JSON</span>
             </div>
-            <pre><code>标题,点赞,收藏,评论,标签,图片数,发布时间
-我怎么复盘爆款笔记,982,510,41,#运营复盘 #内容分析,5,2026-03-12
-预算 300 元的工位升级,1260,441,38,#效率工具 #工位改造,7,2026-03-18
-做竞品研究最省时间的方法,855,392,22,#竞品分析 #内容策划,4,2026-03-21</code></pre>
+            <pre><code data-i18n="sample.code">title,likes,collects,comments,tags,image_count,publish_time
+How I review breakout posts,982,510,41,#ops-review #content-analysis,5,2026-03-12
+Workspace upgrade on a small budget,1260,441,38,#tools #workspace,7,2026-03-18
+The fastest way to do competitor research,855,392,22,#competitor-research #planning,4,2026-03-21</code></pre>
           </article>
         </div>
       </div>
@@ -180,36 +162,45 @@
 
     <section class="trust-strip">
       <div class="container trust-grid reveal-up">
-        <div><strong>不是大而全平台</strong><span>我们主打小红书内容导出，不把页面讲成复杂 SaaS</span></div>
-        <div><strong>先解决最值钱的痛点</strong><span>先把正文、图片、标签和互动数据拿下来，再谈后续分析</span></div>
-        <div><strong>公开版先做真实能力</strong><span>先把能安装、能导出、能复盘的链路打磨清楚，再谈后续商业化</span></div>
+        <div>
+          <strong data-i18n="trust.1.title">Not a bloated platform</strong>
+          <span data-i18n="trust.1.body">The product focuses on export and review, not a full heavy SaaS story.</span>
+        </div>
+        <div>
+          <strong data-i18n="trust.2.title">Solve the valuable part first</strong>
+          <span data-i18n="trust.2.body">Get public post data out first, then decide how deep you want to analyze it.</span>
+        </div>
+        <div>
+          <strong data-i18n="trust.3.title">Public release, real scope</strong>
+          <span data-i18n="trust.3.body">This site describes what the current open build really does, not a future fantasy roadmap.</span>
+        </div>
       </div>
     </section>
 
     <section class="section" id="value">
       <div class="container">
         <div class="section-heading reveal-up">
-          <span class="eyebrow">WHY PEOPLE BUY</span>
-          <h2>因为很多人真正想要的，只是一个更轻、更便宜的导出工具。</h2>
-          <p>他们不想买复杂平台，不想部署脚本，也不想手动复制几十上百篇笔记。红薯采集器就卡在这个中间地带：简单、够用、开源可见。</p>
+          <span class="eyebrow">WHY IT MATTERS</span>
+          <h2 data-i18n="value.title">Most people do not need a giant platform. They just need structured export.</h2>
+          <p data-i18n="value.lead">HongShu Claw sits between manual copy-paste and heavy paid tooling: simpler than scripts, lighter than platforms, and good enough to start working immediately.</p>
         </div>
 
         <div class="value-grid">
           <article class="info-card reveal-up">
-            <h3>比手动复制快很多</h3>
-            <p>不用再一篇篇打开复制正文、标签和互动数据，直接批量导出结构化结果。</p>
+            <h3 data-i18n="value.card1.title">Faster than manual copy-paste</h3>
+            <p data-i18n="value.card1.body">Export structured results instead of opening and copying one post at a time.</p>
           </article>
           <article class="info-card reveal-up">
-            <h3>比脚本更简单</h3>
-            <p>不需要 Python、部署和环境配置，安装扩展后打开网页就能开始抓取。</p>
+            <h3 data-i18n="value.card2.title">Simpler than scripts</h3>
+            <p data-i18n="value.card2.body">No Python setup, no deployment, no environment maintenance before you can start.</p>
           </article>
           <article class="info-card reveal-up">
-            <h3>比大平台便宜很多</h3>
-            <p>如果你只想做导出和轻量复盘，没必要为一整套复杂的数据产品买单。</p>
+            <h3 data-i18n="value.card3.title">Lighter than big platforms</h3>
+            <p data-i18n="value.card3.body">If export and lightweight review are enough, you do not need a full enterprise product.</p>
           </article>
           <article class="info-card reveal-up">
-            <h3>结果足够直接</h3>
-            <p>打开页面，导出账号内容，继续做竞品研究、运营复盘和内容备份，不绕弯子。</p>
+            <h3 data-i18n="value.card4.title">Useful output, not just a demo</h3>
+            <p data-i18n="value.card4.body">The result can go into Excel, Sheets, Python workflows, or the built-in dashboard and material library.</p>
           </article>
         </div>
       </div>
@@ -219,40 +210,67 @@
       <div class="container">
         <div class="section-heading reveal-up">
           <span class="eyebrow">FEATURES</span>
-          <h2>只保留真正影响购买决策的功能。</h2>
-          <p>不是为了堆功能，而是为了让用户最快完成“导出一个账号内容”这件事。</p>
+          <h2 data-i18n="features.title">The feature set stays focused on capture, export, and lightweight review.</h2>
+          <p data-i18n="features.lead">The goal is not to win by feature count. It is to help people export one profile cleanly and keep working from there.</p>
         </div>
 
         <div class="feature-grid">
           <article class="feature-card reveal-up">
             <span class="feature-id">01</span>
-            <h3>主页批量导出</h3>
-            <p>打开任意用户主页，自动收集卡片并逐篇提取详情，而不是只能抓单篇。</p>
+            <h3 data-i18n="features.card1.title">Batch profile capture</h3>
+            <p data-i18n="features.card1.body">Open a public profile, collect note cards, and extract each detail page instead of only supporting single-post export.</p>
           </article>
           <article class="feature-card reveal-up">
             <span class="feature-id">02</span>
-            <h3>正文 / 图片 / 标签一起拿走</h3>
-            <p>不是只拿摘要，直接导出标题、正文、标签、图片链接、评论和互动数据。</p>
+            <h3 data-i18n="features.card2.title">Rich field export</h3>
+            <p data-i18n="features.card2.body">Keep title, body, tags, images, publish time, and engagement in one structured result set.</p>
           </article>
           <article class="feature-card reveal-up">
             <span class="feature-id">03</span>
-            <h3>断点续传</h3>
-            <p>长任务中断后可以继续，几十篇到上百篇账号也能更稳地跑完。</p>
+            <h3 data-i18n="features.card3.title">Resume support</h3>
+            <p data-i18n="features.card3.body">Long jobs can continue after interruption instead of restarting from scratch.</p>
           </article>
           <article class="feature-card reveal-up">
             <span class="feature-id">04</span>
-            <h3>随机延时与冷却</h3>
-            <p>支持更贴近真实浏览节奏的抓取方式，减少人工盯任务的压力。</p>
+            <h3 data-i18n="features.card4.title">Delay and cooldown control</h3>
+            <p data-i18n="features.card4.body">Pacing settings help batch jobs feel closer to real browsing behavior.</p>
           </article>
           <article class="feature-card reveal-up">
             <span class="feature-id">05</span>
-            <h3>基础分析看板</h3>
-            <p>导出后可以继续看 Top Notes、标签分布和基础复盘结果，不止停在下载文件。</p>
+            <h3 data-i18n="features.card5.title">Built-in dashboard</h3>
+            <p data-i18n="features.card5.body">Review top notes, engagement distribution, tags, and title patterns without leaving the extension.</p>
           </article>
           <article class="feature-card reveal-up">
             <span class="feature-id">06</span>
-            <h3>素材库与检索</h3>
-            <p>把导出的内容沉淀下来，方便后续搜索、筛选、复制和复用。</p>
+            <h3 data-i18n="features.card6.title">Material library</h3>
+            <p data-i18n="features.card6.body">Turn captured results into a searchable content bank for later reuse.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-heading reveal-up">
+          <span class="eyebrow">SCREENSHOTS</span>
+          <h2 data-i18n="screens.title">The workflow is already visible in the product, not hidden behind mockups.</h2>
+        </div>
+
+        <div class="screenshot-grid">
+          <article class="dashboard-card screenshot-card reveal-up">
+            <img src="../docs/screenshots/01-popup-batch-capture.png" alt="Popup batch capture">
+            <h3 data-i18n="screens.card1.title">Popup capture entry</h3>
+            <p data-i18n="screens.card1.body">Start a batch task from a public profile page and control pacing before export.</p>
+          </article>
+          <article class="dashboard-card screenshot-card reveal-up">
+            <img src="../docs/screenshots/03-single-blogger-dashboard.png" alt="Single blogger dashboard">
+            <h3 data-i18n="screens.card2.title">Single creator dashboard</h3>
+            <p data-i18n="screens.card2.body">Review top-performing notes, creator details, and export actions in one place.</p>
+          </article>
+          <article class="dashboard-card screenshot-card reveal-up">
+            <img src="../docs/screenshots/05-material-library.png" alt="Material library">
+            <h3 data-i18n="screens.card3.title">Material library</h3>
+            <p data-i18n="screens.card3.body">Search and filter captured notes across multiple creators as a reusable reference bank.</p>
           </article>
         </div>
       </div>
@@ -262,156 +280,89 @@
       <div class="container install-layout">
         <div class="section-heading reveal-up section-heading-left">
           <span class="eyebrow">INSTALL GUIDE</span>
-          <h2>安装后，不用学一堆东西，直接开始导出。</h2>
-          <p>这就是一个实用工具，不是重产品培训。流程越短越好，越快得到结果越好。</p>
+          <h2 data-i18n="install.title">Install it, open a profile page, and start exporting.</h2>
+          <p data-i18n="install.lead">The product should feel like a practical tool, not a training course. The shorter the path to the first useful export, the better.</p>
         </div>
 
         <div class="install-card reveal-up">
           <ol class="install-steps">
-            <li>安装扩展后，打开小红书网页，进入目标主页或笔记详情页。</li>
-            <li>点击扩展图标，选择单篇或批量模式，并设置抓取数量和延时。</li>
-            <li>开始导出，得到标题、正文、标签、图片、评论和互动数据。</li>
-            <li>需要时再继续查看看板、导出 CSV / JSON，或进入素材库检索。</li>
+            <li data-i18n="install.step1">Download the repository or release ZIP, then unzip it locally.</li>
+            <li data-i18n="install.step2">Open Chrome and go to chrome://extensions, then enable Developer mode.</li>
+            <li data-i18n="install.step3">Click Load unpacked and select the folder that contains manifest.json.</li>
+            <li data-i18n="install.step4">Open a public XiaoHongShu profile page, click the extension icon, and start your export task.</li>
           </ol>
           <div class="install-actions">
-            <a class="btn btn-primary" href="#final-actions">查看安装入口</a>
-            <a class="btn btn-secondary" href="privacy.html">查看隐私政策</a>
-            <a class="btn btn-secondary" href="https://github.com/twonly/xhs-claw-studio" target="_blank" rel="noreferrer">打开 GitHub 仓库</a>
+            <a class="btn btn-primary" href="https://github.com/twonly/xhs-claw-studio" target="_blank" rel="noreferrer" data-i18n="install.action1">Open GitHub repository</a>
+            <a class="btn btn-secondary" href="privacy.html" data-i18n="install.action2">Read privacy policy</a>
           </div>
-          <p class="install-note">说明：当前是公开仓库版本。你可以直接从 GitHub 下载代码或 ZIP，解压后通过 Chrome 开发者模式安装。</p>
+          <p class="install-note" data-i18n="install.note">This public build is installed through Chrome developer mode for now. It does not require a server or account before first use.</p>
         </div>
-      </div>
-    </section>
-
-    <section class="section section-alt" id="workflow">
-      <div class="container workflow-layout">
-        <div class="section-heading reveal-up section-heading-left">
-          <span class="eyebrow">WORKFLOW</span>
-          <h2>3 步完成一次典型的竞品研究或内容备份。</h2>
-          <p>不需要脚本，不需要部署，不需要先学平台，只要打开页面、导出结果、继续复盘。</p>
-        </div>
-
-        <div class="workflow-steps">
-          <article class="step-card reveal-up">
-            <span class="step-no">1</span>
-            <h3>打开目标账号</h3>
-            <p>进入小红书主页或笔记详情页，点击扩展图标，选择单篇模式或批量模式。</p>
-          </article>
-          <article class="step-card reveal-up">
-            <span class="step-no">2</span>
-            <h3>运行导出任务</h3>
-            <p>设置抓取数量、延时和冷却策略，扩展自动提取标题、正文、标签、图片与互动数据。</p>
-          </article>
-          <article class="step-card reveal-up">
-            <span class="step-no">3</span>
-            <h3>拿结果去研究</h3>
-            <p>查看看板、导出文件、筛选素材库，或者把结果直接拿去做竞品研究和运营复盘。</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container compliance-grid reveal-up">
-        <article class="compliance-card">
-          <span class="eyebrow">DATA SAFETY</span>
-          <h3>只处理公开可见内容</h3>
-          <p>产品主要处理小红书页面上公开可见的内容，不收集登录凭证或账号密码。</p>
-        </article>
-        <article class="compliance-card">
-          <span class="eyebrow">LOCAL FIRST</span>
-          <h3>默认以本地处理为主</h3>
-          <p>数据默认存储在浏览器本地；云同步是可选能力，需要用户主动注册或开启。</p>
-        </article>
-        <article class="compliance-card">
-          <span class="eyebrow">ENOUGH, NOT MORE</span>
-          <h3>只保留够用的核心能力</h3>
-          <p>这页和这个产品都在强调一个原则：先把导出做好，而不是先把产品讲复杂。</p>
-        </article>
       </div>
     </section>
 
     <section class="section section-alt">
-      <div class="container calculator-wrap reveal-up">
-        <div class="calculator-copy">
-          <span class="eyebrow">ROI CALCULATOR</span>
-          <h2>你每周能省多少时间？</h2>
-          <p>按“需要处理的笔记量”粗略估算，从手动复制切到扩展流程，时间差会很直观。</p>
-        </div>
-
-        <div class="calculator-card">
-          <label for="note-range">每周要处理的笔记数量</label>
-          <input id="note-range" type="range" min="10" max="240" step="10" value="80">
-          <div class="range-meta">
-            <span>10</span>
-            <strong id="note-range-value">80</strong>
-            <span>240</span>
-          </div>
-
-          <div class="calc-grid">
-            <div>
-              <span>手动处理</span>
-              <strong id="manual-time">9.3 小时</strong>
-            </div>
-            <div>
-              <span>使用扩展</span>
-              <strong id="tool-time">1.8 小时</strong>
-            </div>
-            <div class="calc-highlight">
-              <span>每周节省</span>
-              <strong id="saved-time">7.5 小时</strong>
-            </div>
-          </div>
-        </div>
+      <div class="container compliance-grid reveal-up">
+        <article class="compliance-card">
+          <span class="eyebrow">PUBLIC CONTENT</span>
+          <h3 data-i18n="safety.card1.title">Works on public pages</h3>
+          <p data-i18n="safety.card1.body">The extension is designed around public XiaoHongShu pages instead of account credential collection.</p>
+        </article>
+        <article class="compliance-card">
+          <span class="eyebrow">LOCAL FIRST</span>
+          <h3 data-i18n="safety.card2.title">Local by default</h3>
+          <p data-i18n="safety.card2.body">Captured data stays in browser storage unless the user explicitly enables optional cloud sync.</p>
+        </article>
+        <article class="compliance-card">
+          <span class="eyebrow">OPTIONAL LAYERS</span>
+          <h3 data-i18n="safety.card3.title">AI and cloud are optional</h3>
+          <p data-i18n="safety.card3.body">AI analysis, dashboard import, and cloud sync sit on top of the export flow instead of blocking it.</p>
+        </article>
       </div>
     </section>
 
-    <section class="section" id="pricing">
+    <section class="section" id="release">
       <div class="container">
         <div class="section-heading reveal-up">
-          <span class="eyebrow">PRICING</span>
-          <h2>当前先把公开版讲清楚，后续再决定怎么卖。</h2>
-          <p>这一页先对应真实状态：开源公开版已经可用，增强版能力属于后续规划，不在首发页里过度承诺。</p>
+          <span class="eyebrow">PUBLIC RELEASE</span>
+          <h2 data-i18n="release.title">The current site describes a real public build, not an over-promised pricing page.</h2>
+          <p data-i18n="release.lead">For now, the focus is the open-source release: installable, export-capable, and usable for lightweight review. Packaging and monetization can come later.</p>
         </div>
 
         <div class="pricing-grid">
           <article class="price-card reveal-up">
-            <span class="plan-tag">PUBLIC</span>
-            <h3>当前公开版</h3>
-            <p class="price">¥0</p>
+            <span class="plan-tag">v0.1.0</span>
+            <h3 data-i18n="release.card1.title">Public release</h3>
+            <p class="price">Free</p>
             <ul>
-              <li>仓库公开可见</li>
-              <li>Chrome 开发者模式安装</li>
-              <li>批量抓取 / 导出 / 看板 / 素材库</li>
-              <li>适合先验证它是不是你要的工具</li>
+              <li data-i18n="release.card1.item1">Open repository</li>
+              <li data-i18n="release.card1.item2">Chrome developer mode install</li>
+              <li data-i18n="release.card1.item3">Batch capture, export, dashboard, and material library</li>
+              <li data-i18n="release.card1.item4">Best for validating fit before anything else</li>
             </ul>
-            <a class="btn btn-secondary" href="#install-guide">开始安装</a>
           </article>
 
           <article class="price-card featured reveal-up">
-            <span class="plan-tag">PLAN A</span>
-            <h3>增强版方向</h3>
+            <span class="plan-tag">NEXT</span>
+            <h3 data-i18n="release.card2.title">Possible enhanced build</h3>
             <p class="price">TBD</p>
             <ul>
-              <li>更明确的导出门槛与版本分层</li>
-              <li>更稳定的云同步与授权体系</li>
-              <li>更完整的 AI 工作流</li>
-              <li>更适合高频做竞品研究和复盘的人</li>
+              <li data-i18n="release.card2.item1">Clearer packaging and access control</li>
+              <li data-i18n="release.card2.item2">More stable sync and account binding</li>
+              <li data-i18n="release.card2.item3">More polished AI workflow</li>
+              <li data-i18n="release.card2.item4">Driven by real usage and feedback</li>
             </ul>
-            <a class="btn btn-primary" href="https://github.com/twonly/xhs-claw-studio" target="_blank" rel="noreferrer">跟进仓库更新</a>
           </article>
 
           <article class="price-card reveal-up">
             <span class="plan-tag">ROADMAP</span>
-            <h3>后续规划</h3>
+            <h3 data-i18n="release.card3.title">What may come later</h3>
             <p class="price">Later</p>
             <ul>
-              <li>更明确的付费包装</li>
-              <li>商店上架与正式官网</li>
-              <li>更完整的产品化交付</li>
-              <li>先基于真实试用反馈再收敛</li>
+              <li data-i18n="release.card3.item1">Store listing and stronger install flow</li>
+              <li data-i18n="release.card3.item2">Sharper commercial packaging</li>
+              <li data-i18n="release.card3.item3">Broader documentation and onboarding</li>
+              <li data-i18n="release.card3.item4">Only after the current product proves itself</li>
             </ul>
-            <a class="btn btn-secondary" href="#faq">先看 FAQ</a>
           </article>
         </div>
       </div>
@@ -421,49 +372,45 @@
       <div class="container faq-layout">
         <div class="section-heading reveal-up section-heading-left">
           <span class="eyebrow">FAQ</span>
-          <h2>把价格敏感用户最关心的问题先回答清楚。</h2>
+          <h2 data-i18n="faq.title">Answer the practical questions before people ask them.</h2>
         </div>
 
         <div class="faq-list">
           <details class="faq-item reveal-up" open>
-            <summary>红薯采集器适合谁？</summary>
-            <p>适合小红书运营、竞品研究者、内容团队，以及只想把账号内容导出来做备份和复盘的人。</p>
+            <summary data-i18n="faq.q1">Who is HongShu Claw for?</summary>
+            <p data-i18n="faq.a1">It fits XiaoHongShu operators, competitor researchers, content teams, and anyone who wants to export public content into a reusable dataset.</p>
           </details>
           <details class="faq-item reveal-up">
-            <summary>为什么说它是平替？</summary>
-            <p>因为很多人真正想要的只是导出和轻量复盘，不需要一整套又贵又复杂的平台。红薯采集器就是把这件事做得更轻、更直接。</p>
+            <summary data-i18n="faq.q2">Does it only export, or can it analyze too?</summary>
+            <p data-i18n="faq.a2">It does both. Export is the main job, but the current public build also includes a dashboard, comparison views, and a material library.</p>
           </details>
           <details class="faq-item reveal-up">
-            <summary>导出的数据包含哪些字段？</summary>
-            <p>包括标题、正文、标签、图片链接、点赞、收藏、评论、发布时间、原文链接及评论内容等。</p>
+            <summary data-i18n="faq.q3">What fields are included in export?</summary>
+            <p data-i18n="faq.a3">Typical fields include title, body text, tags, image links, likes, collects, comments, publish time, source URL, and related metadata.</p>
           </details>
           <details class="faq-item reveal-up">
-            <summary>是不是只有导出，没有分析？</summary>
-            <p>不是。它会保留基础分析看板和素材库能力，但不会把首页讲成一个复杂的大平台。</p>
+            <summary data-i18n="faq.q4">Does it upload data to the cloud by default?</summary>
+            <p data-i18n="faq.a4">No. The product is local-first by default. Cloud sync is optional and only happens when the user explicitly enables it.</p>
           </details>
           <details class="faq-item reveal-up">
-            <summary>数据会不会默认上传到云端？</summary>
-            <p>默认以本地处理为主。云同步属于可选能力，需要用户主动登录或启用，详见隐私政策。</p>
-          </details>
-          <details class="faq-item reveal-up">
-            <summary>这个页面现在更像官网还是项目页？</summary>
-            <p>当前更接近“项目官网 + 安装说明页”。它已经能承接公开仓库访问、试用安装和基础介绍，后续如果你正式商业化，再继续往完整官网迭代更合适。</p>
+            <summary data-i18n="faq.q5">Why is the site bilingual?</summary>
+            <p data-i18n="faq.a5">The default experience is English for store review and broader accessibility, while Chinese remains available for the core user base.</p>
           </details>
         </div>
       </div>
     </section>
 
-    <section class="section final-cta" id="final-actions">
+    <section class="section final-cta">
       <div class="container reveal-up">
         <div class="final-card">
           <div>
             <span class="eyebrow">GET STARTED</span>
-            <h2>别再为“只想导出内容”去买一整套重平台。</h2>
-            <p>如果你要的是一个开源、轻量、打开网页就能开始的小红书导出工具，红薯采集器就是更适合的选择。</p>
+            <h2 data-i18n="final.title">If you mainly need export and lightweight review, start with the open build.</h2>
+            <p data-i18n="final.body">That is the most honest version of the product today: open, installable, and useful right away.</p>
           </div>
           <div class="final-actions">
-            <a class="btn btn-primary btn-large" href="#install-guide">查看安装方式</a>
-            <a class="btn btn-secondary btn-large" href="https://github.com/twonly/xhs-claw-studio" target="_blank" rel="noreferrer">打开 GitHub</a>
+            <a class="btn btn-primary btn-large" href="https://github.com/twonly/xhs-claw-studio" target="_blank" rel="noreferrer" data-i18n="final.primary">Open GitHub</a>
+            <a class="btn btn-secondary btn-large" href="privacy.html" data-i18n="final.secondary">Read privacy policy</a>
           </div>
         </div>
       </div>
@@ -473,14 +420,14 @@
   <footer class="site-footer">
     <div class="container footer-inner">
       <div>
-        <strong>红薯采集器</strong>
-        <p>开源的小红书笔记导出与轻量分析工具。</p>
+        <strong>HongShu Claw</strong>
+        <p data-i18n="footer.tagline">Open-source XiaoHongShu export and lightweight analysis.</p>
       </div>
       <div class="footer-links">
-        <a href="/">首页</a>
-        <a href="privacy.html">隐私政策</a>
-        <a href="#install-guide">安装说明</a>
-        <a href="#faq">FAQ</a>
+        <a href="/" data-i18n="footer.home">Home</a>
+        <a href="privacy.html" data-i18n="footer.privacy">Privacy</a>
+        <a href="#install-guide" data-i18n="footer.install">Install</a>
+        <a href="#faq" data-i18n="footer.faq">FAQ</a>
       </div>
     </div>
   </footer>
