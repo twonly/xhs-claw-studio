@@ -103,7 +103,6 @@ Claw Studio 是面向内容创作者的数据导出和分析工具，单一用�
 
 | 权限 | Justification (EN) | 中文参考 |
 |------|---|---|
-| `activeTab` | Read the DOM of a note or profile page the user explicitly opens, so the user can extract visible content. | 用户主动打开页面后读取 DOM 提取公开内容 |
 | `scripting` | Inject the capture script into target pages when the user triggers a capture from the popup/side panel. | 触发抓取时向目标页面注入内容脚本 |
 | `tabs` | Detect the active tab and route capture messages to the correct tab; no browsing history is collected. | 判断活跃标签并路由抓取消息 |
 | `storage` | Store user preferences (AI key, export format) and captured data locally in the browser. | 本地保存用户偏好和已抓数据 |

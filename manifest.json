@@ -5,7 +5,6 @@
   "description": "Export publicly visible notes, images, tags, and engagement data for content research and analysis. Bring your own AI API key.",
   "minimum_chrome_version": "114",
   "permissions": [
-    "activeTab",
     "downloads",
     "scripting",
     "sidePanel",

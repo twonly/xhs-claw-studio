@@ -4507,17 +4507,25 @@ ${digest}`,
 
       const startAt = Date.now();
       try {
-        const result = await CLOUD_SYNC.syncAll(({ current, total, bloggerName }) => {
-          const pct = Math.round((current / total) * 100);
+        const result = await CLOUD_SYNC.syncAll(({ phase, current, total, bloggerName }) => {
+          const pct = total > 0 ? Math.round((current / total) * 100) : 0;
           progressFill.style.width = pct + '%';
-          progressText.textContent = `${current}/${total} · ${bloggerName || ''}`;
+          const label = phase === 'pull' ? '拉取云端' : '上传本地';
+          progressText.textContent = `${label} ${current}/${total} · ${bloggerName || ''}`;
         });
         progressFill.style.width = '100%';
         const errMsg = result.errors.length > 0
           ? `（${result.errors.length} 位失败：${result.errors[0].nickname || result.errors[0].userId}${result.errors.length > 1 ? ' 等' : ''}）`
           : '';
         const aiMsg = result.aiReportCount > 0 ? ` / ${result.aiReportCount} 份 AI 报告` : '';
-        resultEl.textContent = `同步完成：${result.bloggerCount} 位博主 / ${result.totalNotes} 篇笔记${aiMsg} ${errMsg}`;
+        const pull = result.pull || {};
+        const pulledBloggerTotal = (pull.newBloggers || 0) + (pull.updatedBloggers || 0);
+        const pullParts = [];
+        if (pulledBloggerTotal > 0) pullParts.push(`${pulledBloggerTotal} 位博主`);
+        if (pull.newNotes > 0) pullParts.push(`${pull.newNotes} 篇新笔记`);
+        if (pull.newAiReports > 0) pullParts.push(`${pull.newAiReports} 份 AI 报告`);
+        const pullMsg = pullParts.length > 0 ? `已从云端拉回 ${pullParts.join(' / ')}；` : '';
+        resultEl.textContent = `${pullMsg}同步完成：${result.bloggerCount} 位博主 / ${result.totalNotes} 篇笔记${aiMsg} ${errMsg}`;
         resultEl.className = result.errors.length > 0 ? 'csp-msg warn' : 'csp-msg ok';
         if (result.errors.length > 0) {
           console.warn('[CloudSync] errors:', result.errors);
@@ -4525,6 +4533,8 @@ ${digest}`,
         ANALYTICS.track('cloud_sync_run', {
           blogger_count: result.bloggerCount,
           note_count: result.totalNotes,
+          pulled_bloggers: pulledBloggerTotal,
+          pulled_notes: pull.newNotes || 0,
           error_count: result.errors.length,
           duration_ms: Date.now() - startAt,
         });

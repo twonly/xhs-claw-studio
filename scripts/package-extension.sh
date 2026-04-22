@@ -17,8 +17,7 @@ if ! command -v zip >/dev/null 2>&1; then
 fi
 
 VERSION="$(node -p "require('$MANIFEST_PATH').version")"
-RELEASE_VERSION="0.1.0"
-PACKAGE_NAME="xhs-claw-studio-v${RELEASE_VERSION}"
+PACKAGE_NAME="xhs-claw-studio-v${VERSION}"
 ZIP_PATH="$DIST_DIR/${PACKAGE_NAME}.zip"
 GUIDE_SRC="$ROOT_DIR/docs/friend-trial-guide.md"
 GUIDE_DST="$DIST_DIR/试用说明.md"

@@ -368,7 +368,6 @@ chrome.runtime.onMessage.addListener((message) => {
           message.results, message.blogger.stats || null
         )
           .then(() => loadRecentScrapes())
-          .then(() => autoCloudSync(message.blogger.userId))
           .catch((err) => {
             console.warn('[Popup] saveBlogger failed:', err);
           });
@@ -722,19 +721,6 @@ async function persistMergedProfileData(preferredInfo = null) {
   lastBloggerUserId = bloggerData.userId;
   await loadRecentScrapes();
   return bloggerData;
-}
-
-// 抓取完成后静默上传到云端（无 UI 反馈，类似埋点）
-async function autoCloudSync(userId) {
-  if (typeof CLOUD_SYNC === 'undefined') return;
-  try {
-    const bloggerData = await DATA_STORE.getBloggerData(userId);
-    if (!bloggerData?.notes?.length) return;
-    await CLOUD_SYNC.syncBlogger(bloggerData);
-    await chrome.storage.local.set({ cloudSyncLastAt: Date.now() });
-  } catch (e) {
-    console.warn('[AutoSync]', e.message || e);
-  }
 }
 
 function setCloudMessage(text = '', type = '') {
