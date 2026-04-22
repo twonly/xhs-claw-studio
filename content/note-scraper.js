@@ -823,7 +823,45 @@
     errors: [],
     currentIndex: 0,
     totalCount: 0,
+    // v3.2: 自适应节流 —— 近期错误窗口（只保留最近 5 个结果 'ok'|'err-<kind>'）
+    recentResults: [],
+    // 'normal' | 'slow'，由 recentResults 动态切换
+    riskLevel: 'normal',
+    consecutiveSuccesses: 0,
   };
+
+  // 记录一次笔记结果，更新风险等级；返回是否发生等级变化
+  function _recordResultAndMaybeAdjustRisk(tag) {
+    batchState.recentResults.push(tag);
+    if (batchState.recentResults.length > 5) batchState.recentResults.shift();
+    const retryableErrors = batchState.recentResults.filter(
+      (t) => t === 'err-rate_limit' || t === 'err-network',
+    ).length;
+    const prev = batchState.riskLevel;
+    if (tag === 'ok') {
+      batchState.consecutiveSuccesses += 1;
+      if (prev === 'slow' && batchState.consecutiveSuccesses >= 3) {
+        batchState.riskLevel = 'normal';
+      }
+    } else {
+      batchState.consecutiveSuccesses = 0;
+      if (prev === 'normal' && retryableErrors >= 2) {
+        batchState.riskLevel = 'slow';
+      }
+    }
+    return batchState.riskLevel !== prev ? { from: prev, to: batchState.riskLevel } : null;
+  }
+
+  function _broadcastRiskChange(change) {
+    chrome.runtime.sendMessage({
+      type: 'batchRiskLevelChanged',
+      level: change.to,
+      from: change.from,
+      reason: change.to === 'slow'
+        ? '近期错误偏多，已自动放缓请求速度'
+        : '请求恢复正常速度',
+    }).catch(() => {});
+  }
 
   // ========== 断点续传：chrome.storage.local 持久化 ==========
 
@@ -860,43 +898,53 @@
     await chrome.storage.local.remove(key);
   }
 
-  // 通过 fetch 获取笔记页面 HTML 并从 meta 标签提取数据
-  async function fetchAndParseNote(noteId, token) {
+  // 单次 fetch + 解析；任何异常都抛 error 并附 _classifyInput 供外层分类
+  async function _fetchNoteOnce(noteId, token) {
     const url = `https://www.xiaohongshu.com/explore/${noteId}` +
       (token ? `?xsec_token=${token}&xsec_source=pc_user` : '');
 
-    const resp = await fetch(url, {
-      credentials: 'include',
-      headers: {
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        'Referer': window.location.href,
-      },
-    });
+    let resp;
+    try {
+      resp = await fetch(url, {
+        credentials: 'include',
+        headers: {
+          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+          'Referer': window.location.href,
+        },
+      });
+    } catch (networkErr) {
+      // fetch reject（DNS/断网/CORS 等）
+      throw networkErr;
+    }
 
-    // 识别人机验证重定向：resp.url 会变成 /website-login/captcha?...
+    // 302 → 人机验证
     if (resp.redirected && resp.url.includes('/website-login/captcha')) {
       const err = new Error('CAPTCHA_REQUIRED');
-      err.code = 'CAPTCHA_REQUIRED';
-      err.captchaUrl = resp.url;
+      err._classifyInput = { resp };
       throw err;
     }
 
-    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    // 非 2xx：先读 html 兜底识别特殊页面，否则按 HTTP 状态分类
+    if (!resp.ok) {
+      const err = new Error(`HTTP ${resp.status}`);
+      err._classifyInput = { resp };
+      throw err;
+    }
 
     const html = await resp.text();
 
     // 兜底：某些情况下服务端直接返回验证页 HTML（没走 302）
     if (html.includes('/website-login/captcha') && html.includes('verifyUuid')) {
-      const m = html.match(/https?:\/\/[^"'\s]*\/website-login\/captcha[^"'\s]*/);
       const err = new Error('CAPTCHA_REQUIRED');
-      err.code = 'CAPTCHA_REQUIRED';
-      err.captchaUrl = m ? m[0] : 'https://www.xiaohongshu.com/';
+      err._classifyInput = { html };
       throw err;
     }
 
-    // 检测是否被拦截
+    // 笔记被限制/删除：交给分类器归类为 not_found 或 restricted
     if (html.includes('当前笔记暂时无法浏览') || html.includes('请打开小红书App扫码查看')) {
-      throw new Error('笔记被限制访问');
+      const err = new Error('笔记被限制访问');
+      err._classifyInput = { html };
+      throw err;
     }
 
     const doc = new DOMParser().parseFromString(html, 'text/html');
@@ -996,6 +1044,58 @@
     };
   }
 
+  // fetch + 解析 + 按分类器自动重试。
+  // onRetry({ attempt, waitMs, verdict }) 在重试前触发，调用方可用来更新 UI。
+  // 抛出的 error 会带上：code / kind / userMessage / analyticsTag / captchaUrl?
+  async function fetchAndParseNote(noteId, token, onRetry) {
+    let attempt = 0;
+    while (true) {
+      try {
+        return await _fetchNoteOnce(noteId, token);
+      } catch (raw) {
+        const input = raw && raw._classifyInput ? raw._classifyInput : { error: raw };
+        const verdict = ERROR_CLASSIFIER.classify(input);
+
+        // 不可重试 → 包装成带 kind 的结构化 error
+        if (!verdict.retryable) {
+          throw _wrapVerdictError(raw, verdict);
+        }
+
+        // 可重试：按计划等待后重试
+        attempt += 1;
+        const waitMs = ERROR_CLASSIFIER.waitMsFor(verdict.kind, attempt);
+        if (waitMs <= 0) {
+          // 重试次数用尽
+          const err = _wrapVerdictError(raw, verdict);
+          err.code = (verdict.kind.toUpperCase() + '_EXHAUSTED');
+          err.analyticsTag = (verdict.analyticsTag || verdict.kind) + '_exhausted';
+          throw err;
+        }
+
+        try {
+          onRetry?.({ attempt, waitMs, verdict, noteId });
+        } catch {}
+
+        await new Promise((r) => setTimeout(r, waitMs));
+        // 继续下一轮
+      }
+    }
+  }
+
+  function _wrapVerdictError(raw, verdict) {
+    const err = new Error(verdict.userMessage || (raw && raw.message) || '抓取失败');
+    err.kind = verdict.kind;
+    err.userMessage = verdict.userMessage;
+    err.analyticsTag = verdict.analyticsTag;
+    if (verdict.kind === 'captcha') {
+      err.code = 'CAPTCHA_REQUIRED';
+      if (verdict.captchaUrl) err.captchaUrl = verdict.captchaUrl;
+    } else {
+      err.code = verdict.kind.toUpperCase();
+    }
+    return err;
+  }
+
   // 批量抓取主循环（fetch 方式 + 分段冷却 + 断点续传）
   async function batchScrapeFromProfile(options) {
     const { cards, minDelay, maxDelay, chunkSize, refreshExisting } = options;
@@ -1044,18 +1144,36 @@
         `正在抓取: ${card.title || card.noteId}`);
 
       try {
-        const result = await fetchAndParseNote(card.noteId, card.token);
+        const result = await fetchAndParseNote(card.noteId, card.token, (retryInfo) => {
+          // 每次重试前通知 UI，避免用户以为进度卡住
+          chrome.runtime.sendMessage({
+            type: 'batchNoteRetrying',
+            noteId: card.noteId,
+            title: card.title,
+            attempt: retryInfo.attempt,
+            waitMs: retryInfo.waitMs,
+            kind: retryInfo.verdict?.kind,
+            reason: retryInfo.verdict?.userMessage,
+          }).catch(() => {});
+        });
 
         if (result && result.title) {
           batchState.results.push(result);
           completedIds.add(card.noteId);
+          const change = _recordResultAndMaybeAdjustRisk('ok');
+          if (change) _broadcastRiskChange(change);
         } else {
           batchState.errors.push({ index: i, title: card.title, error: '页面内容为空', noteId: card.noteId });
           trackSampledScrapeError('empty_content');
+          const change = _recordResultAndMaybeAdjustRisk('err-fatal');
+          if (change) _broadcastRiskChange(change);
         }
       } catch (e) {
-        // 触发人机验证 → 立即暂停整个批量，等用户验证后续传
-        if (e && e.code === 'CAPTCHA_REQUIRED') {
+        const kind = e?.kind || 'fatal';
+        const analyticsTag = e?.analyticsTag || e?.message || 'unknown';
+
+        // 1) 人机验证 → 暂停批次，等用户手动验证
+        if (kind === 'captcha') {
           await saveBatchToStorage(targetCards, { refreshExisting: shouldRefreshExisting });
           batchState.stopRequested = true;
           batchState.isRunning = false;
@@ -1069,8 +1187,53 @@
           trackSampledScrapeError('captcha_required');
           return;
         }
-        batchState.errors.push({ index: i, title: card.title, error: e.message, noteId: card.noteId });
-        trackSampledScrapeError(e.message);
+
+        // 2) IP/账号被风控 → 硬停批次，保留进度
+        if (kind === 'restricted') {
+          await saveBatchToStorage(targetCards, { refreshExisting: shouldRefreshExisting });
+          batchState.stopRequested = true;
+          batchState.isRunning = false;
+          chrome.runtime.sendMessage({
+            type: 'batchRestricted',
+            reason: e.userMessage || e.message,
+            scraped: batchState.results.length,
+            total: targetCards.length,
+            remaining: targetCards.filter(c => !completedIds.has(c.noteId)).length,
+          }).catch(() => {});
+          trackSampledScrapeError('restricted_' + analyticsTag);
+          return;
+        }
+
+        // 3) 笔记不存在/被删 → 静默跳过（不计入错误数）
+        if (kind === 'not_found') {
+          trackSampledScrapeError('not_found');
+          // 标记为已处理，避免下次续传还会再抓一次
+          completedIds.add(card.noteId);
+          const change = _recordResultAndMaybeAdjustRisk('ok');
+          if (change) _broadcastRiskChange(change);
+        } else {
+          // 4) 其他（fatal / 超过重试次数的 rate_limit / network）→ 记录错误、继续
+          batchState.errors.push({
+            index: i,
+            title: card.title,
+            error: e.userMessage || e.message,
+            kind,
+            noteId: card.noteId,
+          });
+          trackSampledScrapeError(analyticsTag);
+
+          // rate_limit 耗尽 → 通知 UI，但不硬停
+          if (kind === 'rate_limit') {
+            chrome.runtime.sendMessage({
+              type: 'batchRateLimited',
+              scraped: batchState.results.length,
+              total: targetCards.length,
+              reason: e.userMessage || e.message,
+            }).catch(() => {});
+          }
+          const change = _recordResultAndMaybeAdjustRisk('err-' + kind);
+          if (change) _broadcastRiskChange(change);
+        }
       }
 
       // 每篇抓完都保存进度
@@ -1110,11 +1273,16 @@
         // 普通随机延时（在用户设定的 min~max 区间内）
         // 10% 概率插入一次稍长的暂停（maxDelay 的 2~3 倍），模拟真人不规则操作
         const isLongPause = Math.random() < 0.1;
-        const delayMs = isLongPause
+        let delayMs = isLongPause
           ? maxDelay * 2 + Math.random() * maxDelay
           : minDelay + Math.random() * (maxDelay - minDelay);
 
-        const label = isLongPause ? '防检测暂停' : '等待';
+        // 自适应节流：近期错误偏多 → 延时翻倍
+        const riskMultiplier = batchState.riskLevel === 'slow' ? 2 : 1;
+        delayMs *= riskMultiplier;
+
+        const labelBase = isLongPause ? '防检测暂停' : '等待';
+        const label = riskMultiplier > 1 ? `${labelBase}（放缓）` : labelBase;
         broadcastProgress(batchState.results.length, targetCards.length,
           `${label} ${(delayMs / 1000).toFixed(0)}s...`);
         await new Promise(r => setTimeout(r, delayMs));

@@ -358,6 +358,23 @@ chrome.runtime.onMessage.addListener((message) => {
         scraped_before_error: message.scraped || 0,
       });
       break;
+    case 'batchNoteRetrying':
+      handleNoteRetrying(message);
+      break;
+    case 'batchRateLimited':
+      handleRateLimited(message);
+      break;
+    case 'batchRestricted':
+      handleBatchRestricted(message);
+      ANALYTICS.track('scrape_error', {
+        mode: 'profile',
+        error_type: 'restricted',
+        scraped_before_error: message.scraped || 0,
+      });
+      break;
+    case 'batchRiskLevelChanged':
+      handleRiskLevelChanged(message);
+      break;
     case 'batchComplete':
       cachedNotes = message.results;
       // 按博主保存到 data-store
@@ -560,6 +577,13 @@ function handleCaptchaRequired(msg) {
   const captchaUrl = msg.captchaUrl || 'https://www.xiaohongshu.com/';
   const scraped = msg.scraped || 0;
   const remaining = msg.remaining || 0;
+  if (typeof TOAST !== 'undefined') {
+    TOAST.show({
+      level: 'warn',
+      text: `需要人机验证（已完成 ${scraped} 篇，剩余 ${remaining} 篇）`,
+      action: { label: '去验证', onClick: () => chrome.tabs.create({ url: captchaUrl }) },
+    });
+  }
   setStatus('error', `已被人机验证拦截（已完成 ${scraped} 篇，剩余 ${remaining} 篇）`);
   btnStart.classList.remove('hidden'); btnStart.disabled = false;
   btnStop.classList.add('hidden'); progressSection.classList.add('hidden');
@@ -579,6 +603,67 @@ function handleCaptchaRequired(msg) {
       chrome.tabs.create({ url: captchaUrl });
     });
   }
+}
+
+function handleNoteRetrying(msg) {
+  // 同一条笔记的连续重试用同一个 toast id 更新，避免堆叠
+  if (typeof TOAST === 'undefined') return;
+  const noteId = msg.noteId || 'unknown';
+  const waitSec = Math.max(1, Math.round((msg.waitMs || 0) / 1000));
+  const reason = msg.reason || '请求失败';
+  TOAST.show({
+    id: `retry_${noteId}`,
+    level: 'info',
+    text: `${reason}，${waitSec}s 后重试（第 ${msg.attempt || 1} 次）`,
+    durationMs: Math.min(waitSec * 1000 + 500, 10000),
+  });
+}
+
+function handleRateLimited(msg) {
+  if (typeof TOAST !== 'undefined') {
+    TOAST.show({
+      level: 'warn',
+      text: msg.reason || `触发限流（${msg.scraped || 0}/${msg.total || 0}），已切换到放缓模式`,
+      durationMs: 6000,
+    });
+  }
+}
+
+function handleBatchRestricted(msg) {
+  const scraped = msg.scraped || 0;
+  const remaining = msg.remaining || 0;
+  const reason = msg.reason || '访问被拒绝';
+  if (typeof TOAST !== 'undefined') {
+    TOAST.show({
+      level: 'error',
+      text: `${reason}（已完成 ${scraped} 篇，剩余 ${remaining} 篇已保存进度）`,
+    });
+  }
+  setStatus('error', `${reason}（已完成 ${scraped}/${msg.total || 0}）`);
+  btnStart.classList.remove('hidden'); btnStart.disabled = false;
+  btnStop.classList.add('hidden'); progressSection.classList.add('hidden');
+  batchSettingsDiv.classList.remove('hidden');
+  resultsSection.classList.remove('hidden');
+
+  if (typeof previewDiv !== 'undefined' && previewDiv) {
+    previewDiv.innerHTML = `
+      <div style="padding:12px;background:#fff1f0;border:1px solid #ffa39e;border-radius:6px;font-size:12px;line-height:1.6">
+        <div style="color:#cf1322;font-weight:600;margin-bottom:6px">抓取被暂停</div>
+        <div style="color:#666;margin-bottom:8px">${reason}。常见原因：IP 短期内被限流 / 账号触发了小红书风控。</div>
+        <div style="color:#666">建议：等待 10~30 分钟后再继续；或换用其他网络重新登录后点 <b>"继续抓取"</b> 续传剩余 ${remaining} 篇。</div>
+      </div>`;
+  }
+}
+
+function handleRiskLevelChanged(msg) {
+  if (typeof TOAST === 'undefined') return;
+  const level = msg.level === 'slow' ? 'warn' : 'ok';
+  TOAST.show({
+    id: 'risk_level',
+    level,
+    text: msg.reason || (msg.level === 'slow' ? '已切换到放缓模式' : '已恢复正常速度'),
+    durationMs: 4000,
+  });
 }
 
 // ========== CSV/JSON 生成 ==========

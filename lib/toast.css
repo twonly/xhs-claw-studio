@@ -1,0 +1,108 @@
+/* Toast 轻提示组件样式 —— popup / sidepanel / analysis 共用 */
+
+.xhs-toast-root {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 2147483000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+  max-width: calc(100% - 24px);
+}
+
+.xhs-toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 240px;
+  max-width: 360px;
+  padding: 10px 10px 10px 12px;
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-left: 3px solid #bfbfbf;
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  font-size: 13px;
+  line-height: 1.5;
+  color: #222;
+  transform: translateX(16px);
+  opacity: 0;
+  transition: transform 0.18s ease-out, opacity 0.18s ease-out;
+}
+
+.xhs-toast.xhs-toast-show {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.xhs-toast.xhs-toast-hide {
+  transform: translateX(16px);
+  opacity: 0;
+}
+
+.xhs-toast-icon {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  background: #999;
+  margin-top: 1px;
+}
+
+.xhs-toast-text {
+  flex: 1 1 auto;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.xhs-toast-action {
+  flex: 0 0 auto;
+  background: transparent;
+  border: 0;
+  color: #ff2442;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0 4px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.xhs-toast-action:hover {
+  text-decoration: underline;
+}
+
+.xhs-toast-close {
+  flex: 0 0 auto;
+  background: transparent;
+  border: 0;
+  color: #999;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  padding: 0 2px;
+  margin-left: 2px;
+}
+
+.xhs-toast-close:hover { color: #333; }
+
+/* 配色 */
+.xhs-toast-info   { border-left-color: #4a90e2; }
+.xhs-toast-info   .xhs-toast-icon { background: #4a90e2; }
+
+.xhs-toast-ok     { border-left-color: #52c41a; }
+.xhs-toast-ok     .xhs-toast-icon { background: #52c41a; }
+
+.xhs-toast-warn   { border-left-color: #faad14; }
+.xhs-toast-warn   .xhs-toast-icon { background: #faad14; }
+
+.xhs-toast-error  { border-left-color: #ff4d4f; }
+.xhs-toast-error  .xhs-toast-icon { background: #ff4d4f; }

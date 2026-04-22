@@ -49,7 +49,7 @@
         "https://www.xiaohongshu.com/discovery/item/*",
         "https://www.xiaohongshu.com/user/profile/*"
       ],
-      "js": ["lib/data-store.js", "content/note-scraper.js"],
+      "js": ["lib/data-store.js", "lib/error-classifier.js", "content/note-scraper.js"],
       "run_at": "document_idle"
     }
   ],
