@@ -44,6 +44,26 @@ body {
   background: rgba(255,255,255,0.3);
 }
 
+/* 侧边栏按钮上的活动任务数徽标 */
+.btn-sidepanel-entry .jobs-badge {
+  display: inline-block;
+  min-width: 14px;
+  height: 14px;
+  padding: 0 4px;
+  margin-left: 5px;
+  background: #fff;
+  color: #ff2442;
+  border-radius: 7px;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 14px;
+  text-align: center;
+  vertical-align: 1px;
+}
+.btn-sidepanel-entry .jobs-badge[hidden] {
+  display: none;
+}
+
 .header h1 {
   font-size: 18px;
   font-weight: 600;

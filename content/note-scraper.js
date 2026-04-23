@@ -828,6 +828,10 @@
     // 'normal' | 'slow'，由 recentResults 动态切换
     riskLevel: 'normal',
     consecutiveSuccesses: 0,
+    // v3.2: 任务中心 —— 当前批次的 job id（跨 popup/sidepanel/notification 追踪）
+    jobId: null,
+    // 区分"用户手动停止"与"自然完成"
+    userStopped: false,
   };
 
   // 记录一次笔记结果，更新风险等级；返回是否发生等级变化
@@ -861,6 +865,14 @@
         ? '近期错误偏多，已自动放缓请求速度'
         : '请求恢复正常速度',
     }).catch(() => {});
+  }
+
+  // 写一条任务进度到 jobs_index；失败静默，不阻塞批抓主流程
+  async function _jobsUpsert(patch) {
+    if (typeof JOBS === 'undefined' || !batchState.jobId) return;
+    try {
+      await JOBS.upsert({ id: batchState.jobId, ...patch });
+    } catch {}
   }
 
   // ========== 断点续传：chrome.storage.local 持久化 ==========
@@ -1123,11 +1135,30 @@
 
     batchState.isRunning = true;
     batchState.stopRequested = false;
+    batchState.userStopped = false;
     batchState.refreshExisting = shouldRefreshExisting;
     batchState.results = saved?.results || [];
     batchState.errors = saved?.errors || [];
     batchState.totalCount = targetCards.length;
     batchState.currentIndex = 0;
+
+    // 任务中心：创建 / 更新 job 记录（只在有实际工作时创建，避免空任务刷屏）
+    if (targetCards.length > 0 && typeof JOBS !== 'undefined') {
+      batchState.jobId = JOBS.generateId();
+      await _jobsUpsert({
+        userId: profileUserId || null,
+        profileUrl,
+        nickname: existingBlogger?.nickname || '',
+        avatar: existingBlogger?.avatar || '',
+        status: JOBS.STATUS.RUNNING,
+        total: targetCards.length,
+        scraped: batchState.results.length,
+        errorCount: batchState.errors.length,
+        refreshExisting: shouldRefreshExisting,
+      });
+    } else {
+      batchState.jobId = null;
+    }
 
     let scrapedInChunk = 0;
 
@@ -1177,6 +1208,13 @@
           await saveBatchToStorage(targetCards, { refreshExisting: shouldRefreshExisting });
           batchState.stopRequested = true;
           batchState.isRunning = false;
+          await _jobsUpsert({
+            status: typeof JOBS !== 'undefined' ? JOBS.STATUS.CAPTCHA_WAIT : 'captcha_wait',
+            scraped: batchState.results.length,
+            errorCount: batchState.errors.length,
+            lastErrorKind: 'captcha',
+            captchaUrl: e.captchaUrl || null,
+          });
           chrome.runtime.sendMessage({
             type: 'batchCaptchaRequired',
             captchaUrl: e.captchaUrl,
@@ -1193,6 +1231,13 @@
           await saveBatchToStorage(targetCards, { refreshExisting: shouldRefreshExisting });
           batchState.stopRequested = true;
           batchState.isRunning = false;
+          await _jobsUpsert({
+            status: typeof JOBS !== 'undefined' ? JOBS.STATUS.FAILED : 'failed',
+            scraped: batchState.results.length,
+            errorCount: batchState.errors.length,
+            lastErrorKind: 'restricted',
+            lastErrorMessage: e.userMessage || e.message,
+          });
           chrome.runtime.sendMessage({
             type: 'batchRestricted',
             reason: e.userMessage || e.message,
@@ -1224,6 +1269,13 @@
 
           // rate_limit 耗尽 → 通知 UI，但不硬停
           if (kind === 'rate_limit') {
+            await _jobsUpsert({
+              status: typeof JOBS !== 'undefined' ? JOBS.STATUS.RATE_LIMITED : 'rate_limited',
+              scraped: batchState.results.length,
+              errorCount: batchState.errors.length,
+              lastErrorKind: 'rate_limit',
+              lastErrorMessage: e.userMessage || e.message,
+            });
             chrome.runtime.sendMessage({
               type: 'batchRateLimited',
               scraped: batchState.results.length,
@@ -1240,6 +1292,17 @@
       await saveBatchToStorage(targetCards, { refreshExisting: shouldRefreshExisting });
       scrapedInChunk++;
 
+      // 任务中心：每 5 篇或最后一篇时更新进度（避免每篇都写 storage 触发太多 onChanged）
+      if ((i + 1) % 5 === 0 || i === targetCards.length - 1) {
+        await _jobsUpsert({
+          status: typeof JOBS !== 'undefined' ? JOBS.STATUS.RUNNING : 'running',
+          scraped: batchState.results.length,
+          errorCount: batchState.errors.length,
+          nickname: batchState.results[0]?.author?.nickname || existingBlogger?.nickname || '',
+          avatar: batchState.results[0]?.author?.avatar || existingBlogger?.avatar || '',
+        });
+      }
+
       // 检查是否还有剩余
       const remaining = targetCards.filter(c => !completedIds.has(c.noteId)).length;
       if (remaining === 0) break;
@@ -1249,7 +1312,15 @@
       // 分段冷却：每 chunkSize 篇后插入长休息
       if (scrapedInChunk >= chunk && remaining > 0) {
         const cooldownSec = 120 + Math.floor(Math.random() * 120); // 2-4 分钟
+        const cooldownUntil = Date.now() + cooldownSec * 1000;
         broadcastProgress(batchState.results.length, targetCards.length, '');
+
+        await _jobsUpsert({
+          status: typeof JOBS !== 'undefined' ? JOBS.STATUS.PAUSED_COOLDOWN : 'paused_cooldown',
+          scraped: batchState.results.length,
+          errorCount: batchState.errors.length,
+          chunkCooldownUntil: cooldownUntil,
+        });
 
         chrome.runtime.sendMessage({
           type: 'batchChunkPause',
@@ -1266,6 +1337,12 @@
             `防封冷却中 ${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, '0')}`);
           await new Promise(r => setTimeout(r, 1000));
         }
+
+        // 冷却结束 → 回到 RUNNING
+        await _jobsUpsert({
+          status: typeof JOBS !== 'undefined' ? JOBS.STATUS.RUNNING : 'running',
+          chunkCooldownUntil: null,
+        });
 
         scrapedInChunk = 0;
         if (batchState.stopRequested) break;
@@ -1317,6 +1394,18 @@
       }
     }
 
+    // 任务中心：收尾（自然完成 → DONE；用户点了停止 → CANCELLED）
+    if (typeof JOBS !== 'undefined' && batchState.jobId) {
+      await _jobsUpsert({
+        status: batchState.userStopped ? JOBS.STATUS.CANCELLED : JOBS.STATUS.DONE,
+        scraped: batchState.results.length,
+        errorCount: batchState.errors.length,
+        nickname,
+        avatar,
+        chunkCooldownUntil: null,
+      });
+    }
+
     chrome.runtime.sendMessage({
       type: 'batchComplete',
       results: finalResults,
@@ -1326,6 +1415,8 @@
       localTotal: finalResults.length,
       skippedExistingCount: Math.max(cards.length - targetCards.length, 0),
       refreshExisting: shouldRefreshExisting,
+      jobId: batchState.jobId,
+      userStopped: batchState.userStopped,
       blogger: {
         userId: profileUserId,
         profileUrl,
@@ -1411,6 +1502,7 @@
 
       case 'stopBatchScrape':
         batchState.stopRequested = true;
+        batchState.userStopped = true;
         sendResponse({ success: true });
         break;
 

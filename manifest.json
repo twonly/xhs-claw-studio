@@ -6,6 +6,7 @@
   "minimum_chrome_version": "114",
   "permissions": [
     "downloads",
+    "notifications",
     "scripting",
     "sidePanel",
     "storage",
@@ -49,7 +50,7 @@
         "https://www.xiaohongshu.com/discovery/item/*",
         "https://www.xiaohongshu.com/user/profile/*"
       ],
-      "js": ["lib/data-store.js", "lib/error-classifier.js", "content/note-scraper.js"],
+      "js": ["lib/data-store.js", "lib/error-classifier.js", "lib/jobs-registry.js", "content/note-scraper.js"],
       "run_at": "document_idle"
     }
   ],

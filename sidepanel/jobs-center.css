@@ -1,0 +1,215 @@
+/* 任务中心 — 侧边栏专属的批量任务看板 */
+
+.jobs-center {
+  margin: 10px 20px 0;
+  padding: 10px 12px 8px;
+  background: #fafafa;
+  border: 1px solid #eee;
+  border-radius: 8px;
+}
+
+.jobs-center.hidden {
+  display: none !important;
+}
+
+.jobs-center-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.jobs-center-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #333;
+}
+
+.jobs-center-clear {
+  font-size: 11px;
+  color: #999;
+  background: transparent;
+  border: none;
+  padding: 2px 4px;
+  cursor: pointer;
+}
+
+.jobs-center-clear:hover {
+  color: #666;
+}
+
+.jobs-center-clear[hidden] {
+  display: none;
+}
+
+.jobs-center-group {
+  margin-bottom: 8px;
+}
+
+.jobs-center-group:last-child {
+  margin-bottom: 0;
+}
+
+.jobs-center-group[hidden] {
+  display: none;
+}
+
+.jobs-center-group-label {
+  font-size: 10px;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 4px 0 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.jobs-center-group-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #bbb;
+}
+
+.jobs-center-group[data-group="active"] .jobs-center-group-dot {
+  background: #2db7f5;
+}
+
+.jobs-center-group[data-group="attention"] .jobs-center-group-dot {
+  background: #ffa940;
+}
+
+.jobs-center-group[data-group="done"] .jobs-center-group-dot {
+  background: #87d068;
+}
+
+.job-card {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin-bottom: 6px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.job-card:last-child {
+  margin-bottom: 0;
+}
+
+.job-card[data-status="failed"],
+.job-card[data-status="captcha_wait"],
+.job-card[data-status="rate_limited"] {
+  border-color: #ffa39e;
+  background: #fff7f6;
+}
+
+.job-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.job-card-title {
+  font-weight: 500;
+  color: #333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.job-card-status {
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 10px;
+  background: #f0f0f0;
+  color: #666;
+  white-space: nowrap;
+}
+
+.job-card[data-status="running"] .job-card-status {
+  background: #e6f7ff;
+  color: #1890ff;
+}
+
+.job-card[data-status="paused_cooldown"] .job-card-status {
+  background: #fff7e6;
+  color: #fa8c16;
+}
+
+.job-card[data-status="captcha_wait"] .job-card-status,
+.job-card[data-status="rate_limited"] .job-card-status,
+.job-card[data-status="failed"] .job-card-status {
+  background: #fff1f0;
+  color: #cf1322;
+}
+
+.job-card[data-status="done"] .job-card-status {
+  background: #f6ffed;
+  color: #389e0d;
+}
+
+.job-card[data-status="cancelled"] .job-card-status {
+  background: #f5f5f5;
+  color: #999;
+}
+
+.job-card-meta {
+  color: #666;
+  font-size: 11px;
+  margin-top: 3px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.job-card-progress {
+  font-family: -apple-system-mono, Menlo, monospace;
+}
+
+.job-card-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.job-card-actions button {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: #fff;
+  border: 1px solid #d9d9d9;
+  color: #333;
+  cursor: pointer;
+}
+
+.job-card-actions button.primary {
+  background: #ff2442;
+  border-color: #ff2442;
+  color: #fff;
+}
+
+.job-card-actions button.primary:hover {
+  background: #e01f3c;
+}
+
+.job-card-actions button.ghost {
+  background: transparent;
+  border: none;
+  color: #999;
+  padding: 3px 4px;
+}
+
+.job-card-actions button:hover {
+  border-color: #ff2442;
+  color: #ff2442;
+}
+
+.job-card-actions .spacer {
+  flex: 1;
+}

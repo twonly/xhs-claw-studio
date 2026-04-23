@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="sidepanel.css">
   <link rel="stylesheet" href="../lib/onboarding.css">
   <link rel="stylesheet" href="../lib/toast.css">
+  <link rel="stylesheet" href="jobs-center.css">
 </head>
 <body data-mode="sidepanel">
   <div class="container">
@@ -16,6 +17,15 @@
       <h1 id="popup-title">红薯采集器</h1>
       <p class="subtitle">小红书笔记一键导出 / 批量抓取</p>
       <button id="btn-close-sidepanel" class="sp-close" title="切回弹窗模式">×</button>
+    </div>
+
+    <!-- 任务中心（仅侧边栏模式有；popup 由 css 隐藏）-->
+    <div id="jobs-center-section" class="jobs-center hidden">
+      <div class="jobs-center-header">
+        <span class="jobs-center-title">任务中心</span>
+        <button id="jobs-center-clear" class="jobs-center-clear" type="button" hidden>清空已完成</button>
+      </div>
+      <div id="jobs-center-body" class="jobs-center-body"></div>
     </div>
 
     <!-- URL 快捷输入 -->
@@ -270,9 +280,11 @@
   <script src="../lib/cloud-sync.js"></script>
   <script src="../lib/onboarding.js"></script>
   <script src="../lib/toast.js"></script>
+  <script src="../lib/jobs-registry.js"></script>
   <!-- 核心业务逻辑 100% 复用 popup.js -->
   <script src="../popup/popup.js"></script>
   <!-- 薄壳：只处理 sidepanel 特有交互（关闭、默认入口切换） -->
   <script src="sidepanel.js"></script>
+  <script src="jobs-center.js"></script>
 </body>
 </html>

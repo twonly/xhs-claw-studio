@@ -72,6 +72,24 @@ if (!IS_SIDEPANEL) {
       console.warn('[SidePanel] open failed:', e);
     }
   });
+
+  // 侧边栏按钮右上角的活动任务徽标：running + paused_cooldown + captcha_wait + rate_limited
+  (function setupJobsBadge() {
+    if (typeof JOBS === 'undefined') return;
+    const badge = document.getElementById('jobs-badge');
+    if (!badge) return;
+    const update = (list) => {
+      const count = list.filter((j) => JOBS.isActive(j.status)).length;
+      if (count > 0) {
+        badge.textContent = String(count);
+        badge.hidden = false;
+      } else {
+        badge.hidden = true;
+      }
+    };
+    JOBS.list().then(update).catch(() => {});
+    JOBS.subscribe(update);
+  })();
 } else {
   // 侧边栏模式下隐藏入口按钮
   document.getElementById('btn-open-sidepanel')?.remove();

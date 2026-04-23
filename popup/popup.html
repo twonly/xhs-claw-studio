@@ -12,7 +12,7 @@
     <div class="header">
       <h1 id="popup-title">红薯采集器</h1>
       <p class="subtitle">小红书笔记一键导出 / 批量抓取</p>
-      <button id="btn-open-sidepanel" class="btn-sidepanel-entry" title="在侧边栏打开（常驻，不会因失焦关闭）">侧边栏</button>
+      <button id="btn-open-sidepanel" class="btn-sidepanel-entry" title="在侧边栏打开（常驻，不会因失焦关闭）">侧边栏<span id="jobs-badge" class="jobs-badge" hidden></span></button>
     </div>
 
     <!-- URL 快捷输入 -->
@@ -255,6 +255,7 @@
   <script src="../lib/cloud-sync.js"></script>
   <script src="../lib/onboarding.js"></script>
   <script src="../lib/toast.js"></script>
+  <script src="../lib/jobs-registry.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>
