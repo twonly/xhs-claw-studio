@@ -5,6 +5,7 @@
   <title>红薯采集器 — 数据分析</title>
   <link rel="stylesheet" href="analysis.css">
   <link rel="stylesheet" href="../lib/onboarding.css">
+  <link rel="stylesheet" href="../popup/ai-wizard.css">
 </head>
 <body>
   <div class="container">
@@ -138,7 +139,8 @@
         <div id="compare-ai-nokey-overlay" class="lock-overlay" style="display:none">
           <div class="lock-content">
             <p class="lock-icon">&#128273;</p>
-            <p>请先在扩展弹窗的 AI 设置中配置 API Key</p>
+            <p>还没配置 AI API Key，配好后即可一键生成分析报告</p>
+            <button class="btn-wizard-open" data-wizard-from="compare">一键配置 AI</button>
           </div>
         </div>
       </section>
@@ -388,7 +390,8 @@
         <div id="ai-nokey-overlay" class="lock-overlay" style="display:none">
           <div class="lock-content">
             <p class="lock-icon">&#128273;</p>
-            <p>请先在扩展弹窗的 AI 设置中配置 API Key</p>
+            <p>还没配置 AI API Key，配好后即可一键生成分析报告</p>
+            <button class="btn-wizard-open" data-wizard-from="detail">一键配置 AI</button>
           </div>
         </div>
       </section>
@@ -496,7 +499,8 @@
         <div id="personal-ai-nokey" class="lock-overlay" style="display:none">
           <div class="lock-content">
             <p class="lock-icon">&#128273;</p>
-            <p>请先在扩展弹窗的 AI 设置中配置 API Key</p>
+            <p>还没配置 AI API Key，配好后即可一键生成分析报告</p>
+            <button class="btn-wizard-open" data-wizard-from="personal">一键配置 AI</button>
           </div>
         </div>
       </section>
@@ -603,6 +607,7 @@
   <script src="../lib/pdf-export.js"></script>
   <script src="../lib/cloud-sync.js"></script>
   <script src="../lib/onboarding.js"></script>
+  <script src="../popup/ai-wizard.js"></script>
   <script src="analysis.js"></script>
   <script src="sponsor.js"></script>
 </body>

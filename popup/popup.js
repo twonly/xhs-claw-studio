@@ -137,7 +137,32 @@ async function init() {
 
   // 新用户引导：首次打开 popup 且处于支持的页面时启动
   setTimeout(() => startPopupOnboarding(), 400);
+
+  // AI 向导：主引导结束后若尚未配置 Key，弹出向导
+  setTimeout(maybeOpenAiWizard, 1200);
 }
+
+async function maybeOpenAiWizard() {
+  if (typeof AI_WIZARD === 'undefined') return;
+  try {
+    if (await AI_WIZARD.shouldAutoOpen()) {
+      AI_WIZARD.open({ onComplete: () => refreshAiKeyInput() });
+    }
+  } catch {}
+}
+
+// AI 设置区的"重新配置向导"链接
+document.getElementById('btn-open-ai-wizard')?.addEventListener('click', (e) => {
+  e.preventDefault();
+  if (typeof AI_WIZARD !== 'undefined') {
+    AI_WIZARD.open({ onComplete: () => refreshAiKeyInput() });
+  }
+});
+
+// 向导完成后（事件派发）刷新 AI 设置区 UI
+window.addEventListener('ai-wizard-complete', () => {
+  try { refreshAiKeyInput(); } catch {}
+});
 
 // ========== 新用户引导 ==========
 

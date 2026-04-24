@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="../lib/onboarding.css">
   <link rel="stylesheet" href="../lib/toast.css">
   <link rel="stylesheet" href="jobs-center.css">
+  <link rel="stylesheet" href="../popup/ai-wizard.css">
 </head>
 <body data-mode="sidepanel">
   <div class="container">
@@ -211,7 +212,9 @@
 
     <!-- AI 与偏好设置 -->
     <div id="license-section" class="settings">
-      <h3>AI 与偏好设置</h3>
+      <h3>AI 与偏好设置
+        <a href="#" id="btn-open-ai-wizard" style="float:right;font-size:11px;font-weight:normal;color:#ff2442;text-decoration:none">重新配置向导 →</a>
+      </h3>
       <div class="setting-row">
         <label>AI 厂商</label>
         <div class="setting-input">
@@ -281,6 +284,7 @@
   <script src="../lib/onboarding.js"></script>
   <script src="../lib/toast.js"></script>
   <script src="../lib/jobs-registry.js"></script>
+  <script src="../popup/ai-wizard.js"></script>
   <!-- 核心业务逻辑 100% 复用 popup.js -->
   <script src="../popup/popup.js"></script>
   <!-- 薄壳：只处理 sidepanel 特有交互（关闭、默认入口切换） -->

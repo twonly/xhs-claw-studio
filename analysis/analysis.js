@@ -3,6 +3,28 @@
 (async function () {
   await DATA_STORE.migrateIfNeeded();
 
+  // "一键配置 AI" 锁屏按钮 → 打开向导 → 完成后刷新所有 nokey 蒙层
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.btn-wizard-open');
+    if (!btn || typeof AI_WIZARD === 'undefined') return;
+    AI_WIZARD.open({
+      onComplete: async () => {
+        try {
+          const key = await AI_SERVICE.getApiKey();
+          if (!key) return;
+          ['compare-ai-nokey-overlay', 'ai-nokey-overlay', 'personal-ai-nokey'].forEach((id) => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = 'none';
+          });
+          // 分析页其它按钮的 disabled 状态由各自 init 函数控制；提示用户刷新
+          if (typeof window.TOAST !== 'undefined') {
+            window.TOAST.show({ level: 'ok', text: 'AI 已就绪，点击"生成报告"即可使用' });
+          }
+        } catch {}
+      },
+    });
+  });
+
   let selectionMode = false;
   let selectedBloggers = new Set();
   const workbenchRail = document.getElementById('workbench-rail');
