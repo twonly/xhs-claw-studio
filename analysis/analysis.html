@@ -392,6 +392,31 @@
           </div>
         </div>
       </section>
+
+      <!-- v3.2: 评论洞察（情感 + 话题 + IP 分布） -->
+      <section class="panel ai-section" id="comments-insight-section">
+        <div class="panel-header">
+          <h2>评论洞察
+            <span class="section-subtitle">读者在说什么 · 基于评论文本</span>
+          </h2>
+          <div class="ai-actions">
+            <button id="btn-ci-generate" class="btn-ai">分析评论</button>
+            <button id="btn-ci-clear" class="btn-ai-secondary" style="display:none">清除缓存</button>
+          </div>
+        </div>
+        <div id="ci-nodata" class="ai-placeholder" style="display:none">
+          当前博主还没有抓到足够的评论。请确认笔记详情页的评论已加载后再重新抓取。
+        </div>
+        <div id="ci-body" class="ci-body">
+          <p class="ai-placeholder">点击「分析评论」，AI 会从评论里挖出读者真正关心的问题、情感倾向和高频话题。</p>
+        </div>
+        <div id="ci-nokey-overlay" class="lock-overlay" style="display:none">
+          <div class="lock-content">
+            <p class="lock-icon">&#128273;</p>
+            <p>请先在扩展弹窗的 AI 设置中配置 API Key</p>
+          </div>
+        </div>
+      </section>
     </div>
 
     <!-- ===== 个人分析视图 ===== -->

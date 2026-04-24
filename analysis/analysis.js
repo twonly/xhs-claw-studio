@@ -1568,6 +1568,7 @@
     initDetailWorkspace(userId, bloggerData, notes, detailAnalyticsProps);
 
     initAI(notes, userId, detailAnalyticsProps).catch(err => console.error('[AI] init failed:', err));
+    initCommentsInsight(notes, userId, detailAnalyticsProps).catch(err => console.error('[CI] init failed:', err));
     initPdfExport(bloggerData, detailAnalyticsProps).catch(err => console.error('[PDF] init failed:', err));
     runDetailSection('data-export', () => initDataExport(bloggerData));
     initBackendImport(bloggerData, userId).catch(err => console.error('[BackendImport] init failed:', err));
@@ -4236,6 +4237,247 @@ ${digest}`,
         ...detailAnalyticsProps,
       });
     }
+  }
+
+  // ========== 评论洞察（v3.2 #9） ==========
+
+  async function initCommentsInsight(notes, userId, detailAnalyticsProps = {}) {
+    const section = document.getElementById('comments-insight-section');
+    if (!section) return;
+    const body = document.getElementById('ci-body');
+    const nodataEl = document.getElementById('ci-nodata');
+    const nokeyEl = document.getElementById('ci-nokey-overlay');
+    const btnGenerate = document.getElementById('btn-ci-generate');
+    const btnClear = document.getElementById('btn-ci-clear');
+
+    // 复位
+    body.style.display = 'block';
+    nodataEl.style.display = 'none';
+    nokeyEl.style.display = 'none';
+    btnClear.style.display = 'none';
+    btnGenerate.disabled = false;
+    body.innerHTML = '<p class="ai-placeholder">点击「分析评论」，AI 会从评论里挖出读者真正关心的问题、情感倾向和高频话题。</p>';
+
+    // 数据前置检查：一条评论都没有就直接显示空态
+    const totalComments = (notes || []).reduce(
+      (s, n) => s + (Array.isArray(n.comments) ? n.comments.filter(c => (c.content || '').trim()).length : 0),
+      0,
+    );
+    if (totalComments === 0) {
+      body.style.display = 'none';
+      nodataEl.style.display = 'block';
+      btnGenerate.disabled = true;
+      return;
+    }
+
+    // API Key 前置检查
+    const apiKey = await AI_SERVICE.getApiKey();
+    if (!apiKey) {
+      nokeyEl.style.display = 'flex';
+      btnGenerate.disabled = true;
+      return;
+    }
+
+    // 先渲染 IP 分布（客户端算，不耗 token；即便 AI 部分失败也能看到）
+    renderCommentsIpDistribution(notes);
+
+    // 缓存优先
+    const cached = await AI_SERVICE.loadCommentInsight(userId);
+    if (cached) {
+      renderCommentsInsight(cached, totalComments);
+      btnClear.style.display = 'inline-block';
+      ANALYTICS.track('ai_comment_insight_generate', {
+        note_count: notes.length,
+        comment_count: totalComments,
+        cached: true,
+        duration_ms: 0,
+        ...detailAnalyticsProps,
+      });
+    }
+
+    // 用 clone 重绑，避免切换博主时叠加事件
+    replaceWithClone('btn-ci-generate').addEventListener('click', () =>
+      generateCommentsInsight(notes, userId, detailAnalyticsProps));
+    replaceWithClone('btn-ci-clear').addEventListener('click', async () => {
+      await AI_SERVICE.clearCommentInsight(userId);
+      body.innerHTML = '<p class="ai-placeholder">缓存已清除，点击「分析评论」重新生成</p>';
+      document.getElementById('btn-ci-clear').style.display = 'none';
+      renderCommentsIpDistribution(notes); // IP 分布不依赖缓存，保留
+    });
+  }
+
+  async function generateCommentsInsight(notes, userId, detailAnalyticsProps = {}) {
+    const body = document.getElementById('ci-body');
+    const btnGenerate = document.getElementById('btn-ci-generate');
+    const btnClear = document.getElementById('btn-ci-clear');
+
+    btnGenerate.disabled = true;
+    btnGenerate.textContent = '分析中...';
+    body.innerHTML = '<div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>';
+
+    const totalComments = (notes || []).reduce(
+      (s, n) => s + (Array.isArray(n.comments) ? n.comments.filter(c => (c.content || '').trim()).length : 0),
+      0,
+    );
+    const startAt = Date.now();
+    let success = false;
+    try {
+      const result = await AI_SERVICE.analyzeComments(notes);
+      await AI_SERVICE.saveCommentInsight(userId, result);
+      renderCommentsInsight(result, totalComments);
+      renderCommentsIpDistribution(notes);
+      btnClear.style.display = 'inline-block';
+      success = true;
+    } catch (err) {
+      body.innerHTML = `<p class="ai-error">${esc(err.message || '分析失败')}</p>`;
+    } finally {
+      btnGenerate.disabled = false;
+      btnGenerate.textContent = '分析评论';
+      ANALYTICS.track('ai_comment_insight_generate', {
+        note_count: notes.length,
+        comment_count: totalComments,
+        cached: false,
+        duration_ms: Date.now() - startAt,
+        success,
+        ...detailAnalyticsProps,
+      });
+    }
+  }
+
+  function renderCommentsInsight(data, totalComments) {
+    const body = document.getElementById('ci-body');
+    if (!body || !data) return;
+    const s = data.sentiment || {};
+    const total = (s.positive || 0) + (s.negative || 0) + (s.question || 0) + (s.neutral || 0);
+    const meta = data._meta || {};
+    const sampledNote = meta.sampled && meta.totalAvailable
+      ? `基于 ${meta.sampled}/${meta.totalAvailable} 条评论（总采集 ${totalComments}）`
+      : `基于 ${total} 条评论`;
+
+    const topics = (data.topics || []).slice(0, 8);
+    const topicsHtml = topics.length === 0
+      ? '<p class="ai-placeholder" style="padding:8px 0">模型未识别出明显的话题聚类</p>'
+      : topics.map(t => {
+          const pct = total > 0 ? Math.round((t.count || 0) / total * 100) : 0;
+          const samples = (t.samples || []).slice(0, 2).map(esc).join('<br>');
+          return `
+            <div class="ci-topic-card" data-kind="${esc(t.kind || 'neutral')}">
+              <div class="ci-topic-head">
+                <span class="ci-topic-name">${esc(t.topic || '未命名')}</span>
+                <span class="ci-topic-count">${t.count || 0} 条 · ${pct}%</span>
+              </div>
+              ${samples ? `<div class="ci-topic-samples">${samples}</div>` : ''}
+            </div>
+          `;
+        }).join('');
+
+    const highlights = data.highlights || {};
+    const renderHighlightList = (arr) => (arr || []).slice(0, 3).map(h => `
+      <li><span class="ci-hl-content">${esc(h.content || '')}</span>
+        ${h.author ? `<span class="ci-hl-author">— @${esc(h.author)}</span>` : ''}</li>
+    `).join('');
+
+    const suggestionsHtml = Array.isArray(data.suggestions) && data.suggestions.length
+      ? `<div class="ci-suggestions">
+          <div class="ci-block-title">给博主的建议</div>
+          <ul>${data.suggestions.slice(0, 3).map(x => `<li>${esc(x)}</li>`).join('')}</ul>
+        </div>`
+      : '';
+
+    body.innerHTML = `
+      <div class="ci-summary">
+        <div class="ci-summary-text">${esc(data.summary || '')}</div>
+        <div class="ci-summary-meta">${sampledNote}</div>
+      </div>
+
+      <div class="ci-row">
+        <div class="ci-col-sentiment">
+          <div class="ci-block-title">情感分布</div>
+          <div id="ci-sentiment-chart" style="width:100%;height:180px"></div>
+          <div class="ci-sentiment-legend">
+            <span class="dot dot-positive"></span>正向 <b>${s.positive || 0}</b>
+            <span class="dot dot-question"></span>提问 <b>${s.question || 0}</b>
+            <span class="dot dot-negative"></span>负向 <b>${s.negative || 0}</b>
+            <span class="dot dot-neutral"></span>中性 <b>${s.neutral || 0}</b>
+          </div>
+        </div>
+        <div class="ci-col-topics">
+          <div class="ci-block-title">话题聚类（Top ${topics.length}）</div>
+          <div class="ci-topics">${topicsHtml}</div>
+        </div>
+      </div>
+
+      <div class="ci-row">
+        <div class="ci-col-half">
+          <div class="ci-block-title">典型正向评论</div>
+          <ul class="ci-highlight-list">${renderHighlightList(highlights.top_positive) || '<li class="ai-placeholder">暂无</li>'}</ul>
+        </div>
+        <div class="ci-col-half">
+          <div class="ci-block-title">典型读者提问</div>
+          <ul class="ci-highlight-list">${renderHighlightList(highlights.top_questions) || '<li class="ai-placeholder">暂无</li>'}</ul>
+        </div>
+      </div>
+
+      ${suggestionsHtml}
+
+      <div id="ci-ip-block" class="ci-ip-block"></div>
+    `;
+
+    // 情感 donut
+    const chartEl = document.getElementById('ci-sentiment-chart');
+    if (chartEl && typeof echarts !== 'undefined') {
+      const chart = echarts.init(chartEl);
+      chart.setOption({
+        tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+        series: [{
+          type: 'pie',
+          radius: ['55%', '80%'],
+          avoidLabelOverlap: false,
+          label: { show: true, formatter: '{b}\n{d}%', fontSize: 11 },
+          labelLine: { show: false },
+          data: [
+            { value: s.positive || 0, name: '正向', itemStyle: { color: '#52c41a' } },
+            { value: s.question || 0, name: '提问', itemStyle: { color: '#1890ff' } },
+            { value: s.negative || 0, name: '负向', itemStyle: { color: '#ff4d4f' } },
+            { value: s.neutral || 0, name: '中性', itemStyle: { color: '#bfbfbf' } },
+          ],
+        }],
+      });
+    }
+  }
+
+  function renderCommentsIpDistribution(notes) {
+    const target = document.getElementById('ci-ip-block');
+    if (!target) return;
+    const counts = new Map();
+    (notes || []).forEach(n => {
+      (n.comments || []).forEach(c => {
+        const loc = (c.ipLocation || '').trim();
+        if (loc) counts.set(loc, (counts.get(loc) || 0) + 1);
+      });
+    });
+    if (counts.size === 0) {
+      target.innerHTML = ''; // 抓不到 IP 字段时静默隐藏
+      return;
+    }
+    const top = [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 10);
+    const max = top[0][1];
+    const total = [...counts.values()].reduce((a, b) => a + b, 0);
+    const rows = top.map(([loc, cnt]) => {
+      const pct = Math.round(cnt / total * 100);
+      const width = Math.round(cnt / max * 100);
+      return `
+        <div class="ci-ip-row">
+          <span class="ci-ip-loc">${esc(loc)}</span>
+          <div class="ci-ip-bar-wrap"><div class="ci-ip-bar" style="width:${width}%"></div></div>
+          <span class="ci-ip-count">${cnt} 条 · ${pct}%</span>
+        </div>
+      `;
+    }).join('');
+    target.innerHTML = `
+      <div class="ci-block-title">读者 IP 归属地分布（Top ${top.length}）</div>
+      <div class="ci-ip-list">${rows}</div>
+    `;
   }
 
   async function sendChat(notes, hash, detailAnalyticsProps = {}) {

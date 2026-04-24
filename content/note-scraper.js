@@ -969,6 +969,8 @@
             content: c.content || '',
             time: c.createTime || '',
             picture: '',
+            // v3.2: 评论者 IP 归属地，用于后续分布分析（__INITIAL_STATE__ 字段名有多种写法）
+            ipLocation: c.ipLocation || c.userInfo?.ipLocation || c.userInfo?.location || '',
           }));
         }
       }
