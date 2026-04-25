@@ -4251,28 +4251,86 @@ ${digest}`,
     btnSend.disabled = true;
 
     const history = await AI_SERVICE.loadChatHistory(hash);
+    const useTools = !!document.getElementById('chk-chat-tools')?.checked;
 
     ANALYTICS.track('ai_chat_send', {
       mode: 'detail',
       msg_length: msg.length,
       history_length: history.length,
       note_count: notes.length,
+      use_tools: useTools,
       ...detailAnalyticsProps,
     });
 
     appendChatBubble('user', msg);
     const aiEl = appendChatBubble('ai', '');
     aiEl.classList.add('streaming');
+    // 深度查询时在气泡上方挂一条工具调用链路
+    let toolTrail = null;
+    if (useTools) {
+      toolTrail = document.createElement('div');
+      toolTrail.className = 'chat-tool-trail';
+      aiEl.parentElement.insertBefore(toolTrail, aiEl);
+    }
     scrollChatToBottom();
 
     try {
       let fullReply = '';
-      for await (const chunk of AI_SERVICE.chat(notes, msg, history)) {
-        if (chunk.done) break;
-        fullReply += chunk.text;
-        aiEl.textContent = fullReply;
-        scrollChatToBottom();
+      let toolRounds = 0;
+      const startAt = Date.now();
+
+      if (useTools && typeof AI_TOOLS !== 'undefined') {
+        // 构造 messages（按 chat() 同样的结构：system + 数据摘要 + 历史 + 用户消息）
+        const digest = AI_SERVICE.buildDataDigest(notes);
+        const messages = [
+          {
+            role: 'system',
+            content: `你是小红书运营分析助手。你可以调用下面注册的工具来查博主真实数据；先想清楚要查什么再调工具，拿到结果再综合回答。能用数据说话时必须用数据。
+回答简洁专业；如果问题明显和数据无关，直接基于运营知识答即可，不必调工具。
+
+数据概览（作为背景，必要时用工具取更细的切片）：
+${digest}`,
+          },
+          ...history.slice(-20),
+          { role: 'user', content: msg },
+        ];
+
+        const handlers = AI_TOOLS.createHandlers(notes, { hash });
+        for await (const chunk of AI_SERVICE.chatWithTools(
+          messages,
+          AI_TOOLS.SCHEMAS,
+          handlers,
+          5,
+        )) {
+          if (chunk.toolCall) {
+            toolRounds = chunk.toolCall.round;
+            if (toolTrail) {
+              const names = chunk.toolCall.names
+                .map((n) => AI_TOOLS.DISPLAY_NAME[n] || n)
+                .join(' · ');
+              const chip = document.createElement('span');
+              chip.className = 'chat-tool-chip';
+              chip.textContent = `R${chunk.toolCall.round}: ${names}`;
+              toolTrail.appendChild(chip);
+              scrollChatToBottom();
+            }
+          } else if (chunk.done) {
+            break;
+          } else if (chunk.text) {
+            fullReply += chunk.text;
+            aiEl.textContent = fullReply;
+            scrollChatToBottom();
+          }
+        }
+      } else {
+        for await (const chunk of AI_SERVICE.chat(notes, msg, history)) {
+          if (chunk.done) break;
+          fullReply += chunk.text;
+          aiEl.textContent = fullReply;
+          scrollChatToBottom();
+        }
       }
+
       aiEl.classList.remove('streaming');
 
       history.push(
@@ -4280,6 +4338,14 @@ ${digest}`,
         { role: 'assistant', content: fullReply }
       );
       await AI_SERVICE.saveChatHistory(hash, history.slice(-20));
+
+      ANALYTICS.track('ai_chat_reply', {
+        mode: 'detail',
+        use_tools: useTools,
+        tool_rounds: toolRounds,
+        duration_ms: Date.now() - startAt,
+        ...detailAnalyticsProps,
+      });
     } catch (err) {
       aiEl.textContent = `[错误] ${err.message}`;
       aiEl.classList.remove('streaming');

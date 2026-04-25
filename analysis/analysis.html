@@ -507,6 +507,10 @@
       <div class="chat-header">
         <span>AI 问答</span>
         <div class="chat-header-actions">
+          <label class="chat-tools-toggle" title="开启后 AI 可以按需查数据（更准但慢一点，且需要支持 function calling 的模型）">
+            <input type="checkbox" id="chk-chat-tools">
+            <span>深度查询</span>
+          </label>
           <button id="btn-chat-clear" class="chat-btn" title="清除记录">&#128465;</button>
           <button id="btn-chat-close" class="chat-btn">&#10005;</button>
         </div>
@@ -599,6 +603,7 @@
   <script src="../lib/license.js"></script>
   <script src="../lib/analytics.js"></script>
   <script src="../lib/ai-catalog.js"></script>
+  <script src="../lib/ai-tools.js"></script>
   <script src="../lib/ai-service.js"></script>
   <script src="../lib/pdf-export.js"></script>
   <script src="../lib/cloud-sync.js"></script>
