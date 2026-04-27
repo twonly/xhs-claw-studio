@@ -4305,13 +4305,15 @@ ${digest}`,
           if (chunk.toolCall) {
             toolRounds = chunk.toolCall.round;
             if (toolTrail) {
-              const names = chunk.toolCall.names
-                .map((n) => AI_TOOLS.DISPLAY_NAME[n] || n)
-                .join(' · ');
-              const chip = document.createElement('span');
-              chip.className = 'chat-tool-chip';
-              chip.textContent = `R${chunk.toolCall.round}: ${names}`;
-              toolTrail.appendChild(chip);
+              // 一次工具调用一个 chip，带关键参数（如搜索词），区分同名多调
+              for (const call of chunk.toolCall.calls || []) {
+                const display = AI_TOOLS.DISPLAY_NAME[call.name] || call.name;
+                const argHint = AI_TOOLS.describeCall(call.name, call.args);
+                const chip = document.createElement('span');
+                chip.className = 'chat-tool-chip';
+                chip.textContent = `R${chunk.toolCall.round} ${display}${argHint}`;
+                toolTrail.appendChild(chip);
+              }
               scrollChatToBottom();
             }
           } else if (chunk.done) {
