@@ -35,6 +35,7 @@ copy_path() {
 copy_path manifest.json
 copy_path background
 copy_path popup
+copy_path sidepanel
 copy_path analysis
 copy_path content
 copy_path lib
